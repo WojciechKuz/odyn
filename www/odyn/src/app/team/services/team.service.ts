@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import { Team } from '../models/team.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class TeamService {
-  constructor() { }
+  constructor() {}
   getData() {
     return ELEMENT_DATA;
   }

@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import { WorkSchedule } from '../models/work-schedule.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class WorkScheduleService {
-  constructor() { }
+  constructor() {}
   getData() {
     return ELEMENT_DATA;
   }

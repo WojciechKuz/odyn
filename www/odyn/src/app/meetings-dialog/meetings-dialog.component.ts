@@ -6,11 +6,11 @@ import { Meetings } from '../meetings/models/meetings.model';
 @Component({
   selector: 'app-meetings-dialog',
   templateUrl: './meetings-dialog.component.html',
-  styleUrls: ['./meetings-dialog.component.scss']
+  styleUrls: ['./meetings-dialog.component.scss'],
 })
 export class MeetingsDialogComponent {
   constructor(
     public dialogRef: MatDialogRef<MeetingsComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: Meetings,
+    @Inject(MAT_DIALOG_DATA) public data: Meetings
   ) {}
 }

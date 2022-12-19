@@ -5,7 +5,11 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FooterComponent } from './footer/footer.component';
 import { HeaderComponent } from './header/header.component';
-import { CustomDateAdapter, CustomHeader, MeetingsComponent } from './meetings/meetings.component';
+import {
+  CustomDateAdapter,
+  CustomHeader,
+  MeetingsComponent,
+} from './meetings/meetings.component';
 import { MeetingsDialogComponent } from './meetings-dialog/meetings-dialog.component';
 import { FinishTimeComponent } from './finish-time/finish-time.component';
 import { ProjectInfoComponent } from './project-info/project-info.component';
@@ -20,7 +24,7 @@ import { TeamService } from './team/services/team.service';
 import { WorkScheduleService } from './work-schedule/services/work-schedule.service';
 import { DateAdapter } from '@angular/material/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import localePl from "@angular/common/locales/pl";
+import localePl from '@angular/common/locales/pl';
 import { FormsModule } from '@angular/forms';
 
 registerLocaleData(localePl);
@@ -35,7 +39,7 @@ registerLocaleData(localePl);
     MeetingsDialogComponent,
     ProjectInfoComponent,
     TeamComponent,
-    WorkScheduleComponent
+    WorkScheduleComponent,
   ],
   imports: [
     AppRoutingModule,
@@ -52,10 +56,10 @@ registerLocaleData(localePl);
     TeamService,
     WorkScheduleService,
     { provide: MatDialogRef, useValue: {} },
-    { provide: MAT_DIALOG_DATA, useValue: {}},
-    { provide: DateAdapter, useClass: CustomDateAdapter},
-    { provide: LOCALE_ID, useValue: "pl" }
+    { provide: MAT_DIALOG_DATA, useValue: {} },
+    { provide: DateAdapter, useClass: CustomDateAdapter },
+    { provide: LOCALE_ID, useValue: 'pl' },
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

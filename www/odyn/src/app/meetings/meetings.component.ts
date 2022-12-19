@@ -1,19 +1,31 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, Injectable, OnDestroy } from '@angular/core';
-import { MatCalendar, MatCalendarCellCssClasses } from '@angular/material/datepicker';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  Inject,
+  Injectable,
+  OnDestroy,
+} from '@angular/core';
+import {
+  MatCalendar,
+  MatCalendarCellCssClasses,
+} from '@angular/material/datepicker';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MeetingsService } from './services/meetings.service';
-import { Meetings }  from './models/meetings.model';
+import { Meetings } from './models/meetings.model';
 import { MeetingsDialogComponent } from '../meetings-dialog/meetings-dialog.component';
 import { Subject, takeUntil } from 'rxjs';
-import { DateAdapter, MAT_DATE_FORMATS, MatDateFormats } from '@angular/material/core';
-import { LOCALE_ID } from "@angular/core";
-import { NativeDateAdapter } from "@angular/material/core";
+import {
+  DateAdapter,
+  MAT_DATE_FORMATS,
+  MatDateFormats,
+} from '@angular/material/core';
+import { LOCALE_ID } from '@angular/core';
+import { NativeDateAdapter } from '@angular/material/core';
 
 @Injectable()
 export class CustomDateAdapter extends NativeDateAdapter {
-  constructor(
-    @Inject(LOCALE_ID) public override locale:any,
-  ) {
+  constructor(@Inject(LOCALE_ID) public override locale: any) {
     super(locale);
     console.log(locale);
   }
@@ -21,7 +33,7 @@ export class CustomDateAdapter extends NativeDateAdapter {
     return 1;
   }
 
-  override getDayOfWeekNames(style: "long" | "short" | "narrow"): string[] {
+  override getDayOfWeekNames(style: 'long' | 'short' | 'narrow'): string[] {
     return ['Niedz', 'Pon', 'Wt', 'Śr', 'Czw', 'Pt', 'Sob'];
   }
 }
@@ -30,7 +42,6 @@ export class CustomDateAdapter extends NativeDateAdapter {
   templateUrl: './meetings.component.html',
   styleUrls: ['./meetings.component.scss'],
 })
-
 export class MeetingsComponent {
   customHeader = CustomHeader;
   selectedDate: Date | null;
@@ -38,7 +49,7 @@ export class MeetingsComponent {
   maxDate = new Date('2023/06/01');
   dataSource: Meetings[];
   meet: Meetings;
-  constructor(public dialog: MatDialog,  private dataService: MeetingsService) {}
+  constructor(public dialog: MatDialog, private dataService: MeetingsService) {}
 
   ngOnInit() {
     this.dataSource = this.dataService.getData();
@@ -69,17 +80,17 @@ export class MeetingsComponent {
 
   isSelectedValidDate = (date: Date): boolean => {
     const highlightDate = this.dataSource
-        .map((meet) => new Date(meet.date))
-        .some(
-          (d) =>
-            d.getDate() === date.getDate() &&
-            d.getMonth() === date.getMonth() &&
-            d.getFullYear() === date.getFullYear()
-        );
+      .map((meet) => new Date(meet.date))
+      .some(
+        (d) =>
+          d.getDate() === date.getDate() &&
+          d.getMonth() === date.getMonth() &&
+          d.getFullYear() === date.getFullYear()
+      );
 
-      if(!highlightDate) return false;
-      else return true;
-  }
+    if (!highlightDate) return false;
+    else return true;
+  };
 
   openDialog(value: Meetings): void {
     const dialogConfig = new MatDialogConfig();
@@ -89,27 +100,29 @@ export class MeetingsComponent {
     dialogConfig.enterAnimationDuration = '500ms';
 
     const dialogRef = this.dialog.open(MeetingsDialogComponent, dialogConfig);
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       console.log('The dialog was closed' + result);
     });
   }
 
   onSelectedChange(event: Date) {
-    let meetingInfo = document.getElementsByClassName('span-info')[0] as HTMLElement;
+    let meetingInfo = document.getElementsByClassName(
+      'span-info'
+    )[0] as HTMLElement;
     if (!this.isSelectedValidDate(this.selectedDate)) {
-      meetingInfo.style.opacity = "1";
+      meetingInfo.style.opacity = '1';
       meetingInfo.textContent = 'Brak wydarzeń tego dnia!';
-      setTimeout(function() {
-        meetingInfo.style.opacity = "0";
+      setTimeout(function () {
+        meetingInfo.style.opacity = '0';
       }, 2000);
     } else {
-      meetingInfo.style.opacity = "0";
+      meetingInfo.style.opacity = '0';
       for (let item of this.dataSource) {
-          if (event.getDate() ===  new Date(item.date).getDate()) {
-            this.openDialog(item);
-            this.selectedDate = null;
-          }
+        if (event.getDate() === new Date(item.date).getDate()) {
+          this.openDialog(item);
+          this.selectedDate = null;
         }
+      }
     }
   }
 }
@@ -118,34 +131,34 @@ export class MeetingsComponent {
   selector: 'custom-header',
   styles: [
     `
-    .custom-header {
-      display: flex;
-      align-items: center;
-      padding: 6px;
-    }
-
-    .custom-header-label {
-      flex: 1;
-      font-weight: 500;
-      text-align: center;
-    }
-
-    @media screen and (max-width: 480px) {
       .custom-header {
         display: flex;
         align-items: center;
-        justify-content: space-around;
+        padding: 6px;
       }
 
       .custom-header-label {
-        font-size: 12px;
+        flex: 1;
+        font-weight: 500;
+        text-align: center;
       }
 
-      .custom-header .mat-icon {
-        font-size: 16px;
+      @media screen and (max-width: 480px) {
+        .custom-header {
+          display: flex;
+          align-items: center;
+          justify-content: space-around;
+        }
+
+        .custom-header-label {
+          font-size: 12px;
+        }
+
+        .custom-header .mat-icon {
+          font-size: 16px;
+        }
       }
-    }
-  `,
+    `,
   ],
   template: `
     <div class="custom-header">
@@ -155,7 +168,7 @@ export class MeetingsComponent {
       <button mat-icon-button (click)="previousClicked('month')">
         <mat-icon>keyboard_arrow_left</mat-icon>
       </button>
-      <span class="custom-header-label">{{periodLabel}}</span>
+      <span class="custom-header-label">{{ periodLabel }}</span>
       <button mat-icon-button (click)="nextClicked('month')">
         <mat-icon>keyboard_arrow_right</mat-icon>
       </button>
@@ -166,17 +179,18 @@ export class MeetingsComponent {
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-
 export class CustomHeader<D> implements OnDestroy {
   private _destroyed = new Subject<void>();
 
-  constructor (
+  constructor(
     private _calendar: MatCalendar<D>,
     private _dateAdapter: DateAdapter<D>,
     @Inject(MAT_DATE_FORMATS) private _dateFormats: MatDateFormats,
-    cdr: ChangeDetectorRef,
+    cdr: ChangeDetectorRef
   ) {
-    _calendar.stateChanges.pipe(takeUntil(this._destroyed)).subscribe(() => cdr.markForCheck());
+    _calendar.stateChanges
+      .pipe(takeUntil(this._destroyed))
+      .subscribe(() => cdr.markForCheck());
   }
 
   ngOnDestroy() {
@@ -186,7 +200,10 @@ export class CustomHeader<D> implements OnDestroy {
 
   get periodLabel() {
     return this._dateAdapter
-      .format(this._calendar.activeDate, this._dateFormats.display.monthYearA11yLabel)
+      .format(
+        this._calendar.activeDate,
+        this._dateFormats.display.monthYearA11yLabel
+      )
       .toLocaleUpperCase('pl-PL');
   }
 
