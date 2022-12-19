@@ -1,0 +1,56 @@
+.project-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 70vh;
+  margin: 12vh 0 8vh 0;
+  width: 75vw;
+  background-color: #242424;
+  box-shadow: 2px 6px 9px 2px rgb(0 0 0 / 35%);
+  border-radius: 15px;
+
+  @media screen and (max-width: 480px) {
+    width: 85vw;
+    min-height: 65vh;
+  }
+
+  @media screen and (min-width: 481px) and (max-width: 768px) {
+    width: 85vw;
+    min-height: 75vh;
+  }
+}
+
+h1 {
+  font-family: "Fira Sans Extra Condensed", sans-serif;
+  font-size: 70px;
+  color: white;
+  margin-top: 10vh;
+
+  @media screen and (max-width: 480px) {
+    font-size: 40px;
+    margin-top: 5vh;
+  }
+
+  @media screen and (min-width: 481px) and (max-width: 768px) {
+    font-size: 55px;
+    margin-top: 7.5vh;
+  }
+}
+
+p {
+  font-size: 30px;
+  line-height: 1.25;
+  text-align: center;
+  color: white;
+  margin: 0 6vw;
+
+  @media screen and (max-width: 480px) {
+    font-size: 20px;
+    margin: 0 2vw;
+  }
+
+  @media screen and (min-width: 481px) and (max-width: 768px) {
+    font-size: 25px;
+    margin: 0 4vw;
+  }
+}

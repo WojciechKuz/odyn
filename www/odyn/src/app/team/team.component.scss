@@ -1,0 +1,134 @@
+.team {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  margin: 8vh 0;
+  width: 75vw;
+  background-color: #242424;
+  box-shadow: 2px 6px 9px 2px rgb(0 0 0 / 35%);
+  border-radius: 15px;
+
+  @media screen and (max-width: 480px) {
+    width: 85vw;
+    margin-top: 4vh;
+  }
+
+  @media screen and (min-width: 481px) and (max-width: 768px) {
+    width: 85vw;
+    margin-top: 6vh;
+  }
+
+  h1 {
+    font-family: "Fira Sans Extra Condensed", sans-serif;
+    font-size: 70px;
+    color: white;
+    margin-top: 10vh;
+
+    @media screen and (max-width: 480px) {
+      font-size: 40px;
+      margin-top: 5vh;
+    }
+
+    @media screen and (min-width: 481px) and (max-width: 768px) {
+      font-size: 55px;
+      margin-top: 7.5vh;
+    }
+  }
+
+  .row {
+    display: flex;
+    justify-content: center;
+    max-width: 900px;
+    align-items: center;
+    flex-flow: row wrap;
+    gap: 30px;
+    margin-bottom: 30px;
+  }
+}
+
+mat-card {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  min-width: 280px;
+  min-height: 280px;
+
+  &:hover {
+    background-color: #555;
+    cursor: pointer;
+  }
+
+  @media screen and (max-width: 480px) {
+    min-width: 250px;
+    min-height: 250px;
+  }
+
+  mat-card-title {
+    color: white;
+    font-size: 22px;
+  }
+
+  .role {
+    font-size: 16px;
+  }
+
+  .mail,
+  .tech {
+    font-size: 14px;
+  }
+
+  .member-avatar {
+    width: 120px;
+    margin-top: 20px;
+  }
+
+  .keeper-avatar {
+    width: 120px;
+    margin-top: 40px;
+  }
+
+  @media screen and (max-width: 480px) {
+    mat-card-title {
+      font-size: 20px;
+    }
+
+    .role {
+      font-size: 14px;
+    }
+
+    .mail,
+    .tech {
+      font-size: 12px;
+    }
+
+    .member-avatar {
+      width: 100px;
+    }
+
+    .keeper-avatar {
+      width: 100px;
+      margin-top: 40px;
+    }
+  }
+}
+
+.icon {
+  color: #999;
+  margin-right: 5px;
+}
+
+a {
+  color: #a4d6ef;
+  text-decoration: none;
+  margin-left: 8px;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.fa-crown:before {
+  margin-left: 2px;
+  content: "\1f451";
+}

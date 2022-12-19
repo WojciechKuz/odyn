@@ -1,0 +1,67 @@
+.footer {
+  width: 100vw;
+  height: 10vh;
+  background-color: rgba($color: #eef, $alpha: 0.8);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;
+  bottom: 0;
+  padding: 0 20px;
+  z-index: 1;
+
+  @media screen and (max-width: 480px) {
+    height: 7vh;
+    padding: 0 10px;
+  }
+
+  @media screen and (min-width: 481px) and (max-width: 768px) {
+    height: 8vh;
+    padding: 0 15px;
+  }
+
+  .logo {
+    width: 15vw;
+
+    @media screen and (max-width: 481px) {
+      display: none;
+    }
+
+    @media screen and (min-width: 481px) and (max-width: 768px) {
+      width: 16vw;
+    }
+  }
+
+  .copyright {
+    font-size: 18px;
+    font-weight: 500;
+    color: #024da1;
+    margin-right: 10vw;
+
+    @media screen and (max-width: 480px) {
+      font-size: 10px;
+      margin: 0;
+    }
+
+    @media screen and (min-width: 481px) and (max-width: 768px) {
+      font-size: 14px;
+      margin-right: 8vw;
+    }
+  }
+
+  .comeback-btn {
+    background-color: transparent;
+    font-size: 50px;
+    color: #024da1;
+    border: none;
+    margin-right: 1vw;
+
+    @media screen and (max-width: 480px) {
+      font-size: 30px;
+    }
+
+    @media screen and (min-width: 481px) and (max-width: 768px) {
+      font-size: 40px;
+    }
+  }
+}

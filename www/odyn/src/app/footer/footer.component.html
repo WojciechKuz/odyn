@@ -1,1 +1,20 @@
-<p>footer works!</p>
+<div class="footer">
+  <a href="https://www.mat.umk.pl/" target="_blank" rel="noreferrer">
+    <img class="logo" src="./assets/images/footer/wmii.png" alt="WMiI UMK" />
+  </a>
+
+  <div class="copyright">
+    &#169; 2022/2023 Programowanie Zespołowe - Zespół X
+  </div>
+  <button
+    class="comeback-btn"
+    matTooltip="Przewiń do strony głównej"
+    routerLink=""
+    (click)="goToTop()"
+    matTooltipPosition="left"
+    data-aos="fade-up"
+    data-aos-duration="500"
+  >
+    <i class="fa fa-angle-up icon"></i>
+  </button>
+</div>
