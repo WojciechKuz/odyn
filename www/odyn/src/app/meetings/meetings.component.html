@@ -1,0 +1,17 @@
+<div class="meetings">
+  <h1>Spotkania</h1>
+  <div class="hr"></div>
+  <mat-card class="calendar-card" data-aos="fade-up" data-aos-duration="1500">
+    <mat-calendar
+      [dateClass]="dateClass()"
+      [(selected)]="selectedDate"
+      (selectedChange)="onSelectedChange($event)"
+      [minDate]="minDate"
+      [maxDate]="maxDate"
+      [dateFilter]="disableWeekendsFilter"
+      [headerComponent]="customHeader"
+    >
+    </mat-calendar>
+  </mat-card>
+  <span class="span-info">&nbsp;</span>
+</div>

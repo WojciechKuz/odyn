@@ -1,0 +1,98 @@
+@import url("https://fonts.googleapis.com/css2?family=Martian+Mono&display=swap");
+
+.content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.video-recorder {
+  background-color: transparent;
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  font-family: "Martian Mono", monospace;
+  color: white;
+  font-size: 20px;
+  line-height: 1.25;
+  z-index: 0;
+
+  @media screen and (max-width: 1024px) {
+    display: none;
+  }
+
+  .corners {
+    position: fixed;
+    top: 2vh;
+    left: 1vw;
+    width: 95vw;
+    height: 86vh;
+    padding: 10px;
+    margin: 0 auto;
+
+    .top,
+    .bottom {
+      position: absolute;
+      width: 60px;
+      height: 50px;
+    }
+
+    .top {
+      top: 0;
+      border-top: 4px solid #fff;
+    }
+
+    .bottom {
+      bottom: 0;
+      border-bottom: 4px solid #fff;
+    }
+
+    .left {
+      left: 0;
+      border-left: 4px solid #fff;
+    }
+
+    .right {
+      right: 0;
+      border-right: 4px solid #fff;
+      margin-right: -2vw;
+    }
+  }
+  .recorder {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 5vh;
+    left: 3vw;
+
+    .play_icon {
+      font-size: 18px;
+      position: relative;
+      bottom: 1px;
+    }
+
+    .rec_icon {
+      font-size: 16px;
+      position: relative;
+      bottom: 2px;
+      color: red;
+      animation: display 1s infinite;
+
+      @keyframes display {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+    }
+  }
+
+  .timer {
+    position: fixed;
+    top: 5vh;
+    right: 3vw;
+  }
+}

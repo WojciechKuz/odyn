@@ -1,0 +1,135 @@
+.countdown-timer {
+  display: flex;
+  flex-direction: column;
+  min-height: 50vh;
+  width: 75vw;
+  text-align: center;
+  background-color: #242424;
+  margin: 8vh 0 16vh 0;
+  box-shadow: 2px 6px 9px 2px rgb(0 0 0 / 35%);
+  border-radius: 15px;
+
+  @media screen and (max-width: 480px) {
+    width: 85vw;
+    min-height: 20vh;
+    margin-top: 4vh;
+  }
+
+  @media screen and (min-width: 481px) and (max-width: 768px) {
+    width: 85vw;
+    min-height: 15vh;
+    margin-top: 6vh;
+  }
+
+  h1 {
+    font-family: "Fira Sans Extra Condensed", sans-serif;
+    font-size: 60px;
+    color: #fff;
+    margin-top: 10vh;
+    line-height: 1.1;
+
+    @media screen and (max-width: 480px) {
+      font-size: 30px;
+      margin-top: 5vh;
+    }
+
+    @media screen and (min-width: 481px) and (max-width: 768px) {
+      font-size: 45px;
+      margin-top: 7.5vh;
+    }
+  }
+
+  .wrapper {
+    margin: 8vh 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+
+    @media screen and (max-width: 480px) {
+      margin: 2vh 0;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    @media screen and (min-width: 481px) and (max-width: 768px) {
+      margin: 4vh 0;
+      flex-wrap: wrap;
+      gap: 40px;
+    }
+
+    .item {
+      background-color: #444;
+      box-shadow: 2px 6px 9px 2px rgb(0 0 0 / 20%);
+      border-radius: 10px;
+      width: 9vw;
+      height: 20vh;
+
+      @media screen and (max-width: 480px) {
+        width: 24vw;
+        height: 14vh;
+      }
+
+      @media screen and (min-width: 481px) and (max-width: 768px) {
+        width: 18vw;
+        height: 19vh;
+      }
+    }
+
+    .title {
+      color: #bbb;
+      padding: 3vh 0;
+      font: normal 30px sans-serif;
+
+      @media screen and (max-width: 480px) {
+        padding: 1vh 0;
+        font-size: 15px;
+      }
+
+      @media screen and (min-width: 481px) and (max-width: 768px) {
+        padding: 2vh 0;
+        font-size: 20px;
+      }
+    }
+
+    .content {
+      color: #ddd;
+      position: relative;
+      font-family: "Martian Mono", monospace;
+      font-size: 50px;
+      padding-bottom: 5vh;
+
+      @media screen and (max-width: 480px) {
+        font-size: 30px;
+        padding-bottom: 1vh;
+      }
+
+      @media screen and (min-width: 481px) and (max-width: 768px) {
+        font-size: 40px;
+        padding-bottom: 2vh;
+      }
+
+      ::ng-deep img {
+        display: block;
+        width: 50px;
+        height: 50px;
+        position: absolute;
+        top: 30%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+
+        @media screen and (max-width: 480px) {
+          width: 30px;
+          height: 30px;
+          transform: translate(-50%, -30%);
+        }
+
+        @media screen and (min-width: 481px) and (max-width: 768px) {
+          width: 40px;
+          height: 40px;
+          transform: translate(-50%, -30%);
+        }
+      }
+    }
+  }
+}

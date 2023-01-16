@@ -1,0 +1,130 @@
+@import url("https://fonts.googleapis.com/css2?family=Fira+Sans+Extra+Condensed&display=swap");
+
+.header {
+  height: 100vh;
+  background-image: url("../../assets/images/background/pexels-abet-llacer-927444.jpg");
+  background-size: cover;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  position: relative;
+
+  .header-title {
+    font-weight: bold;
+    text-transform: uppercase;
+    text-shadow: 4px 4px 8px #000;
+    font-size: 120px;
+    top: 25vh;
+
+    @media screen and (max-width: 480px) {
+      font-size: 60px;
+      top: 20vh;
+    }
+
+    @media screen and (min-width: 481px) and (max-width: 768px) {
+      font-size: 80px;
+      top: 15vh;
+    }
+  }
+
+  .header-subtitle {
+    font-size: 40px;
+    top: 40vh;
+
+    @media screen and (max-width: 480px) {
+      font-size: 20px;
+      top: 30vh;
+    }
+
+    @media screen and (min-width: 481px) and (max-width: 768px) {
+      font-size: 30px;
+      top: 27.5vh;
+    }
+  }
+
+  .header-title,
+  .header-subtitle {
+    color: white;
+    font-family: "Fira Sans Extra Condensed", sans-serif;
+    position: absolute;
+    animation: headlines 1.5s ease-in-out alternate;
+
+    @keyframes headlines {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    @media screen and (max-width: 768px) {
+      animation: none;
+    }
+  }
+
+  .navigation {
+    width: 80vw;
+    height: 30vh;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 43vh;
+    z-index: 1;
+
+    @media screen and (max-width: 480px) {
+      gap: 25px;
+      margin-top: 40vh;
+      width: 60vw;
+    }
+
+    @media screen and (min-width: 481px) and (max-width: 768px) {
+      gap: 35px;
+      margin-top: 40vh;
+      width: 50vw;
+    }
+
+    .btn {
+      background-color: transparent;
+      font-size: 30px;
+      color: white;
+      border: 5px solid white;
+      width: 70px;
+      height: 70px;
+      font-size: 35px;
+      border-radius: 50%;
+      animation: button 2500ms linear infinite alternate;
+
+      &:hover {
+        background-color: #d61111;
+      }
+
+      @keyframes button {
+        from {
+          width: 70px;
+          height: 70px;
+          font-size: 35px;
+        }
+        to {
+          width: 90px;
+          height: 90px;
+          font-size: 45px;
+        }
+      }
+
+      @media screen and (max-width: 480px) {
+        width: 50px;
+        height: 50px;
+        font-size: 25px;
+        border-width: 3px;
+        animation: none;
+      }
+
+      @media screen and (min-width: 481px) and (max-width: 768px) {
+        border-width: 3px;
+        animation: none;
+      }
+    }
+  }
+}
