@@ -15,6 +15,6 @@ https://aleks-2.mat.umk.pl/pz2022/zesp10/
 
 (wymagany włączony OpenVPN)
 
-### Link do repozytorium
+### Link do repozytorium strony internetowej
 https://github.com/mszymczak710/odyn-website
 
