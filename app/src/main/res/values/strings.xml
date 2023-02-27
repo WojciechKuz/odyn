@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">odyn</string>
+
+    <!-- Opisy elementów -->
+    <string name="menu_button_desc">open menu</string>
+    <string name="record_button_desc">record</string>
+    <string name="emergency_record_button_desc">emergency recording</string>
+    <string name="photo_button_desc">take photo</string>
+    <string name="goback_button_desc">go back</string>
+    <string name="close_menu_desc">close menu</string>
+</resources>
