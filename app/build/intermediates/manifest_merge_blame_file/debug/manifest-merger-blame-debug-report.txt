@@ -1,0 +1,135 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.example.odyn"
+4    android:versionCode="1"
+5    android:versionName="1.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="23"
+8-->C:\Users\xewon\Desktop\voicemod cracked by SOFTKILL\odyn-aplikacja\app\src\main\AndroidManifest.xml
+9        android:targetSdkVersion="33" />
+9-->C:\Users\xewon\Desktop\voicemod cracked by SOFTKILL\odyn-aplikacja\app\src\main\AndroidManifest.xml
+10
+11    <uses-feature android:name="android.hardware.camera.any" />
+11-->C:\Users\xewon\Desktop\voicemod cracked by SOFTKILL\odyn-aplikacja\app\src\main\AndroidManifest.xml:6:5-64
+11-->C:\Users\xewon\Desktop\voicemod cracked by SOFTKILL\odyn-aplikacja\app\src\main\AndroidManifest.xml:6:19-61
+12
+13    <uses-permission android:name="android.permission.CAMERA" />
+13-->C:\Users\xewon\Desktop\voicemod cracked by SOFTKILL\odyn-aplikacja\app\src\main\AndroidManifest.xml:7:5-65
+13-->C:\Users\xewon\Desktop\voicemod cracked by SOFTKILL\odyn-aplikacja\app\src\main\AndroidManifest.xml:7:22-62
+14    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+14-->C:\Users\xewon\Desktop\voicemod cracked by SOFTKILL\odyn-aplikacja\app\src\main\AndroidManifest.xml:8:5-81
+14-->C:\Users\xewon\Desktop\voicemod cracked by SOFTKILL\odyn-aplikacja\app\src\main\AndroidManifest.xml:8:22-78
+15
+16    <permission
+16-->[androidx.core:core:1.9.0] C:\Users\xewon\.gradle\caches\transforms-3\85625968673fb9fd8db34217596f6efd\transformed\core-1.9.0\AndroidManifest.xml:22:5-24:47
+17        android:name="com.example.odyn.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+17-->[androidx.core:core:1.9.0] C:\Users\xewon\.gradle\caches\transforms-3\85625968673fb9fd8db34217596f6efd\transformed\core-1.9.0\AndroidManifest.xml:23:9-81
+18        android:protectionLevel="signature" />
+18-->[androidx.core:core:1.9.0] C:\Users\xewon\.gradle\caches\transforms-3\85625968673fb9fd8db34217596f6efd\transformed\core-1.9.0\AndroidManifest.xml:24:9-44
+19
+20    <uses-permission android:name="com.example.odyn.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+20-->[androidx.core:core:1.9.0] C:\Users\xewon\.gradle\caches\transforms-3\85625968673fb9fd8db34217596f6efd\transformed\core-1.9.0\AndroidManifest.xml:26:5-97
+20-->[androidx.core:core:1.9.0] C:\Users\xewon\.gradle\caches\transforms-3\85625968673fb9fd8db34217596f6efd\transformed\core-1.9.0\AndroidManifest.xml:26:22-94
+21
+22    <application
+22-->C:\Users\xewon\Desktop\voicemod cracked by SOFTKILL\odyn-aplikacja\app\src\main\AndroidManifest.xml:12:5-36:19
+23        android:allowBackup="true"
+23-->C:\Users\xewon\Desktop\voicemod cracked by SOFTKILL\odyn-aplikacja\app\src\main\AndroidManifest.xml:13:9-35
+24        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+24-->[androidx.core:core:1.9.0] C:\Users\xewon\.gradle\caches\transforms-3\85625968673fb9fd8db34217596f6efd\transformed\core-1.9.0\AndroidManifest.xml:28:18-86
+25        android:dataExtractionRules="@xml/data_extraction_rules"
+25-->C:\Users\xewon\Desktop\voicemod cracked by SOFTKILL\odyn-aplikacja\app\src\main\AndroidManifest.xml:14:9-65
+26        android:debuggable="true"
+27        android:extractNativeLibs="false"
+28        android:fullBackupContent="@xml/backup_rules"
+28-->C:\Users\xewon\Desktop\voicemod cracked by SOFTKILL\odyn-aplikacja\app\src\main\AndroidManifest.xml:15:9-54
+29        android:icon="@mipmap/ic_launcher"
+29-->C:\Users\xewon\Desktop\voicemod cracked by SOFTKILL\odyn-aplikacja\app\src\main\AndroidManifest.xml:16:9-43
+30        android:label="@string/app_name"
+30-->C:\Users\xewon\Desktop\voicemod cracked by SOFTKILL\odyn-aplikacja\app\src\main\AndroidManifest.xml:17:9-41
+31        android:supportsRtl="true"
+31-->C:\Users\xewon\Desktop\voicemod cracked by SOFTKILL\odyn-aplikacja\app\src\main\AndroidManifest.xml:18:9-35
+32        android:theme="@style/Theme.odyn" >
+32-->C:\Users\xewon\Desktop\voicemod cracked by SOFTKILL\odyn-aplikacja\app\src\main\AndroidManifest.xml:19:9-42
+33        <activity
+33-->C:\Users\xewon\Desktop\voicemod cracked by SOFTKILL\odyn-aplikacja\app\src\main\AndroidManifest.xml:21:9-23:40
+34            android:name="com.example.odyn.RecordingList"
+34-->C:\Users\xewon\Desktop\voicemod cracked by SOFTKILL\odyn-aplikacja\app\src\main\AndroidManifest.xml:22:13-42
+35            android:exported="false" />
+35-->C:\Users\xewon\Desktop\voicemod cracked by SOFTKILL\odyn-aplikacja\app\src\main\AndroidManifest.xml:23:13-37
+36        <activity
+36-->C:\Users\xewon\Desktop\voicemod cracked by SOFTKILL\odyn-aplikacja\app\src\main\AndroidManifest.xml:24:9-26:40
+37            android:name="com.example.odyn.Settings"
+37-->C:\Users\xewon\Desktop\voicemod cracked by SOFTKILL\odyn-aplikacja\app\src\main\AndroidManifest.xml:25:13-37
+38            android:exported="false" />
+38-->C:\Users\xewon\Desktop\voicemod cracked by SOFTKILL\odyn-aplikacja\app\src\main\AndroidManifest.xml:26:13-37
+39        <activity
+39-->C:\Users\xewon\Desktop\voicemod cracked by SOFTKILL\odyn-aplikacja\app\src\main\AndroidManifest.xml:27:9-35:20
+40            android:name="com.example.odyn.MainScreen"
+40-->C:\Users\xewon\Desktop\voicemod cracked by SOFTKILL\odyn-aplikacja\app\src\main\AndroidManifest.xml:28:13-39
+41            android:exported="true" >
+41-->C:\Users\xewon\Desktop\voicemod cracked by SOFTKILL\odyn-aplikacja\app\src\main\AndroidManifest.xml:29:13-36
+42            <intent-filter>
+42-->C:\Users\xewon\Desktop\voicemod cracked by SOFTKILL\odyn-aplikacja\app\src\main\AndroidManifest.xml:30:13-34:29
+43                <action android:name="android.intent.action.MAIN" />
+43-->C:\Users\xewon\Desktop\voicemod cracked by SOFTKILL\odyn-aplikacja\app\src\main\AndroidManifest.xml:31:17-69
+43-->C:\Users\xewon\Desktop\voicemod cracked by SOFTKILL\odyn-aplikacja\app\src\main\AndroidManifest.xml:31:25-66
+44
+45                <category android:name="android.intent.category.LAUNCHER" />
+45-->C:\Users\xewon\Desktop\voicemod cracked by SOFTKILL\odyn-aplikacja\app\src\main\AndroidManifest.xml:33:17-77
+45-->C:\Users\xewon\Desktop\voicemod cracked by SOFTKILL\odyn-aplikacja\app\src\main\AndroidManifest.xml:33:27-74
+46            </intent-filter>
+47        </activity>
+48
+49        <service
+49-->[androidx.camera:camera-camera2:1.2.1] C:\Users\xewon\.gradle\caches\transforms-3\ac06396d9c1fa74e5a7cb7e0c45da511\transformed\camera-camera2-1.2.1\AndroidManifest.xml:24:9-33:19
+50            android:name="androidx.camera.core.impl.MetadataHolderService"
+50-->[androidx.camera:camera-camera2:1.2.1] C:\Users\xewon\.gradle\caches\transforms-3\ac06396d9c1fa74e5a7cb7e0c45da511\transformed\camera-camera2-1.2.1\AndroidManifest.xml:25:13-75
+51            android:enabled="false"
+51-->[androidx.camera:camera-camera2:1.2.1] C:\Users\xewon\.gradle\caches\transforms-3\ac06396d9c1fa74e5a7cb7e0c45da511\transformed\camera-camera2-1.2.1\AndroidManifest.xml:26:13-36
+52            android:exported="false" >
+52-->[androidx.camera:camera-camera2:1.2.1] C:\Users\xewon\.gradle\caches\transforms-3\ac06396d9c1fa74e5a7cb7e0c45da511\transformed\camera-camera2-1.2.1\AndroidManifest.xml:27:13-37
+53            <meta-data
+53-->[androidx.camera:camera-camera2:1.2.1] C:\Users\xewon\.gradle\caches\transforms-3\ac06396d9c1fa74e5a7cb7e0c45da511\transformed\camera-camera2-1.2.1\AndroidManifest.xml:30:13-32:89
+54                android:name="androidx.camera.core.impl.MetadataHolderService.DEFAULT_CONFIG_PROVIDER"
+54-->[androidx.camera:camera-camera2:1.2.1] C:\Users\xewon\.gradle\caches\transforms-3\ac06396d9c1fa74e5a7cb7e0c45da511\transformed\camera-camera2-1.2.1\AndroidManifest.xml:31:17-103
+55                android:value="androidx.camera.camera2.Camera2Config$DefaultProvider" />
+55-->[androidx.camera:camera-camera2:1.2.1] C:\Users\xewon\.gradle\caches\transforms-3\ac06396d9c1fa74e5a7cb7e0c45da511\transformed\camera-camera2-1.2.1\AndroidManifest.xml:32:17-86
+56        </service>
+57
+58        <activity
+58-->[pub.devrel:easypermissions:3.0.0] C:\Users\xewon\.gradle\caches\transforms-3\f8a291701dffc96aa64efcfcf60d42b0\transformed\easypermissions-3.0.0\AndroidManifest.xml:12:9-16:66
+59            android:name="pub.devrel.easypermissions.AppSettingsDialogHolderActivity"
+59-->[pub.devrel:easypermissions:3.0.0] C:\Users\xewon\.gradle\caches\transforms-3\f8a291701dffc96aa64efcfcf60d42b0\transformed\easypermissions-3.0.0\AndroidManifest.xml:13:13-86
+60            android:exported="false"
+60-->[pub.devrel:easypermissions:3.0.0] C:\Users\xewon\.gradle\caches\transforms-3\f8a291701dffc96aa64efcfcf60d42b0\transformed\easypermissions-3.0.0\AndroidManifest.xml:14:13-37
+61            android:label=""
+61-->[pub.devrel:easypermissions:3.0.0] C:\Users\xewon\.gradle\caches\transforms-3\f8a291701dffc96aa64efcfcf60d42b0\transformed\easypermissions-3.0.0\AndroidManifest.xml:15:13-29
+62            android:theme="@style/EasyPermissions.Transparent" />
+62-->[pub.devrel:easypermissions:3.0.0] C:\Users\xewon\.gradle\caches\transforms-3\f8a291701dffc96aa64efcfcf60d42b0\transformed\easypermissions-3.0.0\AndroidManifest.xml:16:13-63
+63
+64        <provider
+64-->[androidx.emoji2:emoji2:1.2.0] C:\Users\xewon\.gradle\caches\transforms-3\7efe218e7ae35cb58dbf86d5ee36a529\transformed\emoji2-1.2.0\AndroidManifest.xml:24:9-32:20
+65            android:name="androidx.startup.InitializationProvider"
+65-->[androidx.emoji2:emoji2:1.2.0] C:\Users\xewon\.gradle\caches\transforms-3\7efe218e7ae35cb58dbf86d5ee36a529\transformed\emoji2-1.2.0\AndroidManifest.xml:25:13-67
+66            android:authorities="com.example.odyn.androidx-startup"
+66-->[androidx.emoji2:emoji2:1.2.0] C:\Users\xewon\.gradle\caches\transforms-3\7efe218e7ae35cb58dbf86d5ee36a529\transformed\emoji2-1.2.0\AndroidManifest.xml:26:13-68
+67            android:exported="false" >
+67-->[androidx.emoji2:emoji2:1.2.0] C:\Users\xewon\.gradle\caches\transforms-3\7efe218e7ae35cb58dbf86d5ee36a529\transformed\emoji2-1.2.0\AndroidManifest.xml:27:13-37
+68            <meta-data
+68-->[androidx.emoji2:emoji2:1.2.0] C:\Users\xewon\.gradle\caches\transforms-3\7efe218e7ae35cb58dbf86d5ee36a529\transformed\emoji2-1.2.0\AndroidManifest.xml:29:13-31:52
+69                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+69-->[androidx.emoji2:emoji2:1.2.0] C:\Users\xewon\.gradle\caches\transforms-3\7efe218e7ae35cb58dbf86d5ee36a529\transformed\emoji2-1.2.0\AndroidManifest.xml:30:17-75
+70                android:value="androidx.startup" />
+70-->[androidx.emoji2:emoji2:1.2.0] C:\Users\xewon\.gradle\caches\transforms-3\7efe218e7ae35cb58dbf86d5ee36a529\transformed\emoji2-1.2.0\AndroidManifest.xml:31:17-49
+71            <meta-data
+71-->[androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\xewon\.gradle\caches\transforms-3\7495f4090f64d34b46f8102bfc12da1e\transformed\lifecycle-process-2.4.1\AndroidManifest.xml:31:13-33:52
+72                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+72-->[androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\xewon\.gradle\caches\transforms-3\7495f4090f64d34b46f8102bfc12da1e\transformed\lifecycle-process-2.4.1\AndroidManifest.xml:32:17-78
+73                android:value="androidx.startup" />
+73-->[androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\xewon\.gradle\caches\transforms-3\7495f4090f64d34b46f8102bfc12da1e\transformed\lifecycle-process-2.4.1\AndroidManifest.xml:33:17-49
+74        </provider>
+75    </application>
+76
+77</manifest>

@@ -1,0 +1,36 @@
+R_DEF: Internal format may change without notice
+local
+color black
+color purple_200
+color purple_500
+color purple_700
+color teal_200
+color teal_700
+color white
+drawable emergency3ungroup
+drawable ic_launcher_background
+drawable ic_launcher_foreground
+drawable labridge_pov_street
+drawable menubutton
+drawable photo
+drawable record
+id EmergencyButton
+id MenuButton
+id PhotoButton
+id RecordButton
+id previewView
+layout main_screen
+layout recording_list
+layout settings
+mipmap ic_launcher
+mipmap ic_launcher_round
+string app_name
+string close_menu_desc
+string emergency_record_button_desc
+string goback_button_desc
+string menu_button_desc
+string photo_button_desc
+string record_button_desc
+style Theme.odyn
+xml backup_rules
+xml data_extraction_rules
