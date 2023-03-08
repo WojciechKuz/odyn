@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="horizontal"
+    tools:context=".MainActivity">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/background"/>
+
+
+    <ImageView
+        android:id="@+id/Tlo"
+        android:layout_width="357dp"
+        android:layout_height="413dp"
+        android:contentDescription="tlo"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/szary"/>
+
+
+    <Button
+        android:id="@+id/btnTlo"
+        android:layout_width="251dp"
+        android:layout_height="63dp"
+        android:backgroundTint="#7F7F7F"
+        android:text="nagrywaj w tle"
+        android:textColor="#000000"
+        app:cornerRadius="15dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.594"
+        app:layout_constraintStart_toStartOf="@+id/Tlo"
+        app:layout_constraintTop_toTopOf="@+id/Tlo"
+        app:layout_constraintVertical_bias="0.464"/>
+
+    <Button
+        android:id="@+id/btnRozmowa"
+        android:layout_width="251dp"
+        android:layout_height="63dp"
+        android:backgroundTint="#7F7F7F"
+        android:text="nagraj rozmowe"
+        android:textColor="#000000"
+        app:cornerRadius="15dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.594"
+        app:layout_constraintStart_toStartOf="@+id/Tlo"
+        app:layout_constraintTop_toTopOf="@+id/Tlo"
+        app:layout_constraintVertical_bias="0.664"/>
+
+    <Button
+        android:id="@+id/btnUstawienia"
+        android:layout_width="251dp"
+        android:layout_height="63dp"
+        android:backgroundTint="#7F7F7F"
+        android:text="ustawienia"
+        android:textColor="#000000"
+        app:cornerRadius="15dp"
+        app:layout_constraintBottom_toBottomOf="@+id/Tlo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.594"
+        app:layout_constraintStart_toStartOf="@+id/Tlo"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.862"/>
+
+    <Button
+        android:id="@+id/btnWyswietl"
+        android:layout_width="251dp"
+        android:layout_height="63dp"
+        android:backgroundTint="#7F7F7F"
+        android:text="wyswietl nagrania"
+        android:textColor="#000000"
+        app:cornerRadius="15dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.594"
+        app:layout_constraintStart_toStartOf="@+id/Tlo"
+        app:layout_constraintTop_toTopOf="@+id/Tlo"
+        app:layout_constraintVertical_bias="0.263"/>
+
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="136dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="120dp"
+        android:text="MENU"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textSize="34sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/Tlo"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.074"/>
+
+    <ImageButton
+        android:id="@+id/imageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.639"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.044"
+        app:srcCompat="@android:drawable/ic_menu_close_clear_cancel"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
