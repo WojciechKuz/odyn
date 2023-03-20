@@ -1,5 +1,8 @@
 # Dziękuję: https://github.com/github/gitignore/blob/main/Android.gitignore
 
+# build, poprawka
+app/build/
+
 # Gradle files
 .gradle/
 build/
