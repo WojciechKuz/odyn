@@ -1,9 +1,0 @@
-com.example.odyn.test.app-core-1.5.0-0 C:\Users\xewon\.gradle\caches\transforms-3\ec8487f8c7272de764897bc7316bc789\transformed\core-1.5.0\res
-com.example.odyn.test.app-annotation-experimental-1.3.0-1 C:\Users\xewon\.gradle\caches\transforms-3\fd3daf95af5e4e1fd3f3860fc1410040\transformed\annotation-experimental-1.3.0\res
-com.example.odyn.test.app-androidTest-2 C:\Users\xewon\Desktop\voicemod cracked by SOFTKILL\odyn-aplikacja\app\build\generated\res\resValues\androidTest\debug
-com.example.odyn.test.app-androidTest-3 C:\Users\xewon\Desktop\voicemod cracked by SOFTKILL\odyn-aplikacja\app\build\generated\res\rs\androidTest\debug
-com.example.odyn.test.app-mergeDebugAndroidTestResources-4 C:\Users\xewon\Desktop\voicemod cracked by SOFTKILL\odyn-aplikacja\app\build\intermediates\incremental\debugAndroidTest\mergeDebugAndroidTestResources\merged.dir
-com.example.odyn.test.app-mergeDebugAndroidTestResources-5 C:\Users\xewon\Desktop\voicemod cracked by SOFTKILL\odyn-aplikacja\app\build\intermediates\incremental\debugAndroidTest\mergeDebugAndroidTestResources\stripped.dir
-com.example.odyn.test.app-merged_res-6 C:\Users\xewon\Desktop\voicemod cracked by SOFTKILL\odyn-aplikacja\app\build\intermediates\merged_res\debugAndroidTest
-com.example.odyn.test.app-androidTest-7 C:\Users\xewon\Desktop\voicemod cracked by SOFTKILL\odyn-aplikacja\app\src\androidTest\res
-com.example.odyn.test.app-androidTestDebug-8 C:\Users\xewon\Desktop\voicemod cracked by SOFTKILL\odyn-aplikacja\app\src\androidTestDebug\res

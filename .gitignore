@@ -3,6 +3,12 @@
 # build, poprawka
 app/build/
 
+#skrypty
+usunWersjonow.sh
+usunWersjonow.bat
+usunPliki.sh
+usunPliki.bat
+
 # Gradle files
 .gradle/
 build/
