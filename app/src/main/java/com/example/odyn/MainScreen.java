@@ -48,9 +48,12 @@ public class MainScreen extends AppCompatActivity {
     // Zrób zdjęcie
     public void onClickPhoto(View view) {
         // Create a file to store the image
+        /*
         String timeStamp = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss", Locale.getDefault()).format(new Date());
         String fileName = "ODYN-" + timeStamp + ".jpg";
         File file = new File(getExternalMediaDirs()[0], fileName);
+        */
+        File file = new FileHandler(this).createPicture();
         camAccess.takePicture(file);
     }
 
