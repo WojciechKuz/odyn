@@ -47,7 +47,8 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="1dp"
                 android:background="#00FFFFFF"
-                android:contentDescription="@string/record_button_desc"
+                android:contentDescription="START"
+                android:onClick="onClickRecord"
                 app:srcCompat="@drawable/record" />
 
             <ImageButton

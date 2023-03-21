@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
 import android.content.Intent;
+import android.widget.ImageButton;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -64,8 +65,10 @@ public class MainScreen extends AppCompatActivity {
 
     // Nagraj wideo
     public void onClickRecord(View view) {
-        //
+        File file = new FileHandler(this).createPicture();
+            camAccess.recordVideo(file);
     }
+
 
     // Z menu:
 
