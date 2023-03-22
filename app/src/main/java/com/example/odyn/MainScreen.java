@@ -97,6 +97,7 @@ public class MainScreen extends AppCompatActivity {
     // Przejdź do ustawień
     public void onClickSettings(View view) {
         Intent doUstaw = new Intent(this, Settings.class);
+        doUstaw.putExtra("settings_file", "settings.xml");
         // tu można dołączyć dodatkowe informacje dla ustawień
         startActivity(doUstaw);
     }
