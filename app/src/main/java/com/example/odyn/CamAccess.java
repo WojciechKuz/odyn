@@ -103,44 +103,43 @@ public class CamAccess extends AppCompatActivity {
     @SuppressLint("RestrictedApi")
     public void recordVideo(File file) {
 
-                    if (isRecording == false) {
-                        isRecording = true;
-                        if (videoCapture != null) {
-                            long timeStamp = System.currentTimeMillis();
-                            ContentValues contentValues = new ContentValues();
-                            contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, timeStamp);
-                            contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "video/mp4");
-
-                            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-
-                                return;
-                            }
-                            videoCapture.startRecording(
-                                    new VideoCapture.OutputFileOptions.Builder(
-                                            getContentResolver(),
-                                            MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
-                                            contentValues
-                                    ).build(),
-                                    getExecutor(),
-                                    new VideoCapture.OnVideoSavedCallback() {
-                                        @Override
-                                        public void onVideoSaved(@NonNull VideoCapture.OutputFileResults outputFileResults) {
-                                            Toast.makeText(CamAccess.this, "Zapisywanie...", Toast.LENGTH_SHORT).show();
-                                        }
-                                        @Override
-                                        public void onError(int videoCaptureError, @NonNull String message, @Nullable Throwable cause) {
-                                            Toast.makeText(CamAccess.this, "Blad... : " + message, Toast.LENGTH_SHORT).show();
-                                        }
-                                    }
-                            );
+        if (isRecording == false) {
+            isRecording = true;
+            if (videoCapture != null) {
+                long timeStamp = System.currentTimeMillis();
+                ContentValues contentValues = new ContentValues();
+                contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, timeStamp);
+                contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "video/mp4");
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+                    return;
+                }
+                videoCapture.startRecording(
+                    new VideoCapture.OutputFileOptions.Builder(
+                        getContentResolver(),
+                        MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+                        contentValues
+                    ).build(),
+                    getExecutor(),
+                    new VideoCapture.OnVideoSavedCallback() {
+                        @Override
+                        public void onVideoSaved(@NonNull VideoCapture.OutputFileResults outputFileResults) {
+                            Toast.makeText(CamAccess.this, "Zapisywanie...", Toast.LENGTH_SHORT).show();
                         }
-                    } else {
-                        isRecording = false;
-                        if (videoCapture != null) {
-                            videoCapture.stopRecording();
+                        @Override
+                        public void onError(int videoCaptureError, @NonNull String message, @Nullable Throwable cause) {
+                            Toast.makeText(CamAccess.this, "Blad... : " + message, Toast.LENGTH_SHORT).show();
                         }
+                    }
+                );
             }
+        }
+        else {
+            isRecording = false;
+            if (videoCapture != null) {
+                videoCapture.stopRecording();
+            }
+        }
 
-    }
+    } // end of recordVideo()
 
 }

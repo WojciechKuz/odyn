@@ -25,13 +25,10 @@ public class FileHandler {
         dir = removeSlash(dir) + '/' + "Odyn";
 
     }
-    /*
-    public void createFile(File absFile, Type type) {
-        // argument absFile - plik bez podanej ścieżki (abstract pathname)
-        File file = createFile(type);
-        file = absFile.
-    }
-    */
+
+    // TODO przetestuj
+
+    // TODO rozbuduj o zapis do katalogu w zależności od rodzaju pliku
 
     // TESTOWE:
     public String testPathGetExternal() {
@@ -44,16 +41,27 @@ public class FileHandler {
         return "XD";
     }
 
-    public File createFile(Type type) {
+
+    // TWORZENIE PLIKÓW
+    public File createFile(String namePrefix, String format) {
+        String fileName = youNameIt(namePrefix, format);
+        File file = new File(context.getExternalMediaDirs()[0].getAbsolutePath(), fileName);
+        return file;
+    }
+    public File createFile(Type type) { // bez sensu, nie korzystać
         switch (type) {
             case picture:
                 return createPicture();
             case video:
+                return createVideo("mp4");
             case emergency:
+                return createEmergencyVideo("mp4"); // tymczasowo
             case data:
+                return createDataFile("txt"); // nie wiem jaki format
         }
         return null;
     }
+
     public File createPicture() {
         String fileName = youNameIt("ODYN-img", "jpg");
         File file = new File(context.getExternalMediaDirs()[0].getAbsolutePath(), fileName);
@@ -61,22 +69,28 @@ public class FileHandler {
         // TODO wybierana ścieżka zapisu
         return file;
     }
+    public File createVideo(String format) {
+        String fileName = youNameIt("ODYN-vid", format);
+        File file = new File(context.getExternalMediaDirs()[0].getAbsolutePath(), fileName);
+        return file;
+    }
+    public File createEmergencyVideo(String format) {
+        String fileName = youNameIt("ODYN-emr", format);
+        File file = new File(context.getExternalMediaDirs()[0].getAbsolutePath(), fileName);
+        return file;
+    }
+    public File createDataFile(String format) {
+        String fileName = youNameIt("ODYN-dat", format);
+        File file = new File(context.getExternalMediaDirs()[0].getAbsolutePath(), fileName);
+        return file;
+    }
+
+
     private String youNameIt(String namePrefix, String fileFormat) {
         String timeStamp = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss", Locale.getDefault()).format(new Date());
         return namePrefix + '-' + timeStamp + '.' + fileFormat;
     }
-    /*
-    private File createFileTemplate(File dirPath) {
-        //
-        return null;
-    }
-    */
 
-    /*
-    private boolean fileExists(URI uri) {
-        //
-    }
-     */
     private void createDir(String path) {
         if(!ifDirExists(path)) {
             new File(path).mkdir();
@@ -95,6 +109,25 @@ public class FileHandler {
         return path;
     }
 
+    /*
+    public void createFile(File absFile, Type type) {
+        // argument absFile - plik bez podanej ścieżki (abstract pathname)
+        File file = createFile(type);
+        file = absFile.
+    }
+    */
+    /*
+    private File createFileTemplate(File dirPath) {
+        //
+        return null;
+    }
+    */
+
+    /*
+    private boolean fileExists(URI uri) {
+        //
+    }
+     */
     /* // NIE POTRZEBA CZYTAĆ PLIKÓW
     public File readFile(URI uri) {
         //

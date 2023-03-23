@@ -65,7 +65,7 @@ public class MainScreen extends AppCompatActivity {
 
     // Nagraj wideo
     public void onClickRecord(View view) {
-        File file = new FileHandler(this).createPicture();
+        File file = new FileHandler(this).createVideo("mp4");
             camAccess.recordVideo(file);
     }
 
