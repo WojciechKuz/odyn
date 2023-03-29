@@ -35,7 +35,7 @@ import java.util.concurrent.Executor;
 
 public class CamAccess extends AppCompatActivity {
     private ImageCapture imageCapture;
-
+    private VideoCapture videoCapture;
     private Activity main; // póki co spełnia dwie role: wątek (Context) i aktywność (wyświetlanie), później warto rozważyć rozdzielenie
 
     // konstruktor. PreviewView służy do wyświetlenia w nim obrazu z kamery
@@ -58,6 +58,7 @@ public class CamAccess extends AppCompatActivity {
         }, ContextCompat.getMainExecutor(main));
 
     }
+    @SuppressLint("RestrictedApi")
     private void bindPreview(ProcessCameraProvider cameraProvider, PreviewView prView) {
 
         CameraSelector cameraSelector = new CameraSelector.Builder()
@@ -73,9 +74,12 @@ public class CamAccess extends AppCompatActivity {
                 .setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY)
                 .setTargetRotation(main.getWindowManager().getDefaultDisplay().getRotation())
                 .build();
+        videoCapture = new VideoCapture.Builder()
+                .setVideoFrameRate(60)
+                .build();
 
         // użyj kamery do wyświetlania w mainActivity (preview) i do robienia zdjęć (imageCapture)
-        Camera camera = cameraProvider.bindToLifecycle((LifecycleOwner)main, cameraSelector, preview, imageCapture);
+        Camera camera = cameraProvider.bindToLifecycle((LifecycleOwner)main, cameraSelector, preview, imageCapture,videoCapture);
     }
 
     // robi zdjęcie
@@ -95,51 +99,30 @@ public class CamAccess extends AppCompatActivity {
         });
     }
 
-    boolean isRecording = false;
-    public VideoCapture videoCapture;
-    private Executor getExecutor() {
-        return ContextCompat.getMainExecutor(this);
-    }
-    @SuppressLint("RestrictedApi")
-    public void recordVideo(File file) {
+    @SuppressLint({"RestrictedApi", "MissingPermission"})
+    public void takeVideo(File file,boolean opcja) {
+        // Set up the output file and start recording video
+        if(opcja) {
+            VideoCapture.OutputFileOptions outputFileOptions = new VideoCapture.OutputFileOptions.Builder(file).build();
+            videoCapture.startRecording(outputFileOptions, ContextCompat.getMainExecutor(main), new VideoCapture.OnVideoSavedCallback() {
 
-        if (isRecording == false) {
-            isRecording = true;
-            if (videoCapture != null) {
-                long timeStamp = System.currentTimeMillis();
-                ContentValues contentValues = new ContentValues();
-                contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, timeStamp);
-                contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "video/mp4");
-                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-                    return;
+                @Override
+                public void onVideoSaved(@NonNull VideoCapture.OutputFileResults outputFileResults) {
+                    // The video has been saved to the file
+                    System.out.println("-----------------------.-------------------.---------ZapisywanieVID-----------------------.-------------------.---------");
                 }
-                videoCapture.startRecording(
-                    new VideoCapture.OutputFileOptions.Builder(
-                        getContentResolver(),
-                        MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
-                        contentValues
-                    ).build(),
-                    getExecutor(),
-                    new VideoCapture.OnVideoSavedCallback() {
-                        @Override
-                        public void onVideoSaved(@NonNull VideoCapture.OutputFileResults outputFileResults) {
-                            Toast.makeText(CamAccess.this, "Zapisywanie...", Toast.LENGTH_SHORT).show();
-                        }
-                        @Override
-                        public void onError(int videoCaptureError, @NonNull String message, @Nullable Throwable cause) {
-                            Toast.makeText(CamAccess.this, "Blad... : " + message, Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                );
-            }
-        }
-        else {
-            isRecording = false;
-            if (videoCapture != null) {
-                videoCapture.stopRecording();
-            }
-        }
 
+                @Override
+                public void onError(int videoCaptureError, @NonNull String message, @Nullable Throwable cause) {
+                    // Handle any errors here
+                    System.out.println("-----------------------.-------------------.---------GownoVID-----------------------.-------------------.---------");
+                }
+            });
+        }
+        else
+        {
+             videoCapture.stopRecording();
+        }
     } // end of recordVideo()
 
 }

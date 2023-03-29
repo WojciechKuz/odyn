@@ -64,9 +64,17 @@ public class MainScreen extends AppCompatActivity {
     }
 
     // Nagraj wideo
+    boolean isRecording = false;
     public void onClickRecord(View view) {
+
         File file = new FileHandler(this).createVideo("mp4");
-            camAccess.recordVideo(file);
+        if (!isRecording) {
+            isRecording = true;
+            camAccess.takeVideo(file,isRecording);
+        } else {
+            isRecording = false;
+            camAccess.takeVideo(file,isRecording);
+        }
     }
 
 
