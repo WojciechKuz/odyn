@@ -6,46 +6,171 @@
     android:layout_height="match_parent"
     tools:context=".Settings">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="USTAWIENIA"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.468"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.41" />
-
     <Switch
         android:id="@+id/switch1"
-        android:layout_width="199dp"
-        android:layout_height="62dp"
-        android:layout_marginStart="84dp"
-        android:layout_marginTop="20dp"
-        android:text="Analizować obraz"
+        android:layout_width="423dp"
+        android:layout_height="47dp"
+        android:text="  Analizować obraz"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textView" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Switch
         android:id="@+id/switch2"
-        android:layout_width="287dp"
-        android:layout_height="67dp"
-        android:layout_marginStart="60dp"
-        android:layout_marginTop="56dp"
+        android:layout_width="415dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="8dp"
         android:text="Odczytywać tablice rejestracyjne"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/switch1" />
+        app:layout_constraintTop_toBottomOf="@id/switch1"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Switch
         android:id="@+id/switch3"
-        android:layout_width="331dp"
-        android:layout_height="73dp"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="68dp"
+        android:layout_width="419dp"
+        android:layout_height="54dp"
+        android:layout_marginTop="8dp"
         android:text="Mierzyć odległość od pojazdu z przodu"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/switch2" />
+        app:layout_constraintTop_toBottomOf="@id/switch2"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Switch
+        android:id="@+id/switch4"
+        android:layout_width="416dp"
+        android:layout_height="50dp"
+        android:text="Wyświetlać lokalizację"
+        app:layout_constraintBottom_toTopOf="@+id/spinner"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/switch3"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Switch
+        android:id="@+id/switch5"
+        android:layout_width="411dp"
+        android:layout_height="55dp"
+        android:text="Zapisywać lokalizację"
+        app:layout_constraintBottom_toTopOf="@+id/spinner"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/switch4"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Switch
+        android:id="@+id/switch6"
+        android:layout_width="408dp"
+        android:layout_height="50dp"
+        android:text="Wyświetlać prędkość"
+        app:layout_constraintBottom_toTopOf="@+id/spinner"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/switch5"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Switch
+        android:id="@+id/switch7"
+        android:layout_width="416dp"
+        android:layout_height="59dp"
+        android:text="Zapisywać prędkość"
+        app:layout_constraintBottom_toTopOf="@+id/spinner"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/switch6" />
+
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:drawable/btn_dropdown"
+        android:contentDescription="Gdzie zapis"
+        android:spinnerMode="dropdown"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/switch3"
+        app:layout_constraintVertical_bias="0.399" />
+
+    <Spinner
+        android:id="@+id/spinner2"
+        android:layout_width="410dp"
+        android:layout_height="53dp"
+        android:background="@android:drawable/btn_dropdown"
+        android:contentDescription="uklad ikonek"
+        android:spinnerMode="dropdown"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spinner"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Spinner
+        android:id="@+id/spinner3"
+        android:layout_width="412dp"
+        android:layout_height="62dp"
+        android:background="@android:drawable/btn_dropdown"
+        android:contentDescription="Dlugosc zapisu"
+        android:spinnerMode="dropdown"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spinner2"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Spinner
+        android:id="@+id/spinner4"
+        android:layout_width="408dp"
+        android:layout_height="53dp"
+        android:background="@android:drawable/btn_dropdown"
+        android:contentDescription="Rozmiar zapisu"
+        android:spinnerMode="dropdown"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spinner3"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Spinner
+        android:id="@+id/spinner5"
+        android:layout_width="408dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="7dp"
+        android:background="@android:drawable/btn_dropdown"
+        android:contentDescription="czas nagran awaryjnych przed"
+        android:spinnerMode="dropdown"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spinner4"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Spinner
+        android:id="@+id/spinner6"
+        android:layout_width="406dp"
+        android:layout_height="54dp"
+        android:background="@android:drawable/btn_dropdown"
+        android:contentDescription="czas nagran awaryjnych po"
+        android:spinnerMode="dropdown"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.8"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spinner5"
+        app:layout_constraintVertical_bias="0.082" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
