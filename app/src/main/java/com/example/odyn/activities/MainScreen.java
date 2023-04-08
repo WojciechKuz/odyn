@@ -10,7 +10,7 @@ import android.view.View;
 import android.content.Intent;
 
 import com.example.odyn.cam.CamAccess;
-import com.example.odyn.FileHandler;
+import com.example.odyn.main_service.FileHandler;
 import com.example.odyn.R;
 import com.example.odyn.main_service.MainService;
 

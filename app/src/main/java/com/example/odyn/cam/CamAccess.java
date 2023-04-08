@@ -83,12 +83,6 @@ public class CamAccess extends AppCompatActivity {
         Camera camera = cameraProvider.bindToLifecycle((LifecycleOwner)main, cameraSelector, preview, imageCapture,videoCapture);
     }
 
-    // obsłuż intent'y. żądania nagrywania, itp.
-    public void onHandleIntent(Intent intent) {
-        // TODO odczytaj, co zrobić RecType i ActionType
-        // może się uda w jednym? 3 bity na RecType, 2 na ActionType
-    }
-
     // robi zdjęcie
     public void takePicture(File file) {
         // Set up the output file and capture the image
@@ -97,6 +91,7 @@ public class CamAccess extends AppCompatActivity {
             @Override
             public void onImageSaved(@NonNull ImageCapture.OutputFileResults outputFileResults) {
                 // The image has been saved to the file
+                Log.v("CamAccess", "---------ZapisywanieIMG---------");
             }
 
             @Override
@@ -118,12 +113,14 @@ public class CamAccess extends AppCompatActivity {
                 public void onVideoSaved(@NonNull VideoCapture.OutputFileResults outputFileResults) {
                     // The video has been saved to the file
                     System.out.println("-----------------------.-------------------.---------ZapisywanieVID-----------------------.-------------------.---------");
+                    Log.v("CamAccess", "---------ZapisywanieVID---------");
                 }
 
                 @Override
                 public void onError(int videoCaptureError, @NonNull String message, @Nullable Throwable cause) {
                     // Handle any errors here
                     System.out.println("-----------------------.-------------------.---------GownoVID-----------------------.-------------------.---------");
+                    Log.wtf("CamAccess", "---------GownoVID---------");
                 }
             });
         }
