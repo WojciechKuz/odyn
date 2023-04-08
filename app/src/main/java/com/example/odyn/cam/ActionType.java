@@ -1,4 +1,4 @@
-package com.example.odyn.types;
+package com.example.odyn.cam;
 
 /*
 	RecType to rodzaj nagrania/zdjęcia z kamery.

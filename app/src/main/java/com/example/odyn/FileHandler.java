@@ -2,7 +2,7 @@ package com.example.odyn;
 
 import android.content.Context;
 
-import com.example.odyn.types.RecType;
+import com.example.odyn.cam.RecType;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -12,7 +12,7 @@ import java.util.Locale;
 
 
 public class FileHandler {
-    // metoda, podajesz plik, typ i zapisuje pod odpowiednią ścieżką
+    // metoda, podajesz plik, typ i zapisuje pod odpowiednią ścieżką i nazwą
     private String dir;
     private String pictSubdir = "pictures";
     private String vidSubdir = "videos";
@@ -20,7 +20,7 @@ public class FileHandler {
     private String dataSubdir = "data";
     private Context context;
 
-    FileHandler(Context mainActivity) {
+    public FileHandler(Context mainActivity) {
         // TODO ustawianie czy w pamięci telefonu, czy na karcie SD. (pobierane z ustawień)
         context = mainActivity;
         dir = context.getFilesDir().getAbsolutePath();
@@ -50,6 +50,8 @@ public class FileHandler {
         File file = new File(context.getExternalMediaDirs()[0].getAbsolutePath(), fileName);
         return file;
     }
+
+    @Deprecated
     public File createFile(RecType type) { // bez sensu, nie korzystać
         switch (type) {
             case picture:

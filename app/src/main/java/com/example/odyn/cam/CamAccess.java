@@ -1,4 +1,4 @@
-package com.example.odyn;
+package com.example.odyn.cam;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -107,8 +107,9 @@ public class CamAccess extends AppCompatActivity {
     }
 
     @SuppressLint({"RestrictedApi", "MissingPermission"})
-    public void takeVideo(File file,boolean opcja) {
+    public void takeVideo(File file, boolean opcja) {
         // Set up the output file and start recording video
+
         if(opcja) {
             VideoCapture.OutputFileOptions outputFileOptions = new VideoCapture.OutputFileOptions.Builder(file).build();
             videoCapture.startRecording(outputFileOptions, ContextCompat.getMainExecutor(main), new VideoCapture.OnVideoSavedCallback() {

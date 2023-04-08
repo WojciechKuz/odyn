@@ -19,18 +19,22 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.odyn"
         tools:targetApi="31">
+        <activity
+            android:name=".activities.TempActivity"
+            android:exported="false" />
+
         <service
-            android:name=".MainService"
-            android:exported="false"></service>
+            android:name=".main_service.MainService"
+            android:exported="false" />
 
         <activity
-            android:name=".RecordingList"
+            android:name=".activities.RecordingList"
             android:exported="false" />
         <activity
-            android:name=".Settings"
+            android:name=".activities.Settings"
             android:exported="false" />
         <activity
-            android:name=".MainScreen"
+            android:name=".activities.MainScreen"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
