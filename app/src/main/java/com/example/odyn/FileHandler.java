@@ -2,12 +2,14 @@ package com.example.odyn;
 
 import android.content.Context;
 
+import com.example.odyn.types.RecType;
+
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-enum Type {picture, video, emergency, data};
+
 
 public class FileHandler {
     // metoda, podajesz plik, typ i zapisuje pod odpowiednią ścieżką
@@ -48,7 +50,7 @@ public class FileHandler {
         File file = new File(context.getExternalMediaDirs()[0].getAbsolutePath(), fileName);
         return file;
     }
-    public File createFile(Type type) { // bez sensu, nie korzystać
+    public File createFile(RecType type) { // bez sensu, nie korzystać
         switch (type) {
             case picture:
                 return createPicture();

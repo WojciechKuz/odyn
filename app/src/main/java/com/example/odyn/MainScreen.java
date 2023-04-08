@@ -20,6 +20,8 @@ public class MainScreen extends AppCompatActivity {
 
     public PreviewView previewView;
     private CamAccess camAccess; // dostęp do kamery
+
+    private MainService service;
     private static final int MY_CAMERA_REQUEST_CODE = 100;
     private static final int MY_WRITE_EXTERNAL_STORAGE = 100;
     @Override
@@ -37,10 +39,23 @@ public class MainScreen extends AppCompatActivity {
 
         previewView = findViewById(R.id.previewView);
 
+        // tworze Service, wątek działający w tle
+
         // tu znajdują się rzeczy związane z inicjalizacją kamery
         camAccess = new CamAccess(this, previewView);
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        service.appNotOnScreen(); // utwórz pływające powiadomienie
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        service.appBackOnScreen(); // zamknij pływające powiadomienie
+    }
 
     // Otwórz panel menu
     public void onClickMenu(View view) {

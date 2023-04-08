@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -80,6 +81,12 @@ public class CamAccess extends AppCompatActivity {
 
         // użyj kamery do wyświetlania w mainActivity (preview) i do robienia zdjęć (imageCapture)
         Camera camera = cameraProvider.bindToLifecycle((LifecycleOwner)main, cameraSelector, preview, imageCapture,videoCapture);
+    }
+
+    // obsłuż intent'y. żądania nagrywania, itp.
+    public void onHandleIntent(Intent intent) {
+        // TODO odczytaj, co zrobić RecType i ActionType
+        // może się uda w jednym? 3 bity na RecType, 2 na ActionType
     }
 
     // robi zdjęcie

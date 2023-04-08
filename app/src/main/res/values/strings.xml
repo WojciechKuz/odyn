@@ -9,4 +9,7 @@
     <string name="goback_button_desc">go back</string>
     <string name="close_menu_desc">close menu</string>
     <string name="take_video">take video</string>
+
+    <string name="notif_title">OdynCam 📹</string>
+    <string name="notif_text">Twój wiking nagrywa z ukrycia...</string>
 </resources>
