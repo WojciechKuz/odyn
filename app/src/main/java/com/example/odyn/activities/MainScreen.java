@@ -13,6 +13,7 @@ import com.example.odyn.cam.CamAccess;
 import com.example.odyn.main_service.FileHandler;
 import com.example.odyn.R;
 import com.example.odyn.main_service.MainService;
+import com.example.odyn.main_service.ServiceConnector;
 
 import java.io.File;
 
@@ -43,7 +44,9 @@ public class MainScreen extends AppCompatActivity {
         // tworze Service, wątek działający w tle
 
         // tu znajdują się rzeczy związane z inicjalizacją kamery
-        camAccess = new CamAccess(this, previewView);
+        camAccess = new CamAccess(null, this); // TODO null > MainService
+
+        ServiceConnector.setActivity(this); // static, usunięcie w onDestroy()
     }
 
     @Override
@@ -72,6 +75,9 @@ public class MainScreen extends AppCompatActivity {
         */
         File file = new FileHandler(this).createPicture();
         camAccess.takePicture(file);
+
+        // nowe
+
     }
 
     // Nagrywanie awaryjne
@@ -121,5 +127,11 @@ public class MainScreen extends AppCompatActivity {
     // Wyjdź i nagrywaj w tle
     public void onClickBackground(View view) {
         //
+    }
+
+    @Override
+    protected void onDestroy() {
+        ServiceConnector.removeActivity(); // trzeba się pozbyć referencji, aby poprawnie usunąć Aktywność
+        super.onDestroy();
     }
 }

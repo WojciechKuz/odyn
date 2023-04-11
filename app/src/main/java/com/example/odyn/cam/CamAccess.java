@@ -28,6 +28,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LifecycleOwner;
 
+import com.example.odyn.R;
 import com.google.common.util.concurrent.ListenableFuture;
 
 import java.io.File;
@@ -37,18 +38,21 @@ import java.util.concurrent.Executor;
 public class CamAccess extends AppCompatActivity {
     private ImageCapture imageCapture;
     private VideoCapture videoCapture;
-    private Activity main; // póki co spełnia dwie role: wątek (Context) i aktywność (wyświetlanie), później warto rozważyć rozdzielenie
+    private Context context; // póki co spełnia dwie role: wątek (Context) i aktywność (wyświetlanie), później warto rozważyć rozdzielenie
+    private int rotation;
 
     // konstruktor. PreviewView służy do wyświetlenia w nim obrazu z kamery
-    public CamAccess(Activity main, PreviewView prView) {
-        this.main = main;
+    public CamAccess(Context context, Activity mainActivity) {
+        this.context = context;
+        PreviewView prView = mainActivity.findViewById(R.id.previewView);
+        rotation =  mainActivity.getWindowManager().getDefaultDisplay().getRotation(); // inny sposób na otrzymanie orientacji ekranu ???
         cameraProviderSetup(prView);
     }
 
     // te dwie poniższe funkcje służą do przygotowania kamery do przekazywania obrazu do <PreviewView> i robienia zdjęć
     @SuppressLint("RestrictedApi")
     private void cameraProviderSetup(PreviewView prView) {
-        ListenableFuture<ProcessCameraProvider> cameraProviderFuture = ProcessCameraProvider.getInstance(main);
+        ListenableFuture<ProcessCameraProvider> cameraProviderFuture = ProcessCameraProvider.getInstance(context);
         cameraProviderFuture.addListener(() -> {
             try {
                 ProcessCameraProvider cameraProvider = cameraProviderFuture.get();
@@ -56,7 +60,7 @@ public class CamAccess extends AppCompatActivity {
             } catch (ExecutionException | InterruptedException e) {
                 // gdzie przechwycenie ???
             }
-        }, ContextCompat.getMainExecutor(main));
+        }, ContextCompat.getMainExecutor(context));
 
     }
     @SuppressLint("RestrictedApi")
@@ -73,21 +77,21 @@ public class CamAccess extends AppCompatActivity {
         ImageCapture.Builder builder = new ImageCapture.Builder();
         imageCapture = builder
                 .setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY)
-                .setTargetRotation(main.getWindowManager().getDefaultDisplay().getRotation())
+                .setTargetRotation(rotation)
                 .build();
         videoCapture = new VideoCapture.Builder()
                 .setVideoFrameRate(60)
                 .build();
 
         // użyj kamery do wyświetlania w mainActivity (preview) i do robienia zdjęć (imageCapture)
-        Camera camera = cameraProvider.bindToLifecycle((LifecycleOwner)main, cameraSelector, preview, imageCapture,videoCapture);
+        Camera camera = cameraProvider.bindToLifecycle((LifecycleOwner)context, cameraSelector, preview, imageCapture,videoCapture);
     }
 
-    // robi zdjęcie
+    // robi zdjęcie TODO change to protected
     public void takePicture(File file) {
         // Set up the output file and capture the image
         ImageCapture.OutputFileOptions outputFileOptions = new ImageCapture.OutputFileOptions.Builder(file).build();
-        imageCapture.takePicture(outputFileOptions, ContextCompat.getMainExecutor(main), new ImageCapture.OnImageSavedCallback() {
+        imageCapture.takePicture(outputFileOptions, ContextCompat.getMainExecutor(context), new ImageCapture.OnImageSavedCallback() {
             @Override
             public void onImageSaved(@NonNull ImageCapture.OutputFileResults outputFileResults) {
                 // The image has been saved to the file
@@ -101,13 +105,14 @@ public class CamAccess extends AppCompatActivity {
         });
     }
 
+    // TODO change to protected
     @SuppressLint({"RestrictedApi", "MissingPermission"})
     public void takeVideo(File file, boolean opcja) {
         // Set up the output file and start recording video
 
         if(opcja) {
             VideoCapture.OutputFileOptions outputFileOptions = new VideoCapture.OutputFileOptions.Builder(file).build();
-            videoCapture.startRecording(outputFileOptions, ContextCompat.getMainExecutor(main), new VideoCapture.OnVideoSavedCallback() {
+            videoCapture.startRecording(outputFileOptions, ContextCompat.getMainExecutor(context), new VideoCapture.OnVideoSavedCallback() {
 
                 @Override
                 public void onVideoSaved(@NonNull VideoCapture.OutputFileResults outputFileResults) {
@@ -128,6 +133,6 @@ public class CamAccess extends AppCompatActivity {
         {
              videoCapture.stopRecording();
         }
-    } // end of recordVideo()
+    } // end of takeVideo()
 
 }
