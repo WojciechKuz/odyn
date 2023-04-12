@@ -1,16 +1,7 @@
 package com.example.odyn;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.ContentValues;
-import android.content.Context;
-import android.content.pm.PackageManager;
-import android.provider.MediaStore;
-import android.util.Log;
-import android.view.View;
-import android.widget.ImageButton;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,7 +14,6 @@ import androidx.camera.core.Preview;
 import androidx.camera.core.VideoCapture;
 import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.camera.view.PreviewView;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LifecycleOwner;
 
@@ -31,7 +21,9 @@ import com.google.common.util.concurrent.ListenableFuture;
 
 import java.io.File;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executor;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class CamAccess extends AppCompatActivity {
     private ImageCapture imageCapture;
@@ -99,28 +91,52 @@ public class CamAccess extends AppCompatActivity {
         });
     }
 
+    Timer timer = new Timer();
+
+
+
     @SuppressLint({"RestrictedApi", "MissingPermission"})
-    public void takeVideo(File file,boolean opcja) {
+    public void takeVideo(boolean opcja) {
         // Set up the output file and start recording video
         if(opcja) {
-            VideoCapture.OutputFileOptions outputFileOptions = new VideoCapture.OutputFileOptions.Builder(file).build();
-            videoCapture.startRecording(outputFileOptions, ContextCompat.getMainExecutor(main), new VideoCapture.OnVideoSavedCallback() {
+            TimerTask task = new TimerTask() {
+                int count = 0;
+                public void run() {
+                    if(count == 0)
+                    {
+                        File file = new FileHandler(main).createVideo("mp4");
 
-                @Override
-                public void onVideoSaved(@NonNull VideoCapture.OutputFileResults outputFileResults) {
-                    // The video has been saved to the file
-                    System.out.println("-----------------------.-------------------.---------ZapisywanieVID-----------------------.-------------------.---------");
-                }
 
-                @Override
-                public void onError(int videoCaptureError, @NonNull String message, @Nullable Throwable cause) {
-                    // Handle any errors here
-                    System.out.println("-----------------------.-------------------.---------GownoVID-----------------------.-------------------.---------");
+                        VideoCapture.OutputFileOptions outputFileOptions = new VideoCapture.OutputFileOptions.Builder(file).build();
+                        videoCapture.startRecording(outputFileOptions, ContextCompat.getMainExecutor(main), new VideoCapture.OnVideoSavedCallback() {
+
+                            @Override
+                            public void onVideoSaved(@NonNull VideoCapture.OutputFileResults outputFileResults) {
+                                // The video has been saved to the file
+                                System.out.println("-----------------------.-------------------.---------ZapisywanieVID-----------------------.-------------------.---------");
+                            }
+
+                            @Override
+                            public void onError(int videoCaptureError, @NonNull String message, @Nullable Throwable cause) {
+                                // Handle any errors here
+                                System.out.println("-----------------------.-------------------.---------GownoVID-----------------------.-------------------.---------");
+                            }
+                        });
+                    }
+                    count++;
+                    //System.out.println("Czas: " + count + " sekund");
+                    //10+2 -> 2 to opoznienie aby nagrac film 10 sekundowy
+                    if (count >= 10+2) {
+                        videoCapture.stopRecording();
+                        count = 0;
+                    }
                 }
-            });
+            };
+            timer.schedule(task, 0, 1000);
         }
         else
         {
+             timer.cancel();
              videoCapture.stopRecording();
         }
     } // end of recordVideo()

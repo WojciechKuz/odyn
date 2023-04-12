@@ -11,13 +11,12 @@ import android.content.Intent;
 import android.widget.ImageButton;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
+
 
 // ekran główny aplikacji
 public class MainScreen extends AppCompatActivity {
 
+    ImageButton record;
     public PreviewView previewView;
     private CamAccess camAccess; // dostęp do kamery
     private static final int MY_CAMERA_REQUEST_CODE = 100;
@@ -36,7 +35,7 @@ public class MainScreen extends AppCompatActivity {
         }
 
         previewView = findViewById(R.id.previewView);
-
+        record = findViewById(R.id.RecordButton);
         // tu znajdują się rzeczy związane z inicjalizacją kamery
         camAccess = new CamAccess(this, previewView);
     }
@@ -67,13 +66,14 @@ public class MainScreen extends AppCompatActivity {
     boolean isRecording = false;
     public void onClickRecord(View view) {
 
-        File file = new FileHandler(this).createVideo("mp4");
         if (!isRecording) {
             isRecording = true;
-            camAccess.takeVideo(file,isRecording);
+            record.setImageResource(R.drawable.record_active);
+            camAccess.takeVideo(isRecording);
         } else {
             isRecording = false;
-            camAccess.takeVideo(file,isRecording);
+            record.setImageResource(R.drawable.record);
+            camAccess.takeVideo(isRecording);
         }
     }
 
