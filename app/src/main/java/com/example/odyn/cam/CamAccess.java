@@ -1,4 +1,4 @@
-package com.example.odyn;
+package com.example.odyn.cam;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -17,6 +17,7 @@ import androidx.camera.view.PreviewView;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LifecycleOwner;
 
+import com.example.odyn.FileHandler;
 import com.google.common.util.concurrent.ListenableFuture;
 
 import java.io.File;

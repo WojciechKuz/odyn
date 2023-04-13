@@ -1,4 +1,4 @@
-package com.example.odyn;
+package com.example.odyn.activities;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -10,6 +10,8 @@ import android.widget.Switch;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+
+import com.example.odyn.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;

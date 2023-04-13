@@ -18,7 +18,7 @@ public class FileHandler {
     private String dataSubdir = "data";
     private Context context;
 
-    FileHandler(Context mainActivity) {
+    public FileHandler(Context mainActivity) {
         // TODO ustawianie czy w pamięci telefonu, czy na karcie SD. (pobierane z ustawień)
         context = mainActivity;
         dir = context.getFilesDir().getAbsolutePath();

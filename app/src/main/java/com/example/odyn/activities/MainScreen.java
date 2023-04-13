@@ -1,4 +1,4 @@
-package com.example.odyn;
+package com.example.odyn.activities;
 
 import android.Manifest;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,6 +9,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.content.Intent;
 import android.widget.ImageButton;
+
+import com.example.odyn.cam.CamAccess;
+import com.example.odyn.FileHandler;
+import com.example.odyn.R;
 
 import java.io.File;
 
