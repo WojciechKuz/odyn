@@ -28,24 +28,22 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LifecycleOwner;
 
-import com.example.odyn.R;
 import com.google.common.util.concurrent.ListenableFuture;
 
 import java.io.File;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executor;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class CamAccess extends AppCompatActivity {
     private ImageCapture imageCapture;
     private VideoCapture videoCapture;
-    private Context context;
-    private int rotation;
+    private Activity main; // póki co spełnia dwie role: wątek (Context) i aktywność (wyświetlanie), później warto rozważyć rozdzielenie
 
     // konstruktor. PreviewView służy do wyświetlenia w nim obrazu z kamery
-    public CamAccess(Context context, Activity mainActivity) {
-        this.context = context;
-        PreviewView prView = mainActivity.findViewById(R.id.previewView);
-        rotation =  mainActivity.getWindowManager().getDefaultDisplay().getRotation(); // inny sposób na otrzymanie orientacji ekranu ???
+    public CamAccess(Activity main, PreviewView prView) {
+        this.main = main;
         cameraProviderSetup(prView);
         Log.v("CamAccess", ">>> CamAccess constructor");
     }
@@ -53,7 +51,7 @@ public class CamAccess extends AppCompatActivity {
     // te dwie poniższe funkcje służą do przygotowania kamery do przekazywania obrazu do <PreviewView> i robienia zdjęć
     @SuppressLint("RestrictedApi")
     private void cameraProviderSetup(PreviewView prView) {
-        ListenableFuture<ProcessCameraProvider> cameraProviderFuture = ProcessCameraProvider.getInstance(context);
+        ListenableFuture<ProcessCameraProvider> cameraProviderFuture = ProcessCameraProvider.getInstance(main);
         cameraProviderFuture.addListener(() -> {
             try {
                 ProcessCameraProvider cameraProvider = cameraProviderFuture.get();
@@ -61,7 +59,7 @@ public class CamAccess extends AppCompatActivity {
             } catch (ExecutionException | InterruptedException e) {
                 // gdzie przechwycenie ???
             }
-        }, ContextCompat.getMainExecutor(context));
+        }, ContextCompat.getMainExecutor(main));
 
     }
     @SuppressLint("RestrictedApi")
@@ -78,21 +76,21 @@ public class CamAccess extends AppCompatActivity {
         ImageCapture.Builder builder = new ImageCapture.Builder();
         imageCapture = builder
                 .setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY)
-                .setTargetRotation(rotation)
+                .setTargetRotation(main.getWindowManager().getDefaultDisplay().getRotation())
                 .build();
         videoCapture = new VideoCapture.Builder()
                 .setVideoFrameRate(60)
                 .build();
 
         // użyj kamery do wyświetlania w mainActivity (preview) i do robienia zdjęć (imageCapture)
-        Camera camera = cameraProvider.bindToLifecycle((LifecycleOwner)context, cameraSelector, preview, imageCapture,videoCapture);
+        Camera camera = cameraProvider.bindToLifecycle((LifecycleOwner)main, cameraSelector, preview, imageCapture,videoCapture);
     }
 
-    // robi zdjęcie TODO change to protected
+    // robi zdjęcie
     public void takePicture(File file) {
         // Set up the output file and capture the image
         ImageCapture.OutputFileOptions outputFileOptions = new ImageCapture.OutputFileOptions.Builder(file).build();
-        imageCapture.takePicture(outputFileOptions, ContextCompat.getMainExecutor(context), new ImageCapture.OnImageSavedCallback() {
+        imageCapture.takePicture(outputFileOptions, ContextCompat.getMainExecutor(main), new ImageCapture.OnImageSavedCallback() {
             @Override
             public void onImageSaved(@NonNull ImageCapture.OutputFileResults outputFileResults) {
                 // The image has been saved to the file
@@ -106,32 +104,53 @@ public class CamAccess extends AppCompatActivity {
         });
     }
 
-    // TODO change to protected
+    Timer timer = new Timer();
+
+
+
     @SuppressLint({"RestrictedApi", "MissingPermission"})
     public void takeVideo(File file, boolean opcja) {
         // Set up the output file and start recording video
 
         if(opcja) {
-            VideoCapture.OutputFileOptions outputFileOptions = new VideoCapture.OutputFileOptions.Builder(file).build();
-            videoCapture.startRecording(outputFileOptions, ContextCompat.getMainExecutor(context), new VideoCapture.OnVideoSavedCallback() {
+            TimerTask task = new TimerTask() {
+                int count = 0;
+                public void run() {
+                    if(count == 0)
+                    {
+                        File file = new FileHandler(main).createVideo("mp4");
 
-                @Override
-                public void onVideoSaved(@NonNull VideoCapture.OutputFileResults outputFileResults) {
-                    // The video has been saved to the file
-                    System.out.println("-----------------------.-------------------.---------ZapisywanieVID-----------------------.-------------------.---------");
-                    Log.v("CamAccess", "---------ZapisywanieVID---------");
-                }
 
-                @Override
-                public void onError(int videoCaptureError, @NonNull String message, @Nullable Throwable cause) {
-                    // Handle any errors here
-                    System.out.println("-----------------------.-------------------.---------GownoVID-----------------------.-------------------.---------");
-                    Log.wtf("CamAccess", "---------GownoVID---------");
+                        VideoCapture.OutputFileOptions outputFileOptions = new VideoCapture.OutputFileOptions.Builder(file).build();
+                        videoCapture.startRecording(outputFileOptions, ContextCompat.getMainExecutor(main), new VideoCapture.OnVideoSavedCallback() {
+
+                            @Override
+                            public void onVideoSaved(@NonNull VideoCapture.OutputFileResults outputFileResults) {
+                                // The video has been saved to the file
+                                System.out.println("-----------------------.-------------------.---------ZapisywanieVID-----------------------.-------------------.---------");
+                            }
+
+                            @Override
+                            public void onError(int videoCaptureError, @NonNull String message, @Nullable Throwable cause) {
+                                // Handle any errors here
+                                System.out.println("-----------------------.-------------------.---------GownoVID-----------------------.-------------------.---------");
+                            }
+                        });
+                    }
+                    count++;
+                    //System.out.println("Czas: " + count + " sekund");
+                    //10+2 -> 2 to opoznienie aby nagrac film 10 sekundowy
+                    if (count >= 10+2) {
+                        videoCapture.stopRecording();
+                        count = 0;
+                    }
                 }
-            });
+            };
+            timer.schedule(task, 0, 1000);
         }
         else
         {
+             timer.cancel();
              videoCapture.stopRecording();
         }
     } // end of takeVideo()

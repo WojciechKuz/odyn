@@ -17,6 +17,10 @@ import com.example.odyn.main_service.MainService;
 import com.example.odyn.main_service.ServiceConnector;
 import com.example.odyn.main_service.types.IconType;
 
+import com.example.odyn.cam.CamAccess;
+import com.example.odyn.FileHandler;
+import com.example.odyn.R;
+
 import java.io.File;
 
 // ekran główny aplikacji
