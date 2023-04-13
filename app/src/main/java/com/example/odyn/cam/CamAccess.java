@@ -38,7 +38,7 @@ import java.util.concurrent.Executor;
 public class CamAccess extends AppCompatActivity {
     private ImageCapture imageCapture;
     private VideoCapture videoCapture;
-    private Context context; // póki co spełnia dwie role: wątek (Context) i aktywność (wyświetlanie), później warto rozważyć rozdzielenie
+    private Context context;
     private int rotation;
 
     // konstruktor. PreviewView służy do wyświetlenia w nim obrazu z kamery
@@ -47,6 +47,7 @@ public class CamAccess extends AppCompatActivity {
         PreviewView prView = mainActivity.findViewById(R.id.previewView);
         rotation =  mainActivity.getWindowManager().getDefaultDisplay().getRotation(); // inny sposób na otrzymanie orientacji ekranu ???
         cameraProviderSetup(prView);
+        Log.v("CamAccess", ">>> CamAccess constructor");
     }
 
     // te dwie poniższe funkcje służą do przygotowania kamery do przekazywania obrazu do <PreviewView> i robienia zdjęć

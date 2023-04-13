@@ -5,6 +5,7 @@ import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.graphics.drawable.Icon;
+import android.util.Log;
 
 import com.example.odyn.activities.MainScreen;
 import com.example.odyn.R;
@@ -16,12 +17,12 @@ public class MainService extends IntentService {
 
 	private Notification notif;
 
+	// nagrywanie przeniesione tutaj. gdy potrzeba zdjęcia MainScreen (Activity) może wołać tę klasę
 	private Cam cam; // dostęp do kamery
 
 	public MainService() {
 		super("MainService");
 	}
-	// TODO przenieść nagrywanie tutaj. gdy potrzeba zdjęcia MainScreen (Activity) może wołać tę klasę
 
 	@Override
 	protected void onHandleIntent(Intent intent) {
@@ -40,13 +41,21 @@ public class MainService extends IntentService {
 	}
 	private synchronized void mainServiceStart() { // ma się wykonywać pokolei
 		// zamiast konstruktora
+		Log.v("MainService", ">>> starting & setting up MainService");
 		Intent startMainScreen = new Intent(this, MainScreen.class);
-		// TODO put extra MainService > MainScreen
+		startMainScreen.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		startActivity(startMainScreen);
+
 		ServiceConnector.setOnClickHandle(this::buttonHandler);
+		ServiceConnector.setService(this);
 
 		// utwórz Cam, trzeba dostarczyć do konstruktora MainScreen Activity
-		cam = new Cam(this, ServiceConnector.getActivity());
+		//cam = new Cam(ServiceConnector.getActivity(), ServiceConnector.getActivity());
+		// tutaj nie działa, cam musi być utworzony w głównym wątku
+		// OD TERAZ: Cam tworzone w MainScreen.createCam() i przekazywane tu do setCam()
+	}
+	public void setCam(Cam cam) {
+		this.cam = cam;
 	}
 
 	private void buttonHandler(IconType it) {
@@ -79,5 +88,17 @@ public class MainService extends IntentService {
 	public void appBackOnScreen() {
 		//
 		// TODO zamknij powiadomienie
+	}
+
+	@Override
+	public void onCreate() {
+		super.onCreate();
+		Log.v("MainService", ">>> MainService created");
+	}
+
+	@Override
+	public void onDestroy() {
+		Log.v("MainService", ">>> MainService destroyed");
+		super.onDestroy();
 	}
 }

@@ -9,11 +9,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.content.Intent;
 
+import com.example.odyn.cam.Cam;
 import com.example.odyn.cam.CamAccess;
 import com.example.odyn.main_service.FileHandler;
 import com.example.odyn.R;
 import com.example.odyn.main_service.MainService;
 import com.example.odyn.main_service.ServiceConnector;
+import com.example.odyn.main_service.types.IconType;
 
 import java.io.File;
 
@@ -21,7 +23,6 @@ import java.io.File;
 public class MainScreen extends AppCompatActivity {
 
     public PreviewView previewView;
-    private CamAccess camAccess; // dostęp do kamery
 
     private MainService service;
     private static final int MY_CAMERA_REQUEST_CODE = 100;
@@ -41,18 +42,15 @@ public class MainScreen extends AppCompatActivity {
 
         previewView = findViewById(R.id.previewView);
 
-        // tworze Service, wątek działający w tle
-
-        // tu znajdują się rzeczy związane z inicjalizacją kamery
-        camAccess = new CamAccess(null, this); // TODO null > MainService
-
         ServiceConnector.setActivity(this); // static, usunięcie w onDestroy()
+        service = ServiceConnector.getService();
+        service.setCam(createCam()); // wyślij Cam do service
     }
 
     @Override
     protected void onStop() {
-        super.onStop();
         service.appNotOnScreen(); // utwórz pływające powiadomienie
+        super.onStop();
     }
 
     @Override
@@ -67,36 +65,20 @@ public class MainScreen extends AppCompatActivity {
     }
     // Zrób zdjęcie
     public void onClickPhoto(View view) {
-        // Create a file to store the image
-        /*
-        String timeStamp = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss", Locale.getDefault()).format(new Date());
-        String fileName = "ODYN-" + timeStamp + ".jpg";
-        File file = new File(getExternalMediaDirs()[0], fileName);
-        */
-        File file = new FileHandler(this).createPicture();
-        camAccess.takePicture(file);
-
         // nowe
-
+        ServiceConnector.onClick(IconType.photo);
     }
 
     // Nagrywanie awaryjne
     public void onClickEmergency(View view) {
-        //
+        // nowe
+        ServiceConnector.onClick(IconType.emergency);
     }
 
     // Nagraj wideo
-    boolean isRecording = false;
     public void onClickRecord(View view) {
-
-        File file = new FileHandler(this).createVideo("mp4");
-        if (!isRecording) {
-            isRecording = true;
-            camAccess.takeVideo(file,isRecording);
-        } else {
-            isRecording = false;
-            camAccess.takeVideo(file,isRecording);
-        }
+        // nowe
+        ServiceConnector.onClick(IconType.recording);
     }
 
 
@@ -133,5 +115,9 @@ public class MainScreen extends AppCompatActivity {
     protected void onDestroy() {
         ServiceConnector.removeActivity(); // trzeba się pozbyć referencji, aby poprawnie usunąć Aktywność
         super.onDestroy();
+    }
+
+    public Cam createCam() {
+        return new Cam(this, ServiceConnector.getActivity());
     }
 }

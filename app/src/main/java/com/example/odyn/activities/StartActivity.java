@@ -37,9 +37,15 @@ public class StartActivity extends AppCompatActivity {
 			requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_WRITE_EXTERNAL_STORAGE);
 		}
 	}
+
 	private void startMainService() {
 		Intent service = new Intent(this, MainService.class);
 		service.putExtra("start", 1);
 		startService(service);
+	}
+	private void startMainScreen() {
+		Intent activity = new Intent(this, MainScreen.class);
+		//activity.putExtra("start", 1);
+		startActivity(activity);
 	}
 }
