@@ -15,6 +15,8 @@ import com.example.odyn.main_service.types.IconType;
 // ta klasa Service będzie służyć do zapisu/odczytu obrazu oraz zajęć pobocznych, jak powiadomienia pływające
 public class MainService extends IntentService {
 
+	// Musi pracować jakaś pętla, żeby MainService działało. gdy nic nie robi jest usuwane.
+
 	private Notification notif;
 
 	// nagrywanie przeniesione tutaj. gdy potrzeba zdjęcia MainScreen (Activity) może wołać tę klasę
