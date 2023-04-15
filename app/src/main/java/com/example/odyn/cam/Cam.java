@@ -16,8 +16,8 @@ public class Cam extends CamAccess {
 
 	private boolean isRecording = false; // nagranie zapisywane (blokowanie usuwania)
 	private boolean isEmergency = false; // nagranie awaryjne zapisywane (blokowanie usuwania)
-	public Cam(Context context, Activity mainActivity) {
-		super(context, mainActivity);
+	public Cam(Activity mainActivity) {
+		super(mainActivity);
 		Log.v("Cam", ">>> Class Cam is ready");
 	}
 

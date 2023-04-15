@@ -28,6 +28,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LifecycleOwner;
 
+import com.example.odyn.R;
 import com.google.common.util.concurrent.ListenableFuture;
 
 import java.io.File;
@@ -42,9 +43,10 @@ public class CamAccess extends AppCompatActivity {
     private Activity main; // póki co spełnia dwie role: wątek (Context) i aktywność (wyświetlanie), później warto rozważyć rozdzielenie
 
     // konstruktor. PreviewView służy do wyświetlenia w nim obrazu z kamery
-    public CamAccess(Activity main, PreviewView prView) {
+    public CamAccess(Activity main) {
         this.main = main;
-        cameraProviderSetup(prView);
+        PreviewView prView2 = main.findViewById(R.id.previewView);
+        cameraProviderSetup(prView2);
         Log.v("CamAccess", ">>> CamAccess constructor");
     }
 
@@ -118,8 +120,6 @@ public class CamAccess extends AppCompatActivity {
                 public void run() {
                     if(count == 0)
                     {
-                        File file = new FileHandler(main).createVideo("mp4");
-
 
                         VideoCapture.OutputFileOptions outputFileOptions = new VideoCapture.OutputFileOptions.Builder(file).build();
                         videoCapture.startRecording(outputFileOptions, ContextCompat.getMainExecutor(main), new VideoCapture.OnVideoSavedCallback() {

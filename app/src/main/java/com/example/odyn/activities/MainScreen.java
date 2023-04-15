@@ -18,7 +18,7 @@ import com.example.odyn.main_service.ServiceConnector;
 import com.example.odyn.main_service.types.IconType;
 
 import com.example.odyn.cam.CamAccess;
-import com.example.odyn.FileHandler;
+//import com.example.odyn.FileHandler;
 import com.example.odyn.R;
 
 import java.io.File;
@@ -122,6 +122,6 @@ public class MainScreen extends AppCompatActivity {
     }
 
     public Cam createCam() {
-        return new Cam(this, ServiceConnector.getActivity());
+        return new Cam(ServiceConnector.getActivity());
     }
 }
