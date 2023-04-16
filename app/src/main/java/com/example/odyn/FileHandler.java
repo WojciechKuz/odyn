@@ -1,4 +1,4 @@
-package com.example.odyn.main_service;
+package com.example.odyn;
 
 import android.content.Context;
 

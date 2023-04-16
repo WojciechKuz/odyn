@@ -1,12 +1,10 @@
 package com.example.odyn.cam;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Icon;
 import android.util.Log;
 
-import com.example.odyn.main_service.FileHandler;
+import com.example.odyn.FileHandler;
 import com.example.odyn.main_service.types.IconType;
 
 import java.io.File;

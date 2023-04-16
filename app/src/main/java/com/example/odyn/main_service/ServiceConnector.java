@@ -3,14 +3,17 @@ package com.example.odyn.main_service;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 
+import com.example.odyn.cam.Cam;
 import com.example.odyn.cam.RecType;
 import com.example.odyn.main_service.types.IconType;
 import com.example.odyn.main_service.types.IconTypeInterface;
 
 // służy do komunikacji aktywność <-> MainService
 // póki co nieprofesjonalnie, bo przez klasę statyczną. Czytam o alternatywach
+// TODO Later: zamienić na komunikację za pomocą intent'ów
 public class ServiceConnector {
-	private static IconTypeInterface handler;
+
+	// Aktywność:
 	@SuppressLint("StaticFieldLeak") // ostrożnie używać. w aktywności w onDestroy() użyć ServiceConnector.removeActivity()
 	private static Activity activity;
 
@@ -24,6 +27,12 @@ public class ServiceConnector {
 		activity = null;
 	}
 
+	public static boolean activityExists() {
+		return activity != null;
+	}
+
+	// onClickHandler:
+	private static IconTypeInterface handler;
 	// w argumencie podać, jak obsłużyć przyciski: Cam.camAction()
 	public static void setOnClickHandle(IconTypeInterface handler) {
 		ServiceConnector.handler = handler;
@@ -33,12 +42,13 @@ public class ServiceConnector {
 		handler.onIconClick(it);
 	}
 
-	// można to lepiej zrobić:
-	public static MainService ms;
-	public static void setService(MainService ms) {
-		ServiceConnector.ms = ms;
+
+	// przekazywanie Cam z MainScreen do MainActivity:
+	public static RecieveCamInterface camReciever;
+	public static void setCamReciever(RecieveCamInterface camReciever) {
+		ServiceConnector.camReciever = camReciever;
 	}
-	public static MainService getService() {
-		return ms;
+	public static void sendCam(Cam cam) {
+		camReciever.recieveCam(cam);
 	}
 }
