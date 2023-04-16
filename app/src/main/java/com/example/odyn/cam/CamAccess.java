@@ -1,7 +1,17 @@
 package com.example.odyn.cam;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ContentValues;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.provider.MediaStore;
+import android.util.Log;
+import android.view.View;
+import android.widget.ImageButton;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,10 +24,11 @@ import androidx.camera.core.Preview;
 import androidx.camera.core.VideoCapture;
 import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.camera.view.PreviewView;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LifecycleOwner;
 
-import com.example.odyn.FileHandler;
+import com.example.odyn.R;
 import com.google.common.util.concurrent.ListenableFuture;
 
 import java.io.File;
@@ -29,12 +40,15 @@ import java.util.TimerTask;
 public class CamAccess extends AppCompatActivity {
     private ImageCapture imageCapture;
     private VideoCapture videoCapture;
-    private Activity main; // póki co spełnia dwie role: wątek (Context) i aktywność (wyświetlanie), później warto rozważyć rozdzielenie
+    protected Activity main; // póki co spełnia dwie role: wątek (Context) i aktywność (wyświetlanie), później warto rozważyć rozdzielenie
+    // korzysta z tego też klasa Cam (dziedziczy)
 
     // konstruktor. PreviewView służy do wyświetlenia w nim obrazu z kamery
-    public CamAccess(Activity main, PreviewView prView) {
+    public CamAccess(Activity main) {
         this.main = main;
-        cameraProviderSetup(prView);
+        PreviewView prView2 = main.findViewById(R.id.previewView);
+        cameraProviderSetup(prView2);
+        Log.v("CamAccess", ">>> CamAccess constructor");
     }
 
     // te dwie poniższe funkcje służą do przygotowania kamery do przekazywania obrazu do <PreviewView> i robienia zdjęć
@@ -83,6 +97,7 @@ public class CamAccess extends AppCompatActivity {
             @Override
             public void onImageSaved(@NonNull ImageCapture.OutputFileResults outputFileResults) {
                 // The image has been saved to the file
+                Log.v("CamAccess", "---------ZapisywanieIMG---------");
             }
 
             @Override
@@ -97,16 +112,15 @@ public class CamAccess extends AppCompatActivity {
 
 
     @SuppressLint({"RestrictedApi", "MissingPermission"})
-    public void takeVideo(boolean opcja) {
+    public void takeVideo(File file, boolean opcja) {
         // Set up the output file and start recording video
+
         if(opcja) {
             TimerTask task = new TimerTask() {
                 int count = 0;
                 public void run() {
                     if(count == 0)
                     {
-                        File file = new FileHandler(main).createVideo("mp4");
-
 
                         VideoCapture.OutputFileOptions outputFileOptions = new VideoCapture.OutputFileOptions.Builder(file).build();
                         videoCapture.startRecording(outputFileOptions, ContextCompat.getMainExecutor(main), new VideoCapture.OnVideoSavedCallback() {
@@ -140,6 +154,6 @@ public class CamAccess extends AppCompatActivity {
              timer.cancel();
              videoCapture.stopRecording();
         }
-    } // end of recordVideo()
+    } // end of takeVideo()
 
 }

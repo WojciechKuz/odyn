@@ -1,16 +1,19 @@
 package com.example.odyn;
 
 import android.content.Context;
+import android.util.Log;
+
+import com.example.odyn.cam.RecType;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-enum Type {picture, video, emergency, data};
+
 
 public class FileHandler {
-    // metoda, podajesz plik, typ i zapisuje pod odpowiednią ścieżką
+    // metoda, podajesz plik, typ i zapisuje pod odpowiednią ścieżką i nazwą
     private String dir;
     private String pictSubdir = "pictures";
     private String vidSubdir = "videos";
@@ -21,7 +24,8 @@ public class FileHandler {
     public FileHandler(Context mainActivity) {
         // TODO ustawianie czy w pamięci telefonu, czy na karcie SD. (pobierane z ustawień)
         context = mainActivity;
-        dir = context.getFilesDir().getAbsolutePath();
+        //dir = context.getFilesDir().getAbsolutePath();
+        dir = context.getExternalMediaDirs()[0].getAbsolutePath();
         dir = removeSlash(dir) + '/' + "Odyn";
 
     }
@@ -32,7 +36,7 @@ public class FileHandler {
 
     // TESTOWE:
     public String testPathGetExternal() {
-        return context.getExternalMediaDirs()[0].getAbsolutePath();
+        return context.getExternalMediaDirs()[0].getAbsolutePath(); // sdcard/Android/media/com.example.odyn/<tutaj pliki>
     }
     public String testMyDirPath() {
         return dir;
@@ -48,7 +52,9 @@ public class FileHandler {
         File file = new File(context.getExternalMediaDirs()[0].getAbsolutePath(), fileName);
         return file;
     }
-    public File createFile(Type type) { // bez sensu, nie korzystać
+
+    @Deprecated
+    public File createFile(RecType type) { // bez sensu, nie korzystać
         switch (type) {
             case picture:
                 return createPicture();

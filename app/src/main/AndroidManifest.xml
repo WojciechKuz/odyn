@@ -4,10 +4,12 @@
     package="com.example.odyn">
 
     <uses-feature android:name="android.hardware.camera.any" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <uses-permission android:name="android.permission.CAMERA" /> <!-- trzeba zapytać -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" /> <!-- trzeba zapytać -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!-- trzeba zapytać -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
 
 
@@ -19,7 +21,19 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.odyn"
-        tools:targetApi="31">
+        tools:targetApi="29">
+        <activity
+            android:name=".activities.StartActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <service
+            android:name=".main_service.MainService"
+            android:exported="false" />
+
         <activity
             android:name=".activities.RecordingList"
             android:exported="false" />
@@ -28,12 +42,7 @@
             android:exported="false" />
         <activity
             android:name=".activities.MainScreen"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            android:exported="false">
         </activity>
     </application>
 
