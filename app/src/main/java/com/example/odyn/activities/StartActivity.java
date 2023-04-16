@@ -14,8 +14,10 @@ public class StartActivity extends AppCompatActivity {
 	private static final int MY_CAMERA_REQUEST_CODE = 100;
 	private static final int MY_WRITE_EXTERNAL_STORAGE = 100;
 
+	private static final int MY_MICROPHONE_REQUEST = 100;
+
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	protected synchronized void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_start);
 
@@ -35,6 +37,9 @@ public class StartActivity extends AppCompatActivity {
 		}
 		if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
 			requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_WRITE_EXTERNAL_STORAGE);
+		}
+		if (checkSelfPermission(Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+			requestPermissions(new String[]{Manifest.permission.RECORD_AUDIO}, MY_MICROPHONE_REQUEST);
 		}
 	}
 

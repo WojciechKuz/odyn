@@ -40,7 +40,8 @@ import java.util.TimerTask;
 public class CamAccess extends AppCompatActivity {
     private ImageCapture imageCapture;
     private VideoCapture videoCapture;
-    private Activity main; // póki co spełnia dwie role: wątek (Context) i aktywność (wyświetlanie), później warto rozważyć rozdzielenie
+    protected Activity main; // póki co spełnia dwie role: wątek (Context) i aktywność (wyświetlanie), później warto rozważyć rozdzielenie
+    // korzysta z tego też klasa Cam (dziedziczy)
 
     // konstruktor. PreviewView służy do wyświetlenia w nim obrazu z kamery
     public CamAccess(Activity main) {

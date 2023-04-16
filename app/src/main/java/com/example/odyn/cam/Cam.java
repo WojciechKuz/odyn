@@ -63,22 +63,24 @@ public class Cam extends CamAccess {
 		}
 	}
 	private void photo() {
-		File file = new FileHandler(this).createPicture();
+		File file = new FileHandler(main).createPicture();
 		takePicture(file);
 	}
 	private void record() {
-		File file = new FileHandler(this).createVideo("mp4");
+		File file = new FileHandler(main).createVideo("mp4");
 		if (!isRecording) {
+			Log.v("Cam", ">>> rozpoczynam nagrywanie");
 			isRecording = true;
 			takeVideo(file,isRecording);
 		} else {
+			Log.v("Cam", ">>> kończę nagrywanie");
 			isRecording = false;
 			takeVideo(file,isRecording);
 		}
 	}
 	// może jeszcze zostać zmieniony format, albo dodane jakieś dane jeszcze
 	private void emergency() {
-		File file = new FileHandler(this).createEmergencyVideo("mp4");
+		File file = new FileHandler(main).createEmergencyVideo("mp4");
 		if (!isEmergency) {
 			isEmergency = true;
 			takeVideo(file,isEmergency);

@@ -1,18 +1,14 @@
 package com.example.odyn.main_service;
 
-import android.app.IntentService;
 import android.app.Notification;
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
-import android.graphics.drawable.Icon;
 import android.os.IBinder;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
 
 import com.example.odyn.activities.MainScreen;
-import com.example.odyn.R;
 import com.example.odyn.cam.Cam;
 import com.example.odyn.main_service.types.IconType;
 
@@ -47,7 +43,7 @@ public class MainService extends Service {
 				Log.w("MainService", ">>> MainService started with wrong value in intent!");
 			}
 		}
-		mainServiceStart();
+		mainServiceStart(); // XD najpier
 
 		Log.v("MainService", ">>> MainService started");
 		return START_STICKY; // uruchomienie / wyłączenie serwisu, tylko gdy się tego zażąda
@@ -64,7 +60,7 @@ public class MainService extends Service {
 		// TODO utwórz Notification
 
 		ServiceConnector.setOnClickHandle(this::buttonHandler);
-		ServiceConnector.setCamReciever(this::recieveCam);
+		ServiceConnector.setCamReciever(this::receiveCam);
 
 		// utwórz Cam, trzeba dostarczyć do konstruktora MainScreen Activity
 		//cam = new Cam(ServiceConnector.getActivity(), ServiceConnector.getActivity());
@@ -86,6 +82,7 @@ public class MainService extends Service {
 			case photo:
 			case recording:
 			case emergency:
+				Log.d("MainService", ">>> naciśnięto jeden z przycisków");
 				cam.camAction(it);
 				break;
 			case close:
@@ -129,7 +126,7 @@ public class MainService extends Service {
 		super.onDestroy();
 	}
 
-	private void recieveCam(Cam cam) {
+	private void receiveCam(Cam cam) {
 		this.cam = cam;
 	}
 

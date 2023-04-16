@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 
 import com.example.odyn.cam.Cam;
-import com.example.odyn.cam.RecType;
 import com.example.odyn.main_service.types.IconType;
 import com.example.odyn.main_service.types.IconTypeInterface;
 
@@ -38,7 +37,7 @@ public class ServiceConnector {
 		ServiceConnector.handler = handler;
 	}
 	// wywoływane, gdy jakiś przycisk kliknięto
-	public static void onClick(IconType it) {
+	public static void onClickIcon(IconType it) {
 		handler.onIconClick(it);
 	}
 

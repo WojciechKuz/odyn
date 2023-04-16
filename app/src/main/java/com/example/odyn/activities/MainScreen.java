@@ -1,11 +1,9 @@
 package com.example.odyn.activities;
 
-import android.Manifest;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.camera.view.PreviewView;
 
-import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.content.Intent;
 
@@ -27,6 +25,12 @@ public class MainScreen extends AppCompatActivity {
 
         ServiceConnector.setActivity(this); // static, usunięcie w onDestroy()
         ServiceConnector.sendCam(createCam()); // jak się da to tworzenie z powrotem przenieść do MainService
+
+        // obsługa przycisków
+        findViewById(R.id.MenuButton).setOnClickListener(this::onClickMenu);
+        findViewById(R.id.EmergencyButton).setOnClickListener(this::onClickEmergency);
+        findViewById(R.id.PhotoButton).setOnClickListener(this::onClickPhoto);
+        findViewById(R.id.RecordButton).setOnClickListener(this::onClickRecord);
     }
     // zwraca do MainService
     public Cam createCam() {
@@ -38,14 +42,14 @@ public class MainScreen extends AppCompatActivity {
     @Override
     protected void onStop() {
         // nieaktywne, ponieważ powiadomienie widoczne cały czas. Service wersja 1
-        ServiceConnector.onClick(IconType.display_notif); // utwórz pływające powiadomienie
+        ServiceConnector.onClickIcon(IconType.display_notif); // utwórz pływające powiadomienie
         super.onStop();
     }
     @Override
     protected void onRestart() {
         super.onRestart();
         // nieaktywne, ponieważ powiadomienie widoczne cały czas. Service wersja 1
-        ServiceConnector.onClick(IconType.hide_notif); // zamknij pływające powiadomienie
+        ServiceConnector.onClickIcon(IconType.hide_notif); // zamknij pływające powiadomienie
     }
 
 
@@ -53,21 +57,25 @@ public class MainScreen extends AppCompatActivity {
 
     // Otwórz panel menu
     public void onClickMenu(View view) {
+        Log.d("MainScreen", ">>> otwórz menu");
         //todo
     }
     // Zrób zdjęcie
     public void onClickPhoto(View view) {
-        ServiceConnector.onClick(IconType.photo);
+        Log.d("MainScreen", ">>> zrób zdjęcie");
+        ServiceConnector.onClickIcon(IconType.photo);
     }
 
     // Nagrywanie awaryjne
     public void onClickEmergency(View view) {
-        ServiceConnector.onClick(IconType.emergency);
+        Log.d("MainScreen", ">>> nagrywanie awaryjne");
+        ServiceConnector.onClickIcon(IconType.emergency);
     }
 
     // Nagraj wideo
     public void onClickRecord(View view) {
-        ServiceConnector.onClick(IconType.recording);
+        Log.d("MainScreen", ">>> nagraj");
+        ServiceConnector.onClickIcon(IconType.recording);
     }
 
 
@@ -75,6 +83,7 @@ public class MainScreen extends AppCompatActivity {
 
     // Zamknij menu
     public void onClickCloseMenu(View view) {
+        Log.d("MainScreen", ">>> zamknij menu");
         //todo
     }
 

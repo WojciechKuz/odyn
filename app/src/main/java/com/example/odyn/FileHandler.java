@@ -1,6 +1,7 @@
 package com.example.odyn;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.example.odyn.cam.RecType;
 
@@ -23,7 +24,8 @@ public class FileHandler {
     public FileHandler(Context mainActivity) {
         // TODO ustawianie czy w pamięci telefonu, czy na karcie SD. (pobierane z ustawień)
         context = mainActivity;
-        dir = context.getFilesDir().getAbsolutePath();
+        //dir = context.getFilesDir().getAbsolutePath();
+        dir = context.getExternalMediaDirs()[0].getAbsolutePath();
         dir = removeSlash(dir) + '/' + "Odyn";
 
     }
@@ -34,7 +36,7 @@ public class FileHandler {
 
     // TESTOWE:
     public String testPathGetExternal() {
-        return context.getExternalMediaDirs()[0].getAbsolutePath();
+        return context.getExternalMediaDirs()[0].getAbsolutePath(); // sdcard/Android/media/com.example.odyn/<tutaj pliki>
     }
     public String testMyDirPath() {
         return dir;
