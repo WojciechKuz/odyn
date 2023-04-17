@@ -21,7 +21,7 @@
         android:theme="@style/Theme.odyn"
         tools:targetApi="29">
         <activity
-            android:name=".activities.DrawerActivity"
+            android:name=".activities.MainScreen"
             android:exported="false" />
         <activity
             android:name=".activities.StartActivity"
@@ -42,9 +42,6 @@
             android:exported="false" />
         <activity
             android:name=".activities.Settings"
-            android:exported="false" />
-        <activity
-            android:name=".activities.MainScreen"
             android:exported="false" />
     </application>
 

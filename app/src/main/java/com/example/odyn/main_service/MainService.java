@@ -8,7 +8,6 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
-import com.example.odyn.activities.DrawerActivity;
 import com.example.odyn.activities.MainScreen;
 import com.example.odyn.cam.Cam;
 import com.example.odyn.main_service.types.IconType;
@@ -70,7 +69,7 @@ public class MainService extends Service {
 	}
 	private void startMainScreen() {
 		// DrawerActivity zawiera MainScreen
-		Intent startMainScreen = new Intent(this, DrawerActivity.class);
+		Intent startMainScreen = new Intent(this, MainScreen.class);
 		startMainScreen.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		startActivity(startMainScreen);
 	}
