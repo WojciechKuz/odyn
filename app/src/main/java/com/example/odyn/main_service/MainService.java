@@ -8,6 +8,7 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import com.example.odyn.activities.DrawerActivity;
 import com.example.odyn.activities.MainScreen;
 import com.example.odyn.cam.Cam;
 import com.example.odyn.main_service.types.IconType;
@@ -22,7 +23,7 @@ public class MainService extends Service {
 	private Notification notif;
 	private Cam cam; // dostęp do kamery
 
-	private MainScreen mainScreen;
+	//private MainScreen mainScreen;
 
 
 	// nagrywanie przeniesione tutaj. gdy potrzeba zdjęcia, MainScreen (Activity) może wołać tę klasę
@@ -43,7 +44,7 @@ public class MainService extends Service {
 				Log.w("MainService", ">>> MainService started with wrong value in intent!");
 			}
 		}
-		mainServiceStart(); // XD najpier
+		mainServiceStart();
 
 		Log.v("MainService", ">>> MainService started");
 		return START_STICKY; // uruchomienie / wyłączenie serwisu, tylko gdy się tego zażąda
@@ -60,7 +61,7 @@ public class MainService extends Service {
 		// TODO utwórz Notification
 
 		ServiceConnector.setOnClickHandle(this::buttonHandler);
-		ServiceConnector.setCamReciever(this::receiveCam);
+		ServiceConnector.setCamReciever(this::receiveCam); // MainScreen dostarczy Cam
 
 		// utwórz Cam, trzeba dostarczyć do konstruktora MainScreen Activity
 		//cam = new Cam(ServiceConnector.getActivity(), ServiceConnector.getActivity());
@@ -68,7 +69,8 @@ public class MainService extends Service {
 		// OD TERAZ: Cam tworzone w MainScreen.createCam() i przekazywane tu do setCam()
 	}
 	private void startMainScreen() {
-		Intent startMainScreen = new Intent(this, MainScreen.class);
+		// DrawerActivity zawiera MainScreen
+		Intent startMainScreen = new Intent(this, DrawerActivity.class);
 		startMainScreen.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		startActivity(startMainScreen);
 	}

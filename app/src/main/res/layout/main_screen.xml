@@ -30,7 +30,6 @@
                 android:layout_margin="1dp"
                 android:background="#00FFFFFF"
                 android:contentDescription="@string/menu_button_desc"
-                android:onClick="onClickMenu"
                 app:srcCompat="@drawable/menubutton" />
 
             <ImageButton
@@ -59,13 +58,6 @@
                 android:background="#00FFFFFF"
                 android:contentDescription="@string/photo_button_desc"
                 app:srcCompat="@drawable/photo" />
-
-            <Button
-                android:id="@+id/SettingsButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:onClick="onClickSettings"
-                android:text="USTAWIENIA" />
 
         </LinearLayout>
     </LinearLayout>

@@ -14,4 +14,8 @@
     <string name="notif_text">Twój wiking nagrywa z ukrycia…</string>
     <string name="start_text">OdynCam</string>
     <string name="permission_ask">Wyraź zgodę na uprawnienia, aby aplikacja mogła działać poprawnie</string>
+    <string name="close_menu">zamknij menu</string>
+    <string name="open_recording_list">nagrania</string>
+    <string name="open_settings">ustawienia</string>
+    <string name="record_in_background">nagrywaj w tle</string>
 </resources>

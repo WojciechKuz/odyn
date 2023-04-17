@@ -14,20 +14,29 @@ import com.example.odyn.main_service.types.IconType;
 
 
 // ekran główny aplikacji
-public class MainScreen extends AppCompatActivity {
+public abstract class MainScreen extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_screen);
+        Log.d("MainScreen", ">>> onCreate MainScreen");
 
         // sprawdzenie uprawnień do aparatu i pamięci wewn. przeniesione do StartActivity
 
+        setupMainScreen();
+    }
+    // MainScreen wyświetlany przez include z DrawerActivity, nie jest wywoływane wtedy onCreate() !
+    public void onInclude() { // zamiast onCreate()
+        setupMainScreen();
+    }
+
+    private void setupMainScreen() {
         ServiceConnector.setActivity(this); // static, usunięcie w onDestroy()
         ServiceConnector.sendCam(createCam()); // jak się da to tworzenie z powrotem przenieść do MainService
 
         // obsługa przycisków
-        findViewById(R.id.MenuButton).setOnClickListener(this::onClickMenu);
+        //findViewById(R.id.MenuButton).setOnClickListener(this::onClickMenu); // PRZENIESIONE DO DrawerActivity
         findViewById(R.id.EmergencyButton).setOnClickListener(this::onClickEmergency);
         findViewById(R.id.PhotoButton).setOnClickListener(this::onClickPhoto);
         findViewById(R.id.RecordButton).setOnClickListener(this::onClickRecord);
@@ -55,11 +64,13 @@ public class MainScreen extends AppCompatActivity {
 
     // Przyciski ekranu:
 
-    // Otwórz panel menu
+    // Otwórz panel menu // PRZENIESIONE DO DrawerActivity
+    /*
     public void onClickMenu(View view) {
         Log.d("MainScreen", ">>> otwórz menu");
-        //todo
-    }
+		//
+    }*/
+
     // Zrób zdjęcie
     public void onClickPhoto(View view) {
         Log.d("MainScreen", ">>> zrób zdjęcie");
@@ -76,37 +87,6 @@ public class MainScreen extends AppCompatActivity {
     public void onClickRecord(View view) {
         Log.d("MainScreen", ">>> nagraj");
         ServiceConnector.onClickIcon(IconType.recording);
-    }
-
-
-    // Z menu:
-
-    // Zamknij menu
-    public void onClickCloseMenu(View view) {
-        Log.d("MainScreen", ">>> zamknij menu");
-        //todo
-    }
-
-    // Przejdź do listy nagrań
-    public void onClickRecordingsList(View view) {
-        // Początkowo może przekierowywać do innej aplikacji
-
-        Intent doListy = new Intent(this, RecordingList.class);
-        // tu można dołączyć dodatkowe informacje dla listy nagrań
-        startActivity(doListy);
-    }
-
-    // Przejdź do ustawień
-    public void onClickSettings(View view) {
-        Intent doUstaw = new Intent(this, Settings.class);
-        doUstaw.putExtra("settings_file", "settings.xml");
-        // tu można dołączyć dodatkowe informacje dla ustawień
-        startActivity(doUstaw);
-    }
-
-    // Wyjdź i nagrywaj w tle
-    public void onClickBackground(View view) {
-        //todo
     }
 
     @Override
