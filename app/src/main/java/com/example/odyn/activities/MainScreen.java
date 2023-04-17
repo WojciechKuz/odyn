@@ -27,6 +27,7 @@ public abstract class MainScreen extends AppCompatActivity {
         setupMainScreen();
     }
     // MainScreen wyświetlany przez include z DrawerActivity, nie jest wywoływane wtedy onCreate() !
+    // NIE DA RADY, nie mamy referencji w DrawerActivity do MainScreenActivity
     public void onInclude() { // zamiast onCreate()
         setupMainScreen();
     }
