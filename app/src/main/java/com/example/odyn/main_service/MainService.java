@@ -62,6 +62,9 @@ public class MainService extends Service {
 		ServiceConnector.setOnClickHandle(this::buttonHandler);
 		ServiceConnector.setCamReciever(this::receiveCam); // MainScreen dostarczy Cam
 
+		// Z Logcat'a: Skipped 36 frames!  The application may be doing too much work on its main thread.
+		// TODO utworzyć wątek, na kamerę
+
 		// utwórz Cam, trzeba dostarczyć do konstruktora MainScreen Activity
 		//cam = new Cam(ServiceConnector.getActivity(), ServiceConnector.getActivity());
 		// tutaj nie działa, cam musi być utworzony w głównym wątku
