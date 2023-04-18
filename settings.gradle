@@ -12,5 +12,5 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "odyn"
+rootProject.name = "gpsv2"
 include ':app'
