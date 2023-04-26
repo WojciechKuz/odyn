@@ -81,8 +81,11 @@ public class CamAccess extends AppCompatActivity {
                 .setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY)
                 .setTargetRotation(main.getWindowManager().getDefaultDisplay().getRotation())
                 .build();
-        videoCapture = new VideoCapture.Builder()
+        VideoCapture.Builder builder_vid = new VideoCapture.Builder();
+        videoCapture = builder_vid
                 .setVideoFrameRate(60)
+                .setAudioChannelCount(1)
+                .setAudioBitRate(64000)
                 .build();
 
         // użyj kamery do wyświetlania w mainActivity (preview) i do robienia zdjęć (imageCapture)
@@ -107,10 +110,9 @@ public class CamAccess extends AppCompatActivity {
         });
     }
 
+
+
     Timer timer = new Timer();
-
-
-
     @SuppressLint({"RestrictedApi", "MissingPermission"})
     public void takeVideo(File file, boolean opcja) {
         // Set up the output file and start recording video
@@ -121,10 +123,8 @@ public class CamAccess extends AppCompatActivity {
                 public void run() {
                     if(count == 0)
                     {
-
                         VideoCapture.OutputFileOptions outputFileOptions = new VideoCapture.OutputFileOptions.Builder(file).build();
                         videoCapture.startRecording(outputFileOptions, ContextCompat.getMainExecutor(main), new VideoCapture.OnVideoSavedCallback() {
-
                             @Override
                             public void onVideoSaved(@NonNull VideoCapture.OutputFileResults outputFileResults) {
                                 // The video has been saved to the file
