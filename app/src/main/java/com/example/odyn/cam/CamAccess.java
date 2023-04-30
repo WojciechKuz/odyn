@@ -28,6 +28,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LifecycleOwner;
 
+import com.example.odyn.FileHandler;
 import com.example.odyn.R;
 import com.google.common.util.concurrent.ListenableFuture;
 
@@ -114,7 +115,7 @@ public class CamAccess extends AppCompatActivity {
 
     Timer timer = new Timer();
     @SuppressLint({"RestrictedApi", "MissingPermission"})
-    public void takeVideo(File file, boolean opcja) {
+    public void takeVideo(boolean opcja) {
         // Set up the output file and start recording video
 
         if(opcja) {
@@ -123,6 +124,7 @@ public class CamAccess extends AppCompatActivity {
                 public void run() {
                     if(count == 0)
                     {
+                        File file = new FileHandler(main).createVideo("mp4");
                         VideoCapture.OutputFileOptions outputFileOptions = new VideoCapture.OutputFileOptions.Builder(file).build();
                         videoCapture.startRecording(outputFileOptions, ContextCompat.getMainExecutor(main), new VideoCapture.OnVideoSavedCallback() {
                             @Override
