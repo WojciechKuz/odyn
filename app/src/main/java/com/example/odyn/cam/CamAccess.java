@@ -1,5 +1,7 @@
 package com.example.odyn.cam;
 
+import static android.content.ContentValues.TAG;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -7,8 +9,14 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.SurfaceTexture;
+import android.hardware.camera2.CameraAccessException;
+import android.hardware.camera2.CameraCharacteristics;
+import android.hardware.camera2.CameraManager;
+import android.hardware.camera2.params.StreamConfigurationMap;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.util.Size;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -111,13 +119,38 @@ public class CamAccess extends AppCompatActivity {
         });
     }
 
+    public static float calculateFOV(float focalLength, float aperture) {
+        float horizontalFOV = (float) (2 * Math.atan2(aperture, (2 * focalLength)));
+        float verticalFOV = (float) (2 * Math.atan2(aperture, (2 * focalLength)));
+        return (float) Math.toDegrees(Math.sqrt(Math.pow(horizontalFOV, 2) + Math.pow(verticalFOV, 2)));
+    }
 
 
+    public void fov_resInfo(){
+        try {
+            CameraManager cameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
+            String cameraId = cameraManager.getCameraIdList()[1]; // wybierz pierwszą kamerę
+            CameraCharacteristics characteristics = cameraManager.getCameraCharacteristics(cameraId);
+// uzyskanie wartości FOV
+            float[] focalLengths = characteristics.get(CameraCharacteristics.LENS_INFO_AVAILABLE_FOCAL_LENGTHS);
+            float[] apertures = characteristics.get(CameraCharacteristics.LENS_INFO_AVAILABLE_APERTURES);
+            float fov = calculateFOV(focalLengths[0], apertures[0]);
+// uzyskanie wartości rozdzielczości
+            StreamConfigurationMap map = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
+            Size[] sizes = map.getOutputSizes(SurfaceTexture.class);
+            Size resolution = sizes[0];
+
+            Log.d(TAG, "FOV: " + fov);
+            Log.d(TAG, "Rozdzielczość: " + resolution.getWidth() + " x " + resolution.getHeight());
+
+        } catch (CameraAccessException e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Wystąpił błąd podczas korzystania z kamery", Toast.LENGTH_LONG).show();
+        }
+    }
     Timer timer = new Timer();
     @SuppressLint({"RestrictedApi", "MissingPermission"})
     public void takeVideo(boolean opcja) {
-        // Set up the output file and start recording video
-
         if(opcja) {
             TimerTask task = new TimerTask() {
                 int count = 0;
@@ -129,13 +162,11 @@ public class CamAccess extends AppCompatActivity {
                         videoCapture.startRecording(outputFileOptions, ContextCompat.getMainExecutor(main), new VideoCapture.OnVideoSavedCallback() {
                             @Override
                             public void onVideoSaved(@NonNull VideoCapture.OutputFileResults outputFileResults) {
-                                // The video has been saved to the file
                                 System.out.println("-----------------------.-------------------.---------ZapisywanieVID-----------------------.-------------------.---------");
                             }
 
                             @Override
                             public void onError(int videoCaptureError, @NonNull String message, @Nullable Throwable cause) {
-                                // Handle any errors here
                                 System.out.println("-----------------------.-------------------.---------GownoVID-----------------------.-------------------.---------");
                             }
                         });
