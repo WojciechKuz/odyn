@@ -10,13 +10,22 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.example.odyn.R;
 import com.example.odyn.cam.Cam;
 import com.example.odyn.main_service.ServiceConnector;
 import com.example.odyn.main_service.types.IconType;
 
+import java.io.File;
+
 public class MainScreen extends AppCompatActivity {
+
+	private TimerThread timerThread;
+	private GPSThread gpsThread;
+	private SRTWriter srtWriter;
+
+	private TextView counterText, timerText, latitudeText, longitudeText, srtText;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +33,24 @@ public class MainScreen extends AppCompatActivity {
 		setContentView(R.layout.activity_drawer);
 
 		Log.d("MainScreen", ">>> onCreate DrawerActivity");
+
+		timerText = findViewById(R.id.timerText);
+		counterText = findViewById(R.id.counterText);
+		timerThread = new TimerThread(counterText, timerText);
+		timerThread.start();
+
+		latitudeText = findViewById(R.id.latitudeText);
+		longitudeText = findViewById(R.id.longitudeText);
+		gpsThread = new GPSThread(this, latitudeText, longitudeText);
+		gpsThread.requestGPSPermissions();
+		gpsThread.start();
+
+
+		File file = new File(getExternalFilesDir(null), "myfile.srt");
+		srtText = findViewById(R.id.srtText);
+		srtWriter = new SRTWriter(this, file, counterText, timerText, latitudeText, longitudeText, srtText);
+		srtWriter.requestWritePermissions();
+		srtWriter.start();
 
 		// połączenie przycisku otwarcia menu
 		setupMainScreen();
@@ -93,6 +120,8 @@ public class MainScreen extends AppCompatActivity {
 	@Override
 	protected void onDestroy() {
 		ServiceConnector.removeActivity(); // trzeba się pozbyć referencji, aby poprawnie usunąć Aktywność
+		timerThread.stopTimer();
+		gpsThread.stopGPS();
 		super.onDestroy();
 	}
 

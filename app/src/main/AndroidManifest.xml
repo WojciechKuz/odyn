@@ -5,6 +5,8 @@
 
     <uses-feature android:name="android.hardware.camera.any" />
 
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.CAMERA" /> <!-- trzeba zapytać -->
     <uses-permission android:name="android.permission.RECORD_AUDIO" /> <!-- trzeba zapytać -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!-- trzeba zapytać -->
