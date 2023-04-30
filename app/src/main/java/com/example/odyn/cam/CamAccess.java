@@ -2,23 +2,16 @@ package com.example.odyn.cam;
 
 import static android.content.ContentValues.TAG;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.SurfaceTexture;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCharacteristics;
 import android.hardware.camera2.CameraManager;
 import android.hardware.camera2.params.StreamConfigurationMap;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.util.Size;
-import android.view.View;
-import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -32,7 +25,6 @@ import androidx.camera.core.Preview;
 import androidx.camera.core.VideoCapture;
 import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.camera.view.PreviewView;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LifecycleOwner;
 
@@ -41,11 +33,11 @@ import com.example.odyn.R;
 import com.google.common.util.concurrent.ListenableFuture;
 
 import java.io.File;
-import java.util.concurrent.ExecutionException;
-
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.ExecutionException;
 
+@SuppressWarnings("ALL")
 public class CamAccess extends AppCompatActivity {
     private ImageCapture imageCapture;
     private VideoCapture videoCapture;
