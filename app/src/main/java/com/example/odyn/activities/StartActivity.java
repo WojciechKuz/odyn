@@ -9,6 +9,9 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
+/**
+ * Jest to główna klasa aktywności projektu.
+ */
 public class StartActivity extends AppCompatActivity {
 
 	private static final int MY_CAMERA_REQUEST_CODE = 100;
@@ -16,6 +19,10 @@ public class StartActivity extends AppCompatActivity {
 
 	private static final int MY_MICROPHONE_REQUEST = 100;
 
+	/**
+	 * Jest to metoda tworząca główny widok aplikacji.
+	 * @param savedInstanceState Wiązka argumentów
+	 */
 	@Override
 	protected synchronized void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -30,6 +37,10 @@ public class StartActivity extends AppCompatActivity {
 		// start MainService
 		startMainService();
 	}
+
+	/**
+	 * Jest to metoda sprawdzająca uprawnienia użytkownika do robienia zdjęć, nagrywania i zapisu danych.
+	 */
 	private void permissionCheck() {
 		// sprawdzenie uprawnień do aparatu i pamięci wewn.
 		if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
@@ -43,11 +54,18 @@ public class StartActivity extends AppCompatActivity {
 		}
 	}
 
+	/**
+	 * Jest to metoda uruchamiająca główny serwis aplikacji.
+	 */
 	private void startMainService() {
 		Intent service = new Intent(this, MainService.class);
 		service.putExtra("start", 1);
 		startService(service);
 	}
+
+	/**
+	 * Jest to metoda uruchamiająca klasę aktywności z głównym widokiem aplikacji.
+	 */
 	private void startMainScreen() {
 		Intent activity = new Intent(this, MainScreen.class);
 		//activity.putExtra("start", 1);

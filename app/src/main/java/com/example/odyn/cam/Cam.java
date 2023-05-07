@@ -9,6 +9,9 @@ import com.example.odyn.main_service.types.IconType;
 
 import java.io.File;
 
+/**
+ * Jest to klasa służąca do obsługi kamery.
+ */
 // przykrywa CamAccess (inherit or field?)
 public class Cam extends CamAccess {
 
@@ -30,6 +33,9 @@ public class Cam extends CamAccess {
 	// uruchamiane poprzez camAction(IconType)
 
 	// obsłuż intent'y. żądania nagrywania, itp.
+	/**
+	 * Jest to metoda służąca do obsługi intencji oraz żądań nagrywania.
+	 */
 	public void onHandleIntent(Intent intent) { // ???
 		// odczytaj, co zrobić RecType i ActionType
 		if(intent != null) {
@@ -45,7 +51,9 @@ public class Cam extends CamAccess {
 		}
 	}
 
-
+	/**
+	 * Jest to metoda służąca do obsługi akcji kamery (zdjęcie, nagrywanie, nagrywanie w tle).
+	 */
 	public void camAction(IconType iconType) {
 		switch(iconType) {
 			case photo:
@@ -62,10 +70,16 @@ public class Cam extends CamAccess {
 				break;
 		}
 	}
+	/**
+	 * Jest to metoda służąca do tworzenia zdjęcia.
+	 */
 	private void photo() {
 		File file = new FileHandler(main).createPicture();
 		takePicture(file);
 	}
+	/**
+	 * Jest to metoda służąca do obsługi nagrywania.
+	 */
 	private void record() {
 		if (!isRecording) {
 			Log.v("Cam", ">>> rozpoczynam nagrywanie");
@@ -78,6 +92,9 @@ public class Cam extends CamAccess {
 		}
 	}
 	// może jeszcze zostać zmieniony format, albo dodane jakieś dane jeszcze
+	/**
+	 * Jest to metoda służąca do obsługi nagrywania w tle.
+	 */
 	private void emergency() {
 		//File file = new FileHandler(main).createEmergencyVideo("mp4");
 		if (!isEmergency) {

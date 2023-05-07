@@ -13,6 +13,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+/**
+ * Jest to wątek odpowiedzialny za zapis video w formacie SRT.
+ */
 public class SRTWriter extends Thread {
     private boolean stopWriting = false;
     private File file;
@@ -32,6 +35,9 @@ public class SRTWriter extends Thread {
 		this.srtText = srtText;
     }
 
+	/**
+	 * Jest to metoda służąca do uruchomienia wątku zapisywania plików SRT.
+	 */
     @Override
     public void run() {
         try {
@@ -65,10 +71,16 @@ public class SRTWriter extends Thread {
         }
     }
 
+	/**
+	 * Jest to metoda służąca do zatrzymania zapisu do pliku SRT.
+	 */
     public void stopWriting() {
         stopWriting = true;
     }
 
+	/**
+	 * Jest to metoda służąca do zapisu czasu w godzinach, minutach, sekundach i milisekundach.
+	 */
 	public static String secondsToTimestamp(int seconds) {
 		int hours = seconds / 3600;
 		int minutes = (seconds % 3600) / 60;
@@ -78,6 +90,9 @@ public class SRTWriter extends Thread {
 		return String.format("%02d:%02d:%02d,%03d", hours, minutes, secs, millis);
 	}
 
+	/**
+	 * Jest to metoda odpowiadająca za wykonanie żądania o uprawnienia do zapisywania do pliku SRT.
+	 */
 	public void requestWritePermissions(){
 		// Request permissions
 		if (ContextCompat.checkSelfPermission(context, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {

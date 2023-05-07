@@ -8,7 +8,14 @@ import com.example.odyn.cam.Cam;
 import com.example.odyn.cam.RecType;
 
 // IntentProvider to klasa, która dla każdej ikony dostarcza (wykonuje) powiązaną z nią akcję
+/**
+ * Jest to klasa, która dla każdej ikony wykonuje powoiązaną z nią akcję.
+ */
 public class IntentProvider {
+
+	/**
+	 * Jest to metoda, która dla każdej ikony dotarcza powoiązaną z nią akcję.
+	 */
 	public static void iconClicked(Context context, IconType iconType) {
 		Intent intent;
 		switch(iconType) {

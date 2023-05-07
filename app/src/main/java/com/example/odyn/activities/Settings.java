@@ -22,6 +22,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
+/**
+ * Jest to klasa odpowiadająca za ustawienia aplikacji.
+ */
 public class Settings extends AppCompatActivity {
     private SharedPreferences sharedPrefs;
     private Switch switch1;
@@ -39,7 +42,9 @@ public class Settings extends AppCompatActivity {
     private Spinner Spinner5;
     private Spinner Spinner6;
 
-
+    /**
+     * Jest to metoda tworząca widok ustawień aplikacji.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,6 +105,9 @@ public class Settings extends AppCompatActivity {
 
 
         // Dodanie obsługi zdarzeń dla przełączników
+        /**
+         * Jest to metoda obsługująca przycisk analizy obrazu.
+         */
         switch1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -114,6 +122,9 @@ public class Settings extends AppCompatActivity {
             }
         });
 
+        /**
+         * Jest to metoda obsługująca przycisk odczytywania tablic rejestracyjnych.
+         */
         switch2.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -122,6 +133,9 @@ public class Settings extends AppCompatActivity {
             }
         });
 
+        /**
+         * Jest to metoda obsługująca przycisk mierzenia odległości od pojazdu z przodu
+         */
         switch3.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -130,6 +144,9 @@ public class Settings extends AppCompatActivity {
             }
         });
 
+        /**
+         * Jest to metoda obsługująca przycisk wyświetlania lokalizacji.
+         */
         switch4.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -138,6 +155,9 @@ public class Settings extends AppCompatActivity {
             }
         });
 
+        /**
+         * Jest to metoda obsługująca przycisk zapisywania lokalizacji.
+         */
         switch5.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -146,6 +166,9 @@ public class Settings extends AppCompatActivity {
             }
         });
 
+        /**
+         * Jest to metoda obsługująca przycisk wyświetlania prędkości.
+         */
         switch6.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -154,6 +177,9 @@ public class Settings extends AppCompatActivity {
             }
         });
 
+        /**
+         * Jest to metoda obsługująca przycisk zapisywania prędkości.
+         */
         switch7.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -165,12 +191,18 @@ public class Settings extends AppCompatActivity {
         loadSettingsFromFile();
     }
 
+    /**
+     * Jest to metoda wywoływana po zatrzymaniu aplikacji.
+     */
     @Override
     protected void onPause() {
         super.onPause();
         saveSettingsToFile();
     }
 
+    /**
+     * Jest to metoda zapisująca ustawienia do pliku.
+     */
     private void saveSettingsToFile() {
         try {
             JSONObject settings = new JSONObject();
@@ -196,6 +228,9 @@ public class Settings extends AppCompatActivity {
         }
     }
 
+    /**
+     * Jest to metoda uruchamiająca ustawienia z pliku.
+     */
     private void loadSettingsFromFile() {
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(openFileInput("settings.json")));

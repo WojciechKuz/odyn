@@ -12,6 +12,9 @@ import com.example.odyn.cam.RecType;
 import com.example.odyn.main_service.types.IconProvider;
 import com.example.odyn.main_service.types.IconType;
 
+/**
+ Jest to klasa odpowiedzialna za tworzenie powiadomień.
+ */
 public class NotificationCreator {
 	private Context context;
 	public NotificationCreator(Context context) {
@@ -19,6 +22,9 @@ public class NotificationCreator {
 	}
 
 	// użyj, aby utworzyć powiadomienie
+	/**
+	 Jest to metoda służąca do tworzenia powiadomień.
+	 */
 	public Notification create() {
 		Notification.Builder builder = new Notification.Builder(context);
 		builder
@@ -46,6 +52,9 @@ public class NotificationCreator {
 	}
 
 	// akcja po naciśnięciu tła powiadomienia - powrót do aplikacji
+	/**
+	 Jest to metoda służąca do powrotu do aplikacji po naciśnięciu tła powiadomienia.
+	 */
 	private PendingIntent contentIntent() {
 		// po naciśnięciu tła powiadomienia otworzy się ekran główny
 		Intent openApp = new Intent(context, MainScreen.class);
@@ -53,6 +62,9 @@ public class NotificationCreator {
 	}
 
 	// ustaw akcje dostępne pod przyciskami powiadomienia
+	/**
+	 Jest to metoda służąca do uzyskiwania akcji pod przyciskami powiadomienia.
+	 */
 	private Notification.Action getAction(IconType iconType) {
 		Notification.Action.Builder builder = new Notification.Action.Builder(
 				Icon.createWithResource(context, IconProvider.getIconId(iconType, false)),
