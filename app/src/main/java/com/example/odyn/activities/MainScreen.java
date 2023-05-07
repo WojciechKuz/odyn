@@ -20,7 +20,7 @@ import com.example.odyn.main_service.types.IconType;
 import java.io.File;
 
 /**
- * Jest to klasa odpowiadająca za główny ekran aplikacji.
+ * Jest to aktywność odpowiadająca za główny ekran aplikacji.
  */
 public class MainScreen extends AppCompatActivity {
 
@@ -88,7 +88,8 @@ public class MainScreen extends AppCompatActivity {
 
 	// Zamknij/otwórz powiadomienie (nieaktywne w wersji service 1)
 	/**
-	 * Jest to metoda odpowiadająca za utworzenie pływającego powiadomienia.
+	 * Jest to metoda wywoływana, gdy aplikacja przestaje być widoczna.
+	 * Zadaniem tej metody jest wyświetlanie powiadomienia.
 	 */
 	@Override
 	protected void onStop() {
@@ -98,7 +99,8 @@ public class MainScreen extends AppCompatActivity {
 	}
 
 	/**
-	 * Jest to metoda odpowiadająca za zamknięcie pływającego powiadomienia.
+	 * Jest to metoda wywoływana, gdy aplikacja jest przywracana do stanu widocznego.
+	 * Zadaniem tej metody jest zamykanie powiadomienia.
 	 */
 	@Override
 	protected void onRestart() {
@@ -124,7 +126,7 @@ public class MainScreen extends AppCompatActivity {
 
 	// Zrób zdjęcie
 	/**
-	 * Jest to metoda odpowiadająca za wykonanie zdjęcia.
+	 * Jest to metoda odpowiadająca za obsługę przycisku do wykonywania zdjęcia.
 	 */
 	public void onClickPhoto(View view) {
 		Log.d("MainScreen", ">>> zrób zdjęcie");
@@ -133,7 +135,7 @@ public class MainScreen extends AppCompatActivity {
 
 	// Nagrywanie awaryjne
 	/**
-	 * Jest to metoda odpowiadająca za nagrywanie awaryjne.
+	 * Jest to metoda odpowiadająca za obsługę przycisku do nagrywania awaryjnego.
 	 */
 	public void onClickEmergency(View view) {
 		Log.d("MainScreen", ">>> nagrywanie awaryjne");
@@ -142,7 +144,7 @@ public class MainScreen extends AppCompatActivity {
 
 	// Nagraj wideo
 	/**
-	 * Jest to metoda odpowiadająca za nagrywanie video.
+	 * Jest to metoda odpowiadająca za obsługę przycisku do nagrywania video.
 	 */
 	public void onClickRecord(View view) {
 		Log.d("MainScreen", ">>> nagraj");
@@ -150,7 +152,8 @@ public class MainScreen extends AppCompatActivity {
 	}
 
 	/**
-	 * Jest to metoda odpowiadająca za usunięcie klasy MainScreen i powstałych pozostałości po zakończeniu pracy programu.
+	 * Jest to metoda wywoływana przez Android, gdy aktywność jest niszczona.
+	 * Zamyka wątki, Usuwa referencje na siebie.
 	 */
 	@Override
 	protected void onDestroy() {

@@ -6,7 +6,7 @@ import android.os.Bundle;
 
 import com.example.odyn.R;
 /**
- * Jest to klasa odpowiadająca za listę nagrań.
+ * Jest to aktywność odpowiadająca za wyświetlanie listy nagrań.
  */
 public class RecordingList extends AppCompatActivity {
 

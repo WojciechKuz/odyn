@@ -17,6 +17,7 @@ import com.example.odyn.main_service.types.IconType;
 // TODO przerób na Foreground Service
 /**
  * Jest to klasa Service odpowiedzialna za zapis/odczyt obrazu i powiadomień pobocznych.
+ * Wykonuje zadania niezwiązane z UI, działa także, gdy aplikacja nie wyświetla się na ekranie.
  */
 public class MainService extends Service {
 
@@ -36,7 +37,10 @@ public class MainService extends Service {
 	}
 
 	/**
-	 Jest to metoda służąca do uruchamiania lub wyłączenia serwisu na żądanie.
+	 * Jest to metoda wywoływana przy uruchomieniu MainService.
+	 * @param intent intencja
+	 * @param flags flagi
+	 * @param startId początkowe ID
 	 */
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
@@ -55,7 +59,7 @@ public class MainService extends Service {
 	}
 
 	/**
-	 Jest to metoda służąca do uruchamiania głównego serwisu aplikacji.
+	 Jest to metoda służąca do ustawiania parametrów MainService.
 	 */
 	private synchronized void mainServiceStart() { // ma się wykonywać pokolei
 		Log.v("MainService", ">>> setting up MainService");

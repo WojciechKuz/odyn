@@ -23,7 +23,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
 /**
- * Jest to klasa odpowiadająca za ustawienia aplikacji.
+ * Jest to aktywność odpowiadająca za obsługę panelu aplikacji.
  */
 public class Settings extends AppCompatActivity {
     private SharedPreferences sharedPrefs;

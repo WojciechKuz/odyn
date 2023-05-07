@@ -74,7 +74,7 @@ public class CamAccess extends AppCompatActivity {
     }
 
     /**
-     * Jest to metoda służąca do robienia zdjęć.
+     * Jest to metoda służąca do obsługi robienia zdjęć.
      */
     @SuppressLint("RestrictedApi")
     private void bindPreview(ProcessCameraProvider cameraProvider, PreviewView prView) {
@@ -105,7 +105,7 @@ public class CamAccess extends AppCompatActivity {
 
     // robi zdjęcie
     /**
-     * Jest to metoda odpowiadająca za funkcję robienia zdjęcia.
+     * Jest to metoda odpowiadająca za funkcję obsługi robienia zdjęcia.
      */
     public void takePicture(File file) {
         // Set up the output file and capture the image
@@ -168,7 +168,7 @@ public class CamAccess extends AppCompatActivity {
     Timer timer = new Timer();
 
     /**
-     * Jest to metoda odpowiadająca za funkcję nagrywania video.
+     * Jest to metoda odpowiadająca za funkcję obsługi nagrywania video.
      */
     @SuppressLint({"RestrictedApi", "MissingPermission"})
     public void takeVideo(boolean opcja) {
