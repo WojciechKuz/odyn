@@ -46,14 +46,17 @@ public class StartActivity extends AppCompatActivity {
 		// sprawdzenie uprawnień do aparatu i pamięci wewn.
 		if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
 			requestPermissions(new String[]{Manifest.permission.CAMERA}, MY_CAMERA_REQUEST_CODE);
+		} else {
 			cameraPermission = true;
 		}
 		if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
 			requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_WRITE_EXTERNAL_STORAGE);
+		} else {
 			writeExternalStoragePermission = true;
 		}
 		if (checkSelfPermission(Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
 			requestPermissions(new String[]{Manifest.permission.RECORD_AUDIO}, MY_MICROPHONE_REQUEST);
+		} else {
 			recordAudioPermission = true;
 		}
 	}
