@@ -87,7 +87,27 @@ public class MainScreen extends AppCompatActivity {
 		srtWriter.start();
 	}
 	private void changeTextField(String text, GPSValues whatValue) {
-		//
+		switch(whatValue) {
+			case timer:
+				TextView timerText = findViewById(R.id.timerText);
+				timerText.setText(text);
+				break;
+			case counter:
+				TextView counterText = findViewById(R.id.counterText);
+				counterText.setText(text);
+				break;
+			case latitude:
+				TextView latitudeText = findViewById(R.id.latitudeText);
+				latitudeText.setText(text);
+				break;
+			case longitude:
+				TextView longitudeText = findViewById(R.id.longitudeText);
+				longitudeText.setText(text);
+				break;
+			case speed:
+				TextView speedText = findViewById(R.id.speedText);
+				speedText.setText(text);
+		}
 	}
 
 
