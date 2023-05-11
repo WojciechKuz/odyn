@@ -1,4 +1,4 @@
-package com.example.odyn.activities;
+package com.example.odyn.tools;
 
 import android.app.Activity;
 import android.widget.TextView;

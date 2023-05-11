@@ -1,4 +1,4 @@
-package com.example.odyn.activities;
+package com.example.odyn.gps;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -20,12 +20,13 @@ public class GPSThread extends Thread {
 	private LocationListener locationListener;
 	private Context context;
 
-	private TextView latitudeText, longitudeText;
+	private TextView latitudeText, longitudeText,speedText;
 
-	public GPSThread(Context context, TextView latitudeText, TextView longitudeText) {
+	public GPSThread(Context context, TextView latitudeText, TextView longitudeText, TextView speedText) {
 		this.context = context;
 		this.latitudeText = latitudeText;
 		this.longitudeText = longitudeText;
+		this.speedText = speedText;
 	}
 
 	@Override
@@ -35,7 +36,7 @@ public class GPSThread extends Thread {
 		locationListener = new LocationListener() {
 			@Override
 			public void onLocationChanged(Location location) {
-				Log.d("GPS", "Latitude: " + location.getLatitude() + ", Longitude: " + location.getLongitude());
+				Log.d("GPS", "Latitude: " + location.getLatitude() + ", Longitude: " + location.getLongitude() + ", Speed: " + location.getSpeed() * 3.6 + "km/h");
 				((Activity)latitudeText.getContext()).runOnUiThread(new Runnable() {
 					@Override
 					public void run() {
@@ -46,6 +47,12 @@ public class GPSThread extends Thread {
 					@Override
 					public void run() {
 						longitudeText.setText("Long: " + location.getLongitude());
+					}
+				});
+				((Activity)speedText.getContext()).runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						speedText.setText("Speed: " + location.getSpeed() * 3.6 + "km/h");
 					}
 				});
 			}

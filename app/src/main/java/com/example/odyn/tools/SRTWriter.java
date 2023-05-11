@@ -1,4 +1,4 @@
-package com.example.odyn.activities;
+package com.example.odyn.tools;
 
 import android.app.Activity;
 import android.content.Context;
@@ -53,6 +53,8 @@ public class SRTWriter extends Thread {
 						}
 					});
                     writer.write(srtLine);
+					writer.flush();
+					Log.d("GPS","Wrote srt line");
                 }
 
                 // Sleep for a while before checking again
@@ -62,6 +64,7 @@ public class SRTWriter extends Thread {
             writer.close();
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
+			Log.d("GPS","Exception/End of srt writing");
         }
     }
 

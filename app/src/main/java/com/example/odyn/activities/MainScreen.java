@@ -6,16 +6,22 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.example.odyn.FileHandler;
 import com.example.odyn.R;
 import com.example.odyn.cam.Cam;
+import com.example.odyn.gps.GPSThread;
 import com.example.odyn.main_service.ServiceConnector;
 import com.example.odyn.main_service.types.IconType;
+import com.example.odyn.tools.SRTWriter;
+import com.example.odyn.tools.TimerThread;
 
 import java.io.File;
 
@@ -25,7 +31,11 @@ public class MainScreen extends AppCompatActivity {
 	private GPSThread gpsThread;
 	private SRTWriter srtWriter;
 
-	private TextView counterText, timerText, latitudeText, longitudeText, srtText;
+	private Handler emergencyHandler = new Handler();
+
+	private boolean isEmergencyActive = false, isVideoActive = false;
+
+	private TextView counterText, timerText, latitudeText, longitudeText, srtText, speedText;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -34,24 +44,7 @@ public class MainScreen extends AppCompatActivity {
 
 		Log.d("MainScreen", ">>> onCreate DrawerActivity");
 
-		timerText = findViewById(R.id.timerText);
-		counterText = findViewById(R.id.counterText);
-		timerThread = new TimerThread(counterText, timerText);
-		timerThread.start();
-
-		latitudeText = findViewById(R.id.latitudeText);
-		longitudeText = findViewById(R.id.longitudeText);
-		gpsThread = new GPSThread(this, latitudeText, longitudeText);
-		gpsThread.requestGPSPermissions();
-		gpsThread.start();
-
-
-		File file = new File(getExternalFilesDir(null), "myfile.srt");
-		srtText = findViewById(R.id.srtText);
-		srtWriter = new SRTWriter(this, file, counterText, timerText, latitudeText, longitudeText, srtText);
-		srtWriter.requestWritePermissions();
-		srtWriter.start();
-
+		setupGPS();
 		// połączenie przycisku otwarcia menu
 		setupMainScreen();
 	}
@@ -63,13 +56,83 @@ public class MainScreen extends AppCompatActivity {
 		// obsługa przycisków
 		View mainScreenLayout = findViewById(R.id.layout_incepcja);
 		mainScreenLayout.findViewById(R.id.MenuButton).setOnClickListener(this::onClickMenu); // ok
-		findViewById(R.id.EmergencyButton).setOnClickListener(this::onClickEmergency);
-		findViewById(R.id.PhotoButton).setOnClickListener(this::onClickPhoto);
-		findViewById(R.id.RecordButton).setOnClickListener(this::onClickRecord);
+		ImageButton EmergencyButton = findViewById(R.id.EmergencyButton);
+		EmergencyButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if (isEmergencyActive == false) {
+					EmergencyButton.setImageResource(R.drawable.emergency_active);
+					isEmergencyActive = true;
+					emergencyHandler.postDelayed(new Runnable() {
+						@Override
+						public void run() {
+							EmergencyButton.setImageResource(R.drawable.emergency3ungroup);
+							isEmergencyActive = false;
+						}
+					}, 5000);
+				}
+				onClickEmergency(mainScreenLayout);
+			}
+		});
+
+		ImageButton PhotoButton = findViewById(R.id.PhotoButton);
+		PhotoButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if (isEmergencyActive == false) {
+					PhotoButton.setImageResource(R.drawable.photo_active);
+					isEmergencyActive = true;
+					emergencyHandler.postDelayed(new Runnable() {
+						@Override
+						public void run() {
+							PhotoButton.setImageResource(R.drawable.photo);
+							isEmergencyActive = false;
+						}
+					}, 300);
+				}
+				onClickPhoto(mainScreenLayout);
+			}
+		});
+
+		ImageButton RecordButton = findViewById(R.id.RecordButton);
+		RecordButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if (isEmergencyActive == false) {
+					RecordButton.setImageResource(R.drawable.record_active);
+					isEmergencyActive = true;
+				} else {
+					RecordButton.setImageResource(R.drawable.record);
+					isEmergencyActive = true;
+				}
+				onClickRecord(mainScreenLayout);
+			}
+		});
 	}
 	// zwraca do MainService
 	public Cam createCam() {
 		return new Cam(this);
+	}
+
+	private void setupGPS() {
+		timerText = findViewById(R.id.timerText);
+		counterText = findViewById(R.id.counterText);
+		timerThread = new TimerThread(counterText, timerText);
+		timerThread.start();
+
+		latitudeText = findViewById(R.id.latitudeText);
+		longitudeText = findViewById(R.id.longitudeText);
+		speedText = findViewById(R.id.speedText);
+		gpsThread = new GPSThread(this, latitudeText, longitudeText, speedText);
+		gpsThread.requestGPSPermissions();
+		gpsThread.start();
+
+
+		File file = new FileHandler(this).createDataFile("srt");
+		srtText = findViewById(R.id.srtText);
+		srtWriter = new SRTWriter(this, file, counterText, timerText, latitudeText, longitudeText, srtText);
+		srtWriter.requestWritePermissions();
+		srtWriter.start();
 	}
 
 
