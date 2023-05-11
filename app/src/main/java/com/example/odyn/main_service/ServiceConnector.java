@@ -15,8 +15,7 @@ public class ServiceConnector {
 
 	// Aktywność:
 	@SuppressLint("StaticFieldLeak") // ostrożnie używać. w aktywności w onDestroy() użyć ServiceConnector.removeActivity()
-	private static Activity activity;
-
+	private static Activity activity = null;
 	public static Activity getActivity() {
 		return activity;
 	}
@@ -26,10 +25,10 @@ public class ServiceConnector {
 	public static void removeActivity() {
 		activity = null;
 	}
-
 	public static boolean activityExists() {
 		return activity != null;
 	}
+
 
 	// onClickHandler:
 	private static IconTypeInterface handler;
@@ -44,11 +43,11 @@ public class ServiceConnector {
 
 
 	// przekazywanie Cam z MainScreen do MainActivity:
-	public static RecieveCamInterface camReciever;
-	public static void setCamReciever(RecieveCamInterface camReciever) {
-		ServiceConnector.camReciever = camReciever;
+	public static RecieveCamInterface camReceiver;
+	public static void setCamReceiver(RecieveCamInterface camReceiver) {
+		ServiceConnector.camReceiver = camReceiver;
 	}
 	public static void sendCam(Cam cam) {
-		camReciever.recieveCam(cam);
+		camReceiver.recieveCam(cam);
 	}
 }

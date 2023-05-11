@@ -26,12 +26,35 @@ import com.example.odyn.gps.TimerThread;
 
 import java.io.File;
 
+/*  Kolejność metod:
+onCreate
+setupMainScreen
+setupGPS
+
+changeTextField
+
+onStop
+onRestart
+onDestroy
+
+onClickMenu
+onClickPhoto
+onClickEmergency
+onClickRecord
+
+onClickCloseMenu
+onClickRecordinglist
+onClickSettings
+onClickBackground
+
+darkSideOfMenu
+*/
+
 public class MainScreen extends AppCompatActivity {
 
 	private TimerThread timerThread;
 	private GPSThread gpsThread;
 	private SRTWriter srtWriter;
-
 	private Handler delayHandler = new Handler();
 
 	private boolean isEmergencyActive = false;
@@ -44,48 +67,46 @@ public class MainScreen extends AppCompatActivity {
 
 		Log.d("MainScreen", ">>> onCreate DrawerActivity");
 
-		setupGPS();
-		// połączenie przycisku otwarcia menu
 		setupMainScreen();
+		setupGPS();
 	}
 
 	private void setupMainScreen() {
 		ServiceConnector.setActivity(this); // static, usunięcie w onDestroy()
-		ServiceConnector.sendCam(createCam()); // jak się da to tworzenie z powrotem przenieść do MainService
+		ServiceConnector.sendCam(new Cam(this)); // zwraca do MainService, jak się da to tworzenie z powrotem przenieść do MainService
 
 		// obsługa przycisków, metody do obsługi (np. this::onClickPhoto) znajdują się poniżej
 		View mainScreenLayout = findViewById(R.id.layout_incepcja);
-		mainScreenLayout.findViewById(R.id.MenuButton).setOnClickListener(this::onClickMenu); // ok
+		mainScreenLayout.findViewById(R.id.MenuButton).setOnClickListener(this::onClickMenu); // połączenie przycisku otwarcia menu
 		findViewById(R.id.PhotoButton).setOnClickListener(this::onClickPhoto);
 		findViewById(R.id.RecordButton).setOnClickListener(this::onClickRecord);
 		findViewById(R.id.EmergencyButton).setOnClickListener(this::onClickEmergency);
 	}
-	// zwraca do MainService
-	public Cam createCam() {
-		return new Cam(this);
-	}
 
 	// ustawia i inicjalizuje rzeczy związane z GPSem
 	private void setupGPS() {
-		TextView timerText = findViewById(R.id.timerText);
-		TextView counterText = findViewById(R.id.counterText);
 		timerThread = new TimerThread(this::changeTextField);
 		timerThread.start();
 
-		TextView latitudeText = findViewById(R.id.latitudeText);
-		TextView longitudeText = findViewById(R.id.longitudeText);
-		TextView speedText = findViewById(R.id.speedText);
 		gpsThread = new GPSThread(this, this::changeTextField);
 		gpsThread.requestGPSPermissions(); // TODO check permissions in StartActivity instead
 		gpsThread.start();
 
+		TextView timerText = findViewById(R.id.timerText);
+		TextView counterText = findViewById(R.id.counterText);
+		TextView latitudeText = findViewById(R.id.latitudeText);
+		TextView longitudeText = findViewById(R.id.longitudeText);
+		TextView speedText = findViewById(R.id.speedText);
+		TextView srtText = findViewById(R.id.srtText);
 
 		File file = new FileHandler(this).createDataFile("srt");
-		TextView srtText = findViewById(R.id.srtText);
 		srtWriter = new SRTWriter(this, file, counterText, timerText, latitudeText, longitudeText, srtText);
 		srtWriter.requestWritePermissions();
 		srtWriter.start();
 	}
+
+
+
 	private void changeTextField(String text, GPSValues whatValue) {
 		switch(whatValue) {
 			case timer:
@@ -111,6 +132,8 @@ public class MainScreen extends AppCompatActivity {
 	}
 
 
+
+	// metody cyklu życia aktywności
 	// Zamknij/otwórz powiadomienie (nieaktywne w wersji service 1)
 	@Override
 	protected void onStop() {
@@ -124,6 +147,14 @@ public class MainScreen extends AppCompatActivity {
 		// nieaktywne, ponieważ powiadomienie widoczne cały czas. Service wersja 1
 		ServiceConnector.onClickIcon(IconType.hide_notif); // zamknij pływające powiadomienie
 	}
+	@Override
+	protected void onDestroy() {
+		ServiceConnector.removeActivity(); // trzeba się pozbyć referencji, aby poprawnie usunąć Aktywność
+		timerThread.stopTimer();
+		gpsThread.stopGPS();
+		super.onDestroy();
+	}
+
 
 
 	// Przyciski ekranu:
@@ -170,7 +201,7 @@ public class MainScreen extends AppCompatActivity {
 					emergencyButton.setImageResource(R.drawable.emergency3ungroup);
 					isEmergencyActive = false;
 				}
-			}, 5000); // What??? Po 5 sekundach wyłącz? Jaki to ma związek z czasem nagrywania? Jeśli tymczasowe, to powinno być oznaczone
+			}, 5000); // What??? Po 5 sekundach wyłącz? Jaki to ma związek z czasem nagrywania? TEMPORARY
 		}
 	}
 
@@ -188,16 +219,6 @@ public class MainScreen extends AppCompatActivity {
 			recordButton.setImageResource(R.drawable.record);
 			isVideoActive = false;
 		}
-	}
-
-
-
-	@Override
-	protected void onDestroy() {
-		ServiceConnector.removeActivity(); // trzeba się pozbyć referencji, aby poprawnie usunąć Aktywność
-		timerThread.stopTimer();
-		gpsThread.stopGPS();
-		super.onDestroy();
 	}
 
 

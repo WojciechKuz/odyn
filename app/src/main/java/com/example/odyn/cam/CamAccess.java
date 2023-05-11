@@ -38,11 +38,21 @@ import java.util.TimerTask;
 import java.util.concurrent.ExecutionException;
 
 @SuppressWarnings("ALL")
-public class CamAccess extends AppCompatActivity {
+public class CamAccess {
     private ImageCapture imageCapture;
     private VideoCapture videoCapture;
     protected Activity main; // póki co spełnia dwie role: wątek (Context) i aktywność (wyświetlanie), później warto rozważyć rozdzielenie
     // korzysta z tego też klasa Cam (dziedziczy)
+    /* Activity używane do:
+        dostarczenia FileHandler'owi kontekstu x2
+        bind widoku PreviewView
+        otrzymanie CameraProvider
+        otrzymanie wykonawcy x3
+        menedżera okien
+        otrzymanie LiveCycleOwner
+        otrzymanie CameraManager
+        utworzenie tosta
+    */
 
     // konstruktor. PreviewView służy do wyświetlenia w nim obrazu z kamery
     public CamAccess(Activity main) {
@@ -120,14 +130,16 @@ public class CamAccess extends AppCompatActivity {
 
     public void fov_resInfo(){
         try {
-            CameraManager cameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
+            CameraManager cameraManager = (CameraManager) main.getSystemService(Context.CAMERA_SERVICE);
             String cameraId = cameraManager.getCameraIdList()[1]; // wybierz pierwszą kamerę
             CameraCharacteristics characteristics = cameraManager.getCameraCharacteristics(cameraId);
-// uzyskanie wartości FOV
+
+            // uzyskanie wartości FOV
             float[] focalLengths = characteristics.get(CameraCharacteristics.LENS_INFO_AVAILABLE_FOCAL_LENGTHS);
             float[] apertures = characteristics.get(CameraCharacteristics.LENS_INFO_AVAILABLE_APERTURES);
             float fov = calculateFOV(focalLengths[0], apertures[0]);
-// uzyskanie wartości rozdzielczości
+
+            // uzyskanie wartości rozdzielczości
             StreamConfigurationMap map = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
             Size[] sizes = map.getOutputSizes(SurfaceTexture.class);
             Size resolution = sizes[0];
@@ -137,7 +149,8 @@ public class CamAccess extends AppCompatActivity {
 
         } catch (CameraAccessException e) {
             e.printStackTrace();
-            Toast.makeText(this, "Wystąpił błąd podczas korzystania z kamery", Toast.LENGTH_LONG).show();
+            Toast.makeText(main, "Wystąpił błąd podczas korzystania z kamery", Toast.LENGTH_LONG).show();
+            Log.e("CamAccess", ">>> Wystąpił błąd podczas korzystania z kamery");
         }
     }
     Timer timer = new Timer();
@@ -154,12 +167,14 @@ public class CamAccess extends AppCompatActivity {
                         videoCapture.startRecording(outputFileOptions, ContextCompat.getMainExecutor(main), new VideoCapture.OnVideoSavedCallback() {
                             @Override
                             public void onVideoSaved(@NonNull VideoCapture.OutputFileResults outputFileResults) {
-                                System.out.println("-----------------------.-------------------.---------ZapisywanieVID-----------------------.-------------------.---------");
+                                System.out.println("----------ZapisywanieVID----------");
+                                Log.i("CamAccess", ">>> Zapisano nagranie");
                             }
 
                             @Override
                             public void onError(int videoCaptureError, @NonNull String message, @Nullable Throwable cause) {
-                                System.out.println("-----------------------.-------------------.---------GownoVID-----------------------.-------------------.---------");
+                                System.out.println("----------GownoVID----------");
+                                Log.e("CamAccess", ">>> Nie udało się zapisać nagrania");
                             }
                         });
                     }

@@ -16,22 +16,16 @@ import com.example.odyn.main_service.types.IconType;
 
 // TODO przerób na Foreground Service
 public class MainService extends Service {
-
-	// Musi pracować jakaś pętla, żeby MainService działało. gdy nic nie robi jest usuwane.
-
 	private Notification notif;
 	private Cam cam; // dostęp do kamery
-
-	//private MainScreen mainScreen;
-
 
 	// nagrywanie przeniesione tutaj. gdy potrzeba zdjęcia, MainScreen (Activity) może wołać tę klasę
 
 	@Nullable
 	@Override
-	public IBinder onBind(Intent intent) { // TODO zbadaj co to
+	public IBinder onBind(Intent intent) {
 		return null;
-	}
+	} // ZWRACA NULL. Za pomocą zwracanego IBinder powinno dać się komunikować z Service'm, póki co ZWRACA NULL
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
@@ -60,7 +54,7 @@ public class MainService extends Service {
 		// TODO utwórz Notification
 
 		ServiceConnector.setOnClickHandle(this::buttonHandler);
-		ServiceConnector.setCamReciever(this::receiveCam); // MainScreen dostarczy Cam
+		ServiceConnector.setCamReceiver(this::receiveCam); // MainScreen dostarczy Cam
 
 		// Z Logcat'a: Skipped 36 frames!  The application may be doing too much work on its main thread.
 		// TODO utworzyć wątek, na kamerę
@@ -71,7 +65,7 @@ public class MainService extends Service {
 		// OD TERAZ: Cam tworzone w MainScreen.createCam() i przekazywane tu do setCam()
 	}
 	private void startMainScreen() {
-		// DrawerActivity zawiera MainScreen
+		// DrawerActivity zawiera MainScreen, więc ok.
 		Intent startMainScreen = new Intent(this, MainScreen.class);
 		startMainScreen.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		startActivity(startMainScreen);
@@ -133,49 +127,5 @@ public class MainService extends Service {
 	private void receiveCam(Cam cam) {
 		this.cam = cam;
 	}
-
-	/*
-
-	// Do niedawna to był IntentService, dlatego są tutaj te śmieci
-	// Proszę, nie usuwaj :(	Szkoda mi kodu, który napisałem
-
-	public MainService() {
-		super("MainService");
-	}
-	@Override
-	protected void onHandleIntent(Intent intent) {
-		// obsługa Intent'ów
-		// po uruchomieniu service też tutaj.
-		if(intent == null) {
-			return; // albo exception
-		}
-		if(intent.hasExtra("start")) {
-			int code = intent.getIntExtra("start", 0);
-			if(code == 1) {
-				mainServiceStart();
-			}
-		}
-	}
-
-	private synchronized void mainServiceStart() { // ma się wykonywać pokolei
-		// zamiast konstruktora
-		Log.v("MainService", ">>> starting & setting up MainService");
-		Intent startMainScreen = new Intent(this, MainScreen.class);
-		startMainScreen.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		startActivity(startMainScreen);
-
-		ServiceConnector.setOnClickHandle(this::buttonHandler);
-		ServiceConnector.setService(this);
-
-		// utwórz Cam, trzeba dostarczyć do konstruktora MainScreen Activity
-		//cam = new Cam(ServiceConnector.getActivity(), ServiceConnector.getActivity());
-		// tutaj nie działa, cam musi być utworzony w głównym wątku
-		// OD TERAZ: Cam tworzone w MainScreen.createCam() i przekazywane tu do setCam()
-	}
-
-	public void setCam(Cam cam) {
-		this.cam = cam;
-	}
-	*/
 
 }
