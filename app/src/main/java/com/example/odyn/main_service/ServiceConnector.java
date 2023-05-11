@@ -9,7 +9,8 @@ import com.example.odyn.main_service.types.IconTypeInterface;
 
 // służy do komunikacji aktywność <-> MainService
 // póki co nieprofesjonalnie, bo przez klasę statyczną. Czytam o alternatywach
-// TODO Later: zamienić na komunikację za pomocą intent'ów
+// TODO Jeśli metody dostępu do pól (gettery, settery) będą synchronised, to klasa static jest akceptowalnym rozwiązaniem.
+// Można by zamienić na komunikację za pomocą intent'ów
 public class ServiceConnector {
 
 	// Aktywność:

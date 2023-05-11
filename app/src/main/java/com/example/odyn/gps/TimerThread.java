@@ -1,4 +1,4 @@
-package com.example.odyn.tools;
+package com.example.odyn.gps;
 
 import android.app.Activity;
 import android.widget.TextView;
@@ -11,13 +11,13 @@ public class TimerThread extends Thread {
 	private boolean stopTimer = false;
 	private int count = 0;
 
-	private TextView counterText, timerText;
+	private TextFieldChanger changer;
 
-	public TimerThread(TextView counterText, TextView timerText) {
-		this.timerText = timerText;
-		this.counterText = counterText;
+	public TimerThread(TextFieldChanger changer) {
+		this.changer = changer;
 	}
 
+	// FIXME probably better solution would be scheduled execution. Here, sleep() blocks thread.
 	@Override
 	public void run() {
 		while (!stopTimer) {
@@ -33,18 +33,9 @@ public class TimerThread extends Thread {
 				String formattedTime = dateFormat.format(currentTime);
 
 				// Update the TextView with the formatted time and count
-				((Activity)timerText.getContext()).runOnUiThread(new Runnable() {
-					@Override
-					public void run() {
-						timerText.setText(formattedTime);
-					}
-				});
-				((Activity)counterText.getContext()).runOnUiThread(new Runnable() {
-					@Override
-					public void run() {
-						counterText.setText(Integer.toString(count));
-					}
-				});
+				changer.changeTextField(formattedTime, GPSValues.timer);
+				changer.changeTextField(Integer.toString(count), GPSValues.counter);
+
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}

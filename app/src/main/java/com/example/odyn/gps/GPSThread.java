@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
@@ -20,13 +21,11 @@ public class GPSThread extends Thread {
 	private LocationListener locationListener;
 	private Context context;
 
-	private TextView latitudeText, longitudeText,speedText;
+	private TextFieldChanger changer;
 
-	public GPSThread(Context context, TextView latitudeText, TextView longitudeText, TextView speedText) {
+	public GPSThread(Context context, TextFieldChanger changer) {
 		this.context = context;
-		this.latitudeText = latitudeText;
-		this.longitudeText = longitudeText;
-		this.speedText = speedText;
+		this.changer = changer;
 	}
 
 	@Override
@@ -37,24 +36,9 @@ public class GPSThread extends Thread {
 			@Override
 			public void onLocationChanged(Location location) {
 				Log.d("GPS", "Latitude: " + location.getLatitude() + ", Longitude: " + location.getLongitude() + ", Speed: " + location.getSpeed() * 3.6 + "km/h");
-				((Activity)latitudeText.getContext()).runOnUiThread(new Runnable() {
-					@Override
-					public void run() {
-						latitudeText.setText("Lat: " + location.getLatitude());
-					}
-				});
-				((Activity)longitudeText.getContext()).runOnUiThread(new Runnable() {
-					@Override
-					public void run() {
-						longitudeText.setText("Long: " + location.getLongitude());
-					}
-				});
-				((Activity)speedText.getContext()).runOnUiThread(new Runnable() {
-					@Override
-					public void run() {
-						speedText.setText("Speed: " + location.getSpeed() * 3.6 + "km/h");
-					}
-				});
+				changer.changeTextField("Lat: " + location.getLatitude(), GPSValues.latitude);
+				changer.changeTextField("Long: " + location.getLongitude(), GPSValues.longitude);
+				changer.changeTextField("Speed: " + location.getSpeed() * 3.6 + "km/h", GPSValues.speed);
 			}
 
 			@Override
@@ -78,10 +62,13 @@ public class GPSThread extends Thread {
 			@SuppressLint("MissingPermission")
 			@Override
 			public void run() {
-				locationManager.requestLocationUpdates(LocationManager.FUSED_PROVIDER, 1000, 0, locationListener);
+				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+					locationManager.requestLocationUpdates(LocationManager.FUSED_PROVIDER, 1000, 0, locationListener);
+				}
 			}
 		});
 
+		// FIXME
 		while (!stopGPS) {
 			// Do nothing
 		}

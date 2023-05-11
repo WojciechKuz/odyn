@@ -18,10 +18,11 @@ import com.example.odyn.FileHandler;
 import com.example.odyn.R;
 import com.example.odyn.cam.Cam;
 import com.example.odyn.gps.GPSThread;
+import com.example.odyn.gps.GPSValues;
 import com.example.odyn.main_service.ServiceConnector;
 import com.example.odyn.main_service.types.IconType;
-import com.example.odyn.tools.SRTWriter;
-import com.example.odyn.tools.TimerThread;
+import com.example.odyn.gps.SRTWriter;
+import com.example.odyn.gps.TimerThread;
 
 import java.io.File;
 
@@ -31,11 +32,10 @@ public class MainScreen extends AppCompatActivity {
 	private GPSThread gpsThread;
 	private SRTWriter srtWriter;
 
-	private Handler emergencyHandler = new Handler();
+	private Handler delayHandler = new Handler();
 
-	private boolean isEmergencyActive = false, isVideoActive = false;
-
-	private TextView counterText, timerText, latitudeText, longitudeText, srtText, speedText;
+	private boolean isEmergencyActive = false;
+	private boolean isVideoActive = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -53,86 +53,41 @@ public class MainScreen extends AppCompatActivity {
 		ServiceConnector.setActivity(this); // static, usunięcie w onDestroy()
 		ServiceConnector.sendCam(createCam()); // jak się da to tworzenie z powrotem przenieść do MainService
 
-		// obsługa przycisków
+		// obsługa przycisków, metody do obsługi (np. this::onClickPhoto) znajdują się poniżej
 		View mainScreenLayout = findViewById(R.id.layout_incepcja);
 		mainScreenLayout.findViewById(R.id.MenuButton).setOnClickListener(this::onClickMenu); // ok
-		ImageButton EmergencyButton = findViewById(R.id.EmergencyButton);
-		EmergencyButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				if (isEmergencyActive == false) {
-					EmergencyButton.setImageResource(R.drawable.emergency_active);
-					isEmergencyActive = true;
-					emergencyHandler.postDelayed(new Runnable() {
-						@Override
-						public void run() {
-							EmergencyButton.setImageResource(R.drawable.emergency3ungroup);
-							isEmergencyActive = false;
-						}
-					}, 5000);
-				}
-				onClickEmergency(mainScreenLayout);
-			}
-		});
-
-		ImageButton PhotoButton = findViewById(R.id.PhotoButton);
-		PhotoButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				if (isEmergencyActive == false) {
-					PhotoButton.setImageResource(R.drawable.photo_active);
-					isEmergencyActive = true;
-					emergencyHandler.postDelayed(new Runnable() {
-						@Override
-						public void run() {
-							PhotoButton.setImageResource(R.drawable.photo);
-							isEmergencyActive = false;
-						}
-					}, 300);
-				}
-				onClickPhoto(mainScreenLayout);
-			}
-		});
-
-		ImageButton RecordButton = findViewById(R.id.RecordButton);
-		RecordButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				if (isEmergencyActive == false) {
-					RecordButton.setImageResource(R.drawable.record_active);
-					isEmergencyActive = true;
-				} else {
-					RecordButton.setImageResource(R.drawable.record);
-					isEmergencyActive = true;
-				}
-				onClickRecord(mainScreenLayout);
-			}
-		});
+		findViewById(R.id.PhotoButton).setOnClickListener(this::onClickPhoto);
+		findViewById(R.id.RecordButton).setOnClickListener(this::onClickRecord);
+		findViewById(R.id.EmergencyButton).setOnClickListener(this::onClickEmergency);
 	}
 	// zwraca do MainService
 	public Cam createCam() {
 		return new Cam(this);
 	}
 
+	// ustawia i inicjalizuje rzeczy związane z GPSem
 	private void setupGPS() {
-		timerText = findViewById(R.id.timerText);
-		counterText = findViewById(R.id.counterText);
-		timerThread = new TimerThread(counterText, timerText);
+		TextView timerText = findViewById(R.id.timerText);
+		TextView counterText = findViewById(R.id.counterText);
+		timerThread = new TimerThread(this::changeTextField);
 		timerThread.start();
 
-		latitudeText = findViewById(R.id.latitudeText);
-		longitudeText = findViewById(R.id.longitudeText);
-		speedText = findViewById(R.id.speedText);
-		gpsThread = new GPSThread(this, latitudeText, longitudeText, speedText);
-		gpsThread.requestGPSPermissions();
+		TextView latitudeText = findViewById(R.id.latitudeText);
+		TextView longitudeText = findViewById(R.id.longitudeText);
+		TextView speedText = findViewById(R.id.speedText);
+		gpsThread = new GPSThread(this, this::changeTextField);
+		gpsThread.requestGPSPermissions(); // TODO check permissions in StartActivity instead
 		gpsThread.start();
 
 
 		File file = new FileHandler(this).createDataFile("srt");
-		srtText = findViewById(R.id.srtText);
+		TextView srtText = findViewById(R.id.srtText);
 		srtWriter = new SRTWriter(this, file, counterText, timerText, latitudeText, longitudeText, srtText);
 		srtWriter.requestWritePermissions();
 		srtWriter.start();
+	}
+	private void changeTextField(String text, GPSValues whatValue) {
+		//
 	}
 
 
@@ -166,19 +121,56 @@ public class MainScreen extends AppCompatActivity {
 	public void onClickPhoto(View view) {
 		Log.d("MainScreen", ">>> zrób zdjęcie");
 		ServiceConnector.onClickIcon(IconType.photo);
+
+		// na 0,6s zmień ikonkę, aby było widać, że kliknięto
+		ImageButton PhotoButton = (ImageButton) view;
+		PhotoButton.setImageResource(R.drawable.photo_active);
+		delayHandler.postDelayed(new Runnable() {
+			@Override
+			public void run() {
+				PhotoButton.setImageResource(R.drawable.photo);
+				isEmergencyActive = false;
+			}
+		}, 600);
 	}
 
 	// Nagrywanie awaryjne
 	public void onClickEmergency(View view) {
 		Log.d("MainScreen", ">>> nagrywanie awaryjne");
 		ServiceConnector.onClickIcon(IconType.emergency);
+
+		// FIXME this is Temporary code, because there's no emergency recording feature yet
+		ImageButton emergencyButton = (ImageButton) view;
+		if (!isEmergencyActive) {
+			emergencyButton.setImageResource(R.drawable.emergency_active);
+			isEmergencyActive = true;
+			delayHandler.postDelayed(new Runnable() {
+				@Override
+				public void run() {
+					emergencyButton.setImageResource(R.drawable.emergency3ungroup);
+					isEmergencyActive = false;
+				}
+			}, 5000); // What??? Po 5 sekundach wyłącz? Jaki to ma związek z czasem nagrywania? Jeśli tymczasowe, to powinno być oznaczone
+		}
 	}
 
 	// Nagraj wideo
 	public void onClickRecord(View view) {
 		Log.d("MainScreen", ">>> nagraj");
 		ServiceConnector.onClickIcon(IconType.recording);
+
+		// zmiana koloru ikony, aby zasygnalizować nagrywanie
+		ImageButton recordButton = findViewById(R.id.RecordButton);
+		if (!isVideoActive) {
+			recordButton.setImageResource(R.drawable.record_active);
+			isVideoActive = true;
+		} else {
+			recordButton.setImageResource(R.drawable.record);
+			isVideoActive = false;
+		}
 	}
+
+
 
 	@Override
 	protected void onDestroy() {

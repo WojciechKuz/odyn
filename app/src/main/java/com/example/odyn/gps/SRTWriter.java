@@ -1,4 +1,4 @@
-package com.example.odyn.tools;
+package com.example.odyn.gps;
 
 import android.app.Activity;
 import android.content.Context;
@@ -22,6 +22,9 @@ public class SRTWriter extends Thread {
 
 	private String srtLine;
 
+	// FIXME instead of passing all TextViews here in constructor, define one method in MainScreen eg. 'textProvider', that returns all Strings from
+	//  TextViews (in form of map or array or object holding Strings). Then define interface eg. 'GPSDataProvider'. Make field in this class,
+	//  that would hold this interface and it will be passed in constructor instead of all this Textviews. Then pass textProvider in SRTWriter constructor call in MainScreen.
     public SRTWriter(Context context, File file, TextView counterText,TextView timerText, TextView latitudeText, TextView longitudeText, TextView srtText) {
 		this.context = context;
 		this.file = file;
