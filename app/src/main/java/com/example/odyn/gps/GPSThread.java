@@ -35,7 +35,7 @@ public class GPSThread extends Thread {
 		locationListener = new LocationListener() {
 			@Override
 			public void onLocationChanged(Location location) {
-				Log.d("GPS", "Latitude: " + location.getLatitude() + ", Longitude: " + location.getLongitude() + ", Speed: " + location.getSpeed() * 3.6 + "km/h");
+				Log.d("GPSThread", "Latitude: " + location.getLatitude() + ", Longitude: " + location.getLongitude() + ", Speed: " + location.getSpeed() * 3.6 + "km/h");
 				changer.changeTextField("Lat: " + location.getLatitude(), GPSValues.latitude);
 				changer.changeTextField("Long: " + location.getLongitude(), GPSValues.longitude);
 				changer.changeTextField("Speed: " + location.getSpeed() * 3.6 + "km/h", GPSValues.speed);

@@ -1,6 +1,10 @@
 package com.example.odyn.gps;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
+import android.location.LocationManager;
+import android.os.Build;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
@@ -12,8 +16,10 @@ public class TimerThread extends Thread {
 	private int count = 0;
 
 	private TextFieldChanger changer;
+	private Context context;
 
-	public TimerThread(TextFieldChanger changer) {
+	public TimerThread(Context activityContext, TextFieldChanger changer) {
+		this.context = activityContext;
 		this.changer = changer;
 	}
 
@@ -33,9 +39,15 @@ public class TimerThread extends Thread {
 				String formattedTime = dateFormat.format(currentTime);
 
 				// Update the TextView with the formatted time and count
-				changer.changeTextField(formattedTime, GPSValues.timer);
-				changer.changeTextField(Integer.toString(count), GPSValues.counter);
-
+				((Activity) context).runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+							changer.changeTextField(formattedTime, GPSValues.timer);
+							changer.changeTextField(Integer.toString(count), GPSValues.counter);
+						}
+					}
+				});
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}

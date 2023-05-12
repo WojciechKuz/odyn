@@ -53,12 +53,14 @@ public class SRTWriter extends Thread {
 					((Activity) srtText.getContext()).runOnUiThread(new Runnable() {
 						@Override
 						public void run() {
+							Log.d("GPSThread", ">>> wpiszę srtLine do Pola tekstowego");
 							srtText.setText(srtLine);
+							Log.d("GPSThread", ">>> po wpisaniu");
 						}
 					});
 					writer.write(srtLine);
 					writer.flush();
-					Log.d("GPS","Wrote srt line");
+					Log.d("GPSThread","Wrote srt line");
                 }
 
                 // Sleep for a while before checking again
