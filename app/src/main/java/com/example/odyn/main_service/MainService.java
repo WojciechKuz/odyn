@@ -8,6 +8,7 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import com.example.odyn.settings.SettingsProvider;
 import com.example.odyn.activities.MainScreen;
 import com.example.odyn.cam.Cam;
 import com.example.odyn.main_service.types.IconType;
@@ -45,6 +46,8 @@ public class MainService extends Service {
 
 	private synchronized void mainServiceStart() { // ma się wykonywać pokolei
 		Log.v("MainService", ">>> setting up MainService");
+
+		new SettingsProvider().loadSettings(this); // wczyta ustawienia
 
 		// KOLEJNOŚĆ TWORZENIA WERSJA 1
 
