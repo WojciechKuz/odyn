@@ -52,7 +52,7 @@ public class Settings extends AppCompatActivity {
         switch5 = findViewById(R.id.switch5);
         switch6 = findViewById(R.id.switch6);
         switch7 = findViewById(R.id.switch7);
-        Spinner = findViewById(R.id.spinner);
+        Spinner = findViewById(R.id.spinner1);
         Spinner2 = findViewById(R.id.spinner2);
         Spinner3 = findViewById(R.id.spinner3);
         Spinner4 = findViewById(R.id.spinner4);
