@@ -4,14 +4,13 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
-import android.widget.CompoundButton;
 import android.widget.Spinner;
-import android.widget.Switch;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
 import com.example.odyn.R;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,13 +23,13 @@ import java.io.OutputStreamWriter;
 
 public class Settings extends AppCompatActivity {
     private SharedPreferences sharedPrefs;
-    private Switch switch1;
-    private Switch switch2;
-    private Switch switch3;
-    private Switch switch4;
-    private Switch switch5;
-    private Switch switch6;
-    private Switch switch7;
+    private SwitchMaterial switch1;
+    private SwitchMaterial switch2;
+    private SwitchMaterial switch3;
+    private SwitchMaterial switch4;
+    private SwitchMaterial switch5;
+    private SwitchMaterial switch6;
+    private SwitchMaterial switch7;
     private int mode;
     private Spinner Spinner;
     private Spinner Spinner2;
@@ -100,66 +99,45 @@ public class Settings extends AppCompatActivity {
 
 
         // Dodanie obsługi zdarzeń dla przełączników
-        switch1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                sharedPrefs.edit().putBoolean("switch1", isChecked).apply();
-                if (isChecked) {
-                    mode = AppCompatDelegate.MODE_NIGHT_YES;
-                } else {
-                    mode = AppCompatDelegate.MODE_NIGHT_NO;
-                }
-                AppCompatDelegate.setDefaultNightMode(mode);
-                saveSettingsToFile();
+        switch1.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            sharedPrefs.edit().putBoolean("switch1", isChecked).apply();
+            if (isChecked) {
+                mode = AppCompatDelegate.MODE_NIGHT_YES;
+            } else {
+                mode = AppCompatDelegate.MODE_NIGHT_NO;
             }
+            AppCompatDelegate.setDefaultNightMode(mode);
+            saveSettingsToFile();
         });
 
-        switch2.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                sharedPrefs.edit().putBoolean("switch2", isChecked).apply();
-                saveSettingsToFile();
-            }
+        switch2.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            sharedPrefs.edit().putBoolean("switch2", isChecked).apply();
+            saveSettingsToFile();
         });
 
-        switch3.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                sharedPrefs.edit().putBoolean("switch3", isChecked).apply();
-                saveSettingsToFile();
-            }
+        switch3.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            sharedPrefs.edit().putBoolean("switch3", isChecked).apply();
+            saveSettingsToFile();
         });
 
-        switch4.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                sharedPrefs.edit().putBoolean("switch4", isChecked).apply();
-                saveSettingsToFile();
-            }
+        switch4.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            sharedPrefs.edit().putBoolean("switch4", isChecked).apply();
+            saveSettingsToFile();
         });
 
-        switch5.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                sharedPrefs.edit().putBoolean("switch5", isChecked).apply();
-                saveSettingsToFile();
-            }
+        switch5.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            sharedPrefs.edit().putBoolean("switch5", isChecked).apply();
+            saveSettingsToFile();
         });
 
-        switch6.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                sharedPrefs.edit().putBoolean("switch6", isChecked).apply();
-                saveSettingsToFile();
-            }
+        switch6.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            sharedPrefs.edit().putBoolean("switch6", isChecked).apply();
+            saveSettingsToFile();
         });
 
-        switch7.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                sharedPrefs.edit().putBoolean("switch7", isChecked).apply();
-                saveSettingsToFile();
-            }
+        switch7.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            sharedPrefs.edit().putBoolean("switch7", isChecked).apply();
+            saveSettingsToFile();
         });
 
         loadSettingsFromFile();
