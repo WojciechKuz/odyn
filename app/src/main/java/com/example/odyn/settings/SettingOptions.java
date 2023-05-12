@@ -8,5 +8,5 @@ public class SettingOptions {
 	public static final String[] EmergencyBefore= {"1", "2", "3", "4", "5"}; // what.
 	public static final String[] EmergencyAfter = {"1", "2", "3", "4", "5"}; // what.
 
-	public static final String[][] optionsOrder = {storageOptions, LeftOrRight, LengthRecords, SizeVideo, EmergencyBefore, EmergencyAfter}; // to tylko referencje
+	public static final String[][] optionsOrder = {null, storageOptions, LeftOrRight, LengthRecords, SizeVideo, EmergencyBefore, EmergencyAfter}; // to tylko referencje
 }
