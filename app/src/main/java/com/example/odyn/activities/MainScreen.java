@@ -85,7 +85,7 @@ public class MainScreen extends AppCompatActivity {
 
 	// ustawia i inicjalizuje rzeczy związane z GPSem
 	private void setupGPS() {
-		timerThread = new TimerThread(this::changeTextField);
+		timerThread = new TimerThread(this, this::changeTextField);
 		timerThread.start();
 
 		gpsThread = new GPSThread(this, this::changeTextField);
