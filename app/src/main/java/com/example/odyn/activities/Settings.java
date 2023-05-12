@@ -103,8 +103,8 @@ public class Settings extends AppCompatActivity {
     }
     private void setSwitchListeners() {
         // Dodanie obsługi zdarzeń dla przełączników
-        for(SwitchMaterial switchM : mSwitch) {
-            switchM.setOnCheckedChangeListener(this::switchListener);
+        for(int i = 1; i < mSwitch.length; i++) {
+            mSwitch[i].setOnCheckedChangeListener(this::switchListener);
         }
         switch1.setOnCheckedChangeListener((buttonView, isChecked) -> {
             try {
