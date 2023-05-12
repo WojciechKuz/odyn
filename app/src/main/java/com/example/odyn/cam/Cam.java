@@ -35,9 +35,6 @@ public class Cam extends CamAccess {
 		if(intent != null) {
 			if(intent.hasExtra("RecType") && intent.hasExtra("ActionType")) {
 				Log.w("Cam", ">>> odbieranie Intent'ów z polem \"RecType\" przez Cam nie jest już wspierane");
-				RecType recType = (RecType) intent.getSerializableExtra("RecType");
-				ActionType actionType = (ActionType) intent.getSerializableExtra("ActionType");  // nie trzeba używać ActionType
-				camAction(recType, actionType);
 			}
 			if(intent.hasExtra("IconType")) {
 				IconType iconType = (IconType) intent.getSerializableExtra("IconType");

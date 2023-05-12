@@ -1,5 +1,6 @@
 package com.example.odyn.gps;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -29,9 +30,9 @@ public class SRTWriter extends Thread {
 		this.context = context;
 		this.file = file;
 		this.counterText = counterText;
-        this.timerText = timerText;
-        this.latitudeText = latitudeText;
-        this.longitudeText = longitudeText;
+		this.timerText = timerText;
+		this.latitudeText = latitudeText;
+		this.longitudeText = longitudeText;
 		this.srtText = srtText;
     }
 
@@ -55,7 +56,7 @@ public class SRTWriter extends Thread {
 							srtText.setText(srtLine);
 						}
 					});
-                    writer.write(srtLine);
+					writer.write(srtLine);
 					writer.flush();
 					Log.d("GPS","Wrote srt line");
                 }
@@ -66,7 +67,7 @@ public class SRTWriter extends Thread {
 
             writer.close();
         } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
+			e.printStackTrace();
 			Log.d("GPS","Exception/End of srt writing");
         }
     }
@@ -75,6 +76,7 @@ public class SRTWriter extends Thread {
         stopWriting = true;
     }
 
+	@SuppressLint("DefaultLocale")
 	public static String secondsToTimestamp(int seconds) {
 		int hours = seconds / 3600;
 		int minutes = (seconds % 3600) / 60;
