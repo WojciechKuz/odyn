@@ -19,7 +19,6 @@ import java.io.OutputStreamWriter;
 public class SettingsProvider {
 	private static JSONObject settings;
 
-
 	// podaj nazwę ustawienia, zwróci wartość
 	public synchronized boolean getSettingBool(String settingName) throws JSONException {
 		return settings.getBoolean(settingName);
@@ -48,6 +47,21 @@ public class SettingsProvider {
 			Log.e("SettingsProvider", ">>> Nie udało się zapisać ustawień");
 		}
 	}
+	public void writeSettings(Context context) {
+		writeSettings(context, settings);
+	}
+	private void firstWriteSetting() {
+		try {
+			settings = new JSONObject();
+			for(int i = 1; i < SettingNames.switches.length; i++)
+				settings.put(SettingNames.switches[i], false);
+			for(int i = 1; i < SettingNames.spinners.length; i++)
+				settings.put(SettingNames.spinners[i], SettingOptions.optionsOrder[i]);
+		} catch (JSONException e) {
+			Log.e("SettingsProvider", ">>> Nie udało się wqpisać początkowych wartości");
+		}
+
+	}
 
 	// odczytuje ustawienia z pliku. wywołać na początku działania Aplikacji
 	public synchronized void loadSettings(Context context) {
@@ -64,6 +78,9 @@ public class SettingsProvider {
 			settingActions();
 		} catch (IOException | JSONException e) {
 			e.printStackTrace();
+		}
+		if(settings == null) {
+			firstWriteSetting();
 		}
 	}
 

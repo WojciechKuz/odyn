@@ -34,8 +34,9 @@ public class Settings extends AppCompatActivity {
     private Spinner spinner5;
     private Spinner spinner6;
 
-    private SwitchMaterial[] mSwitch = {null, switch1, switch2, switch3, switch4, switch5, switch6, switch7};
-    private Spinner[] spinners = {null, spinner1, spinner2, spinner3, spinner4, spinner5, spinner6};
+    // elementy umieściłem w tablicy, dla ułatwienia użytkowania
+    private SwitchMaterial[] mSwitch;
+    private Spinner[] spinners;
 
 
     @Override
@@ -64,6 +65,8 @@ public class Settings extends AppCompatActivity {
         spinner4 = findViewById(R.id.spinner4);
         spinner5 = findViewById(R.id.spinner5);
         spinner6 = findViewById(R.id.spinner6);
+        mSwitch = new SwitchMaterial[] {null, switch1, switch2, switch3, switch4, switch5, switch6, switch7};
+        spinners = new Spinner[] {null, spinner1, spinner2, spinner3, spinner4, spinner5, spinner6};
     }
     private void setSwitches() {
         // Ustawienie wartości przełączników
@@ -111,7 +114,8 @@ public class Settings extends AppCompatActivity {
             }
 
             AppCompatDelegate.setDefaultNightMode(mode);
-            saveSettingsToFile();
+            // saveSettingsToFile(); // zbędne, nie potrzeba co chwilę nadpisywać pliku, ustawienia w aplikacji są dostępne przez SettingsProvider.
+            //  zapisanie do pliku po wyjściu z tej aktywności
         });
     }
     private void switchListener(CompoundButton buttonView, boolean isChecked) {
