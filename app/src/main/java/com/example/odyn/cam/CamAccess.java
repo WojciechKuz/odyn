@@ -128,7 +128,7 @@ public class CamAccess {
     }
 
 
-    public void fov_resInfo(){
+    public void getInfo(){
         try {
             CameraManager cameraManager = (CameraManager) main.getSystemService(Context.CAMERA_SERVICE);
             String cameraId = cameraManager.getCameraIdList()[1]; // wybierz pierwszą kamerę
