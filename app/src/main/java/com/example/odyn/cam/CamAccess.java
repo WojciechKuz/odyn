@@ -1,7 +1,5 @@
 package com.example.odyn.cam;
 
-import static android.content.ContentValues.TAG;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -16,7 +14,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.camera.core.Camera;
 import androidx.camera.core.CameraSelector;
 import androidx.camera.core.ImageCapture;
@@ -76,6 +73,7 @@ public class CamAccess {
         }, ContextCompat.getMainExecutor(main));
 
     }
+
     @SuppressLint("RestrictedApi")
     private void bindPreview(ProcessCameraProvider cameraProvider, PreviewView prView) {
 
@@ -100,7 +98,7 @@ public class CamAccess {
                 .build();
 
         // użyj kamery do wyświetlania w mainActivity (preview) i do robienia zdjęć (imageCapture)
-        Camera camera = cameraProvider.bindToLifecycle((LifecycleOwner)main, cameraSelector, preview, imageCapture,videoCapture);
+        Camera camera = cameraProvider.bindToLifecycle((LifecycleOwner) main, cameraSelector, preview, imageCapture, videoCapture);
     }
 
     // robi zdjęcie
@@ -121,38 +119,44 @@ public class CamAccess {
         });
     }
 
-    public static float calculateFOV(float focalLength, float aperture) {
-        float horizontalFOV = (float) (2 * Math.atan2(aperture, (2 * focalLength)));
-        float verticalFOV = (float) (2 * Math.atan2(aperture, (2 * focalLength)));
-        return (float) Math.toDegrees(Math.sqrt(Math.pow(horizontalFOV, 2) + Math.pow(verticalFOV, 2)));
-    }
+    public class camInfo {
+        private float FOV;
+        private float width;
+        private float height;
 
 
-    public void getInfo(){
-        try {
-            CameraManager cameraManager = (CameraManager) main.getSystemService(Context.CAMERA_SERVICE);
-            String cameraId = cameraManager.getCameraIdList()[1]; // wybierz pierwszą kamerę
-            CameraCharacteristics characteristics = cameraManager.getCameraCharacteristics(cameraId);
+        public float calculateFOV(float focalLength, float aperture) {
+            float horizontalFOV = (float) (2 * Math.atan2(aperture, (2 * focalLength)));
+            float verticalFOV = (float) (2 * Math.atan2(aperture, (2 * focalLength)));
+            return (float) Math.toDegrees(Math.sqrt(Math.pow(horizontalFOV, 2) + Math.pow(verticalFOV, 2)));
 
-            // uzyskanie wartości FOV
-            float[] focalLengths = characteristics.get(CameraCharacteristics.LENS_INFO_AVAILABLE_FOCAL_LENGTHS);
-            float[] apertures = characteristics.get(CameraCharacteristics.LENS_INFO_AVAILABLE_APERTURES);
-            float fov = calculateFOV(focalLengths[0], apertures[0]);
-
-            // uzyskanie wartości rozdzielczości
-            StreamConfigurationMap map = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
-            Size[] sizes = map.getOutputSizes(SurfaceTexture.class);
-            Size resolution = sizes[0];
-
-            Log.d(TAG, "FOV: " + fov);
-            Log.d(TAG, "Rozdzielczość: " + resolution.getWidth() + " x " + resolution.getHeight());
-
-        } catch (CameraAccessException e) {
-            e.printStackTrace();
-            Toast.makeText(main, "Wystąpił błąd podczas korzystania z kamery", Toast.LENGTH_LONG).show();
-            Log.e("CamAccess", ">>> Wystąpił błąd podczas korzystania z kamery");
         }
-    }
+
+        public void getInfo() {
+            try {
+                CameraManager cameraManager = (CameraManager) main.getSystemService(Context.CAMERA_SERVICE);
+                String cameraId = cameraManager.getCameraIdList()[1]; // wybierz pierwszą kamerę
+                CameraCharacteristics characteristics = cameraManager.getCameraCharacteristics(cameraId);
+
+                // uzyskanie wartości FOV
+                float[] focalLengths = characteristics.get(CameraCharacteristics.LENS_INFO_AVAILABLE_FOCAL_LENGTHS);
+                float[] apertures = characteristics.get(CameraCharacteristics.LENS_INFO_AVAILABLE_APERTURES);
+                FOV = calculateFOV(focalLengths[0], apertures[0]);
+
+                // uzyskanie wartości rozdzielczości
+                StreamConfigurationMap map = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
+                Size[] sizes = map.getOutputSizes(SurfaceTexture.class);
+                Size resolution = sizes[0];
+                width = resolution.getWidth();
+                height = resolution.getHeight();
+
+            } catch (CameraAccessException e) {
+                e.printStackTrace();
+                Toast.makeText(main, "Wystąpił błąd podczas korzystania z kamery", Toast.LENGTH_LONG).show();
+                Log.e("CamAccess", ">>> Wystąpił błąd podczas korzystania z kamery");
+                }
+            }
+        }
     Timer timer = new Timer();
     @SuppressLint({"RestrictedApi", "MissingPermission"})
     public void takeVideo(boolean opcja) {
