@@ -16,7 +16,6 @@ import android.widget.TextView;
 import androidx.core.app.ActivityCompat;
 
 public class GPSThread extends Thread {
-	private boolean stopGPS = false;
 	private LocationManager locationManager;
 	private LocationListener locationListener;
 	private Context context;
@@ -38,7 +37,7 @@ public class GPSThread extends Thread {
 				Log.d("GPSThread", "Latitude: " + location.getLatitude() + ", Longitude: " + location.getLongitude() + ", Speed: " + location.getSpeed() * 3.6 + "km/h");
 				changer.changeTextField("Lat: " + location.getLatitude(), GPSValues.latitude);
 				changer.changeTextField("Long: " + location.getLongitude(), GPSValues.longitude);
-				changer.changeTextField("Speed: " + location.getSpeed() * 3.6 + "km/h", GPSValues.speed);
+				changer.changeTextField("Speed: " + String.format("%.1f", location.getSpeed() * 3.6), GPSValues.speed);
 			}
 
 			@Override
@@ -62,16 +61,9 @@ public class GPSThread extends Thread {
 			@SuppressLint("MissingPermission")
 			@Override
 			public void run() {
-				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-					locationManager.requestLocationUpdates(LocationManager.FUSED_PROVIDER, 1000, 0, locationListener);
-				}
+				locationManager.requestLocationUpdates(LocationManager.FUSED_PROVIDER, 1000, 0, locationListener);
 			}
 		});
-
-		// FIXME
-		while (!stopGPS) {
-			// Do nothing
-		}
 
 		locationManager.removeUpdates(locationListener);
 	}
@@ -85,6 +77,7 @@ public class GPSThread extends Thread {
 	}
 
 	public void stopGPS() {
-		stopGPS = true;
+		locationManager.removeUpdates(locationListener);
+		interrupt();
 	}
 }

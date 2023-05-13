@@ -115,7 +115,8 @@
                     android:id="@+id/counterText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="0" />
+                    android:text="0"
+                    tools:visibility="invisible" />
 
                 <TextView
                     android:id="@+id/srtText"
@@ -123,7 +124,7 @@
                     android:layout_height="wrap_content"
                     android:text="srtText"
                     android:textSize="10sp"
-                    android:visibility="visible" />
+                    android:visibility="invisible" />
             </LinearLayout>
 
         </LinearLayout>

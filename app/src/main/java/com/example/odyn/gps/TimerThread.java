@@ -42,10 +42,8 @@ public class TimerThread extends Thread {
 				((Activity) context).runOnUiThread(new Runnable() {
 					@Override
 					public void run() {
-						if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-							changer.changeTextField(formattedTime, GPSValues.timer);
-							changer.changeTextField(Integer.toString(count), GPSValues.counter);
-						}
+						changer.changeTextField(formattedTime, GPSValues.timer);
+						changer.changeTextField(Integer.toString(count), GPSValues.counter);
 					}
 				});
 			} catch (InterruptedException e) {
