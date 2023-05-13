@@ -19,12 +19,15 @@ import com.example.odyn.R;
 import com.example.odyn.cam.Cam;
 import com.example.odyn.gps.GPSThread;
 import com.example.odyn.gps.GPSValues;
+import com.example.odyn.gps.TextFieldChanger;
 import com.example.odyn.main_service.ServiceConnector;
 import com.example.odyn.main_service.types.IconType;
 import com.example.odyn.gps.SRTWriter;
 import com.example.odyn.gps.TimerThread;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 /*  Kolejność metod:
 onCreate
@@ -85,13 +88,20 @@ public class MainScreen extends AppCompatActivity {
 
 	// ustawia i inicjalizuje rzeczy związane z GPSem
 	private void setupGPS() {
-		timerThread = new TimerThread(this::changeTextField);
+		timerThread = new TimerThread(this, this::changeTextField);
 		timerThread.start();
 
 		gpsThread = new GPSThread(this, this::changeTextField);
 		gpsThread.requestGPSPermissions(); // TODO check permissions in StartActivity instead
 		gpsThread.start();
 
+		File file = new FileHandler(this).createDataFile("srt");
+		srtWriter = new SRTWriter(this, this, file);
+		srtWriter.requestWritePermissions();
+		srtWriter.start();
+	}
+
+	public Map<String, String> textProvider() {
 		TextView timerText = findViewById(R.id.timerText);
 		TextView counterText = findViewById(R.id.counterText);
 		TextView latitudeText = findViewById(R.id.latitudeText);
@@ -99,12 +109,15 @@ public class MainScreen extends AppCompatActivity {
 		TextView speedText = findViewById(R.id.speedText);
 		TextView srtText = findViewById(R.id.srtText);
 
-		File file = new FileHandler(this).createDataFile("srt");
-		srtWriter = new SRTWriter(this, file, counterText, timerText, latitudeText, longitudeText, srtText);
-		srtWriter.requestWritePermissions();
-		srtWriter.start();
+		Map<String, String> textMap = new HashMap<>();
+		textMap.put("counterText", counterText.getText().toString());
+		textMap.put("timerText", timerText.getText().toString());
+		textMap.put("latitudeText", latitudeText.getText().toString());
+		textMap.put("longitudeText", longitudeText.getText().toString());
+		textMap.put("speedText", speedText.getText().toString());
+		textMap.put("srtText", srtText.getText().toString());
+		return textMap;
 	}
-
 
 
 	private void changeTextField(String text, GPSValues whatValue) {
@@ -127,7 +140,7 @@ public class MainScreen extends AppCompatActivity {
 				break;
 			case speed:
 				TextView speedText = findViewById(R.id.speedText);
-				speedText.setText(text);
+				speedText.setText(text + "km/h");
 		}
 	}
 
@@ -152,6 +165,7 @@ public class MainScreen extends AppCompatActivity {
 		ServiceConnector.removeActivity(); // trzeba się pozbyć referencji, aby poprawnie usunąć Aktywność
 		timerThread.stopTimer();
 		gpsThread.stopGPS();
+		srtWriter.stopWriting();
 		super.onDestroy();
 	}
 

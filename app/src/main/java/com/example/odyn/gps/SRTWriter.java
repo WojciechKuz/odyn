@@ -10,31 +10,28 @@ import android.widget.TextView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.example.odyn.activities.MainScreen;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.Map;
 
 public class SRTWriter extends Thread {
     private boolean stopWriting = false;
     private File file;
 	private Context context;
-    private TextView counterText, timerText, latitudeText, longitudeText, srtText;
+	private MainScreen mainScreen;
 	private static final int REQUEST_CODE_WRITE_EXTERNAL_STORAGE = 1;
 
 	private String srtLine;
-
-	// FIXME instead of passing all TextViews here in constructor, define one method in MainScreen eg. 'textProvider', that returns all Strings from
-	//  TextViews (in form of map or array or object holding Strings). Then define interface eg. 'GPSDataProvider'. Make field in this class,
-	//  that would hold this interface and it will be passed in constructor instead of all this Textviews. Then pass textProvider in SRTWriter constructor call in MainScreen.
-    public SRTWriter(Context context, File file, TextView counterText,TextView timerText, TextView latitudeText, TextView longitudeText, TextView srtText) {
+	public SRTWriter(MainScreen mainScreen, Context context, File file) {
+		this.mainScreen = mainScreen;
 		this.context = context;
 		this.file = file;
-		this.counterText = counterText;
-		this.timerText = timerText;
-		this.latitudeText = latitudeText;
-		this.longitudeText = longitudeText;
-		this.srtText = srtText;
-    }
+	}
 
     @Override
     public void run() {
@@ -42,23 +39,24 @@ public class SRTWriter extends Thread {
             FileWriter writer = new FileWriter(file, true); // true for appending
 
             while (!stopWriting) {
+				Map<String, String> textMap = mainScreen.textProvider();
+				String timerText = textMap.get("timerText");
+				String counterText = textMap.get("counterText");
+				String latitudeText = textMap.get("latitudeText");
+				String longitudeText = textMap.get("longitudeText");
+				String speedText = textMap.get("speedText");
+
                 if (timerText != null && latitudeText != null && longitudeText != null) {
                     // Write the data in SRT format
 					srtLine = "\n";
-					srtLine += secondsToTimestamp(Integer.parseInt(counterText.getText().toString()) - 1) + " --> " + secondsToTimestamp(Integer.parseInt(counterText.getText().toString()));
-					srtLine += "\n" + timerText.getText() + " | ";
-					srtLine += latitudeText.getText() + ", ";
-					srtLine += longitudeText.getText() + "\n\n";
+					srtLine += secondsToTimestamp(Integer.parseInt(counterText) - 1) + " --> " + secondsToTimestamp(Integer.parseInt(counterText));
+					srtLine += "\n" + timerText + " | " + speedText + " | ";
+					srtLine += latitudeText + ", ";
+					srtLine += longitudeText + "\n\n";
 					Log.d("GPS", srtLine);
-					((Activity) srtText.getContext()).runOnUiThread(new Runnable() {
-						@Override
-						public void run() {
-							srtText.setText(srtLine);
-						}
-					});
 					writer.write(srtLine);
 					writer.flush();
-					Log.d("GPS","Wrote srt line");
+					Log.d("GPSThread","Wrote srt line");
                 }
 
                 // Sleep for a while before checking again
