@@ -47,7 +47,7 @@ public class Cam extends CamAccess {
 	public void camAction(IconType iconType) {
 		switch(iconType) {
 			case photo:
-				photo();
+				photo(1);
 				break;
 			case recording:
 				record();
@@ -60,9 +60,16 @@ public class Cam extends CamAccess {
 				break;
 		}
 	}
-	private void photo() {
-		File file = new FileHandler(main).createPicture();
-		takePicture(file);
+	private void photo(int opcja) {
+		if(opcja == 1) {
+			File file = new FileHandler(main).createPicture();
+			takePicture(file);
+			}
+		//Druga opcja do zapisania zdj jako mapy bitowej. Przydatne do AI
+		if(opcja ==2){
+			File file = new FileHandler(main).createPictureBMP();
+			takePicture(file);
+			}
 	}
 	private void record() {
 		if (!isRecording) {

@@ -111,7 +111,6 @@ public class CamAccess {
                 // The image has been saved to the file
                 Log.v("CamAccess", "---------ZapisywanieIMG---------");
             }
-
             @Override
             public void onError(@NonNull ImageCaptureException exception) {
                 // Handle any errors here
