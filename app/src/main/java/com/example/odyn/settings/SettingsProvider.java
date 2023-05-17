@@ -37,6 +37,7 @@ public class SettingsProvider {
 	}
 
 
+
 	// zapisuje / nadpisuje plik ustawień. z założenia pisać będzie tylko Settings.java
 	public synchronized void writeSettings(Context context, JSONObject settings) {
 		try {
@@ -75,7 +76,7 @@ public class SettingsProvider {
 			settings = new JSONObject(stringBuilder.toString());
 
 			// akcje związane z ustawieniami, np. włącz ciemny motyw.
-			settingActions();
+			//settingActions();
 		} catch (IOException | JSONException e) {
 			e.printStackTrace();
 		}
@@ -83,9 +84,9 @@ public class SettingsProvider {
 			firstWriteSetting();
 		}
 	}
-
+	// motyw jasny/ciemny nie jest konieczny na tym etapie
 	// akcje związane z ustawieniami, np. włącz ciemny motyw. Jak będzie dużo akcji to przenieść do nowej klasy
-	private void settingActions() {
+	/*private void settingActions() {
 		try {
 			boolean isChecked = this.getSettingBool("mode");
 			int mode;
@@ -98,6 +99,6 @@ public class SettingsProvider {
 		} catch (JSONException e) {
 			throw new RuntimeException(e);
 		}
-	}
+	}*/
 
 }

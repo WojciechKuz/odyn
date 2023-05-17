@@ -1,12 +1,22 @@
 package com.example.odyn;
 
+import com.example.odyn.settings.SettingOptions;
+import com.example.odyn.settings.SettingsProvider;
+import com.example.odyn.settings.SettingNames;
 import android.content.Context;
+import android.os.Build;
 import android.util.Log;
 
 import com.example.odyn.cam.RecType;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Locale;
 
@@ -21,6 +31,8 @@ public class FileHandler {
     private String dataSubdir = "data";
     private Context context;
 
+    private int selectedOptionIndex = 0;
+
     public FileHandler(Context mainActivity) {
         // TODO ustawianie czy w pamięci telefonu, czy na karcie SD. (pobierane z ustawień)
         context = mainActivity;
@@ -28,6 +40,28 @@ public class FileHandler {
         dir = context.getExternalMediaDirs()[0].getAbsolutePath();
         dir = removeSlash(dir) + '/' + "Odyn";
 
+        createDirIfNotExists(getDirPath(pictSubdir));
+        createDirIfNotExists(getDirPath(vidSubdir));
+        createDirIfNotExists(getDirPath(emergSubdir));
+        createDirIfNotExists(getDirPath(dataSubdir));
+
+
+        sprawdzRozmiar();
+    }
+
+
+    private String getDirPath(String subDir) {
+        return context.getExternalMediaDirs()[0].getAbsolutePath() + File.separator + "Odyn" + File.separator + subDir;
+    }
+
+    private void createDirIfNotExists(String path) {
+        File dir = new File(path);
+        if (!dir.exists()) {
+            boolean success = dir.mkdirs();
+            if (!success) {
+                Log.e("FileHandler", "Nie udalo sie stworzyc katalogu: " + path);
+            }
+        }
     }
 
     // TODO przetestuj
@@ -44,6 +78,102 @@ public class FileHandler {
     public String testPathExperiment() {
         return "XD";
     }
+
+
+
+
+    private long getLimitFromSettings() {
+        String selectedOption = SettingOptions.SizeVideo[selectedOptionIndex]; // Przykład pobrania wybranej opcji z ustawień
+        String sizeString = selectedOption.replaceAll("[^0-9]", ""); // Usuń wszystko oprócz cyfr
+        long sizeInMB = Long.parseLong(sizeString);
+        long sizeInBytes = sizeInMB * 1024 * 1024; // Przelicz na bajty
+        return sizeInBytes;
+    }
+
+    public void sprawdzRozmiar() {
+        long rozmiarKatalogów = getTotalDirSize();
+        long limit = 1000000000; // Przykładowy limit rozmiaru (1 GB)
+
+        if (rozmiarKatalogów > limit) {
+            int numVideosToDelete = 2; // Liczba najstarszych nagran do usunięcia
+            deleteOldestVideos(numVideosToDelete); // Usuń najstarsze nagrania z vidSubdir
+            sprawdzRozmiar();
+        }
+    }
+
+
+    public void deleteOldestVideos(int numVideosToDelete) {
+        File videoDir = new File(getDirPath(vidSubdir));
+        File[] videoFiles = videoDir.listFiles();
+
+        if (videoFiles != null && videoFiles.length > numVideosToDelete) {
+            // Sortuj pliki w kolejności od najstarszego do najnowszego
+            Arrays.sort(videoFiles, (file1, file2) -> {
+                Long lastModified1 = file1.lastModified();
+                Long lastModified2 = file2.lastModified();
+                return lastModified1.compareTo(lastModified2);
+            });
+
+            // Usuń najstarsze pliki
+            for (int i = 0; i < numVideosToDelete; i++) {
+                if (videoFiles[i].delete()) {
+                    Log.d("FileHandler", "Usunięto plik: " + videoFiles[i].getName());
+                } else {
+                    Log.e("FileHandler", "Nie udało się usunąć pliku: " + videoFiles[i].getName());
+                }
+            }
+        }
+    }
+
+
+
+
+    private long getDirectorySize(String directoryPath) {
+        File directory = new File(directoryPath);
+        if (!directory.exists() || !directory.isDirectory()) {
+            return 0;
+        }
+
+        long size = 0;
+
+        File[] files = directory.listFiles();
+        if (files != null) {
+            for (File file : files) {
+                if (file.isFile()) {
+                    size += file.length();
+                } else if (file.isDirectory()) {
+                    size += getDirectorySize(file.getAbsolutePath());
+                }
+            }
+        }
+
+        return size;
+    }
+
+
+
+    public long getPictureDirSize() {
+        String pictureDirPath = getDirPath(pictSubdir);
+        long dirSize = getDirectorySize(pictureDirPath);
+        return dirSize;
+    }
+
+    public long getVideoDirSize() {
+        String videoDirPath = getDirPath(vidSubdir);
+        long dirSize = getDirectorySize(videoDirPath);
+        return dirSize;
+    }
+
+    public long getEmergencyDirSize() {
+        String emergencyDirPath = getDirPath(emergSubdir);
+        long dirSize = getDirectorySize(emergencyDirPath);
+        return dirSize;
+    }
+
+    public long getTotalDirSize() {
+        return getPictureDirSize() + getVideoDirSize() + getEmergencyDirSize();
+    }
+
 
 
     // TWORZENIE PLIKÓW
@@ -70,24 +200,31 @@ public class FileHandler {
 
     public File createPicture() {
         String fileName = youNameIt("ODYN-img", "jpg");
-        File file = new File(context.getExternalMediaDirs()[0].getAbsolutePath(), fileName);
+        File file = new File(getDirPath(pictSubdir), fileName);
         // getExternalMediaDirs()[0] = wylistuj mi zewnętrzne nośniki danych i wybierz pierwszy
         // TODO wybierana ścieżka zapisu
         return file;
     }
     public File createVideo(String format) {
         String fileName = youNameIt("ODYN-vid", format);
-        File file = new File(context.getExternalMediaDirs()[0].getAbsolutePath(), fileName);
+        File file = new File(getDirPath(vidSubdir), fileName);
+        Log.d("FileHandler", "Ścieżka pliku: " + file.getAbsolutePath());
+        // Sprawdź rozmiar katalogu wideo
+        long videoDirSize = getVideoDirSize();
+        Log.d("FileHandler", "Rozmiar katalogu wideo: " + videoDirSize);
+
         return file;
     }
+
+
     public File createEmergencyVideo(String format) {
         String fileName = youNameIt("ODYN-emr", format);
-        File file = new File(context.getExternalMediaDirs()[0].getAbsolutePath(), fileName);
+        File file = new File(getDirPath(emergSubdir), fileName);
         return file;
     }
     public File createDataFile(String format) {
         String fileName = youNameIt("ODYN-dat", format);
-        File file = new File(context.getExternalMediaDirs()[0].getAbsolutePath(), fileName);
+        File file = new File(getDirPath(dataSubdir), fileName);
         return file;
     }
 
@@ -114,6 +251,33 @@ public class FileHandler {
         }
         return path;
     }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     /*
     public void createFile(File absFile, Type type) {
@@ -146,4 +310,4 @@ public class FileHandler {
         return readFile(new URI(path));
     }
      */
-}
+

@@ -2,6 +2,8 @@ package com.example.odyn.activities;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.Spinner;
@@ -44,10 +46,14 @@ public class Settings extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings);
 
+        SettingsProvider settingsProvider = new SettingsProvider();
+        settingsProvider.loadSettings(this);
+
         findUIElements();
         setSwitches();
         initSpinners();
         setSwitchListeners();
+        setSpinnerListeners();
 
         loadSettingsFromFile();
     }
@@ -82,23 +88,23 @@ public class Settings extends AppCompatActivity {
     }
     private void initSpinners() {
         // Ustawienie opcji spinnera
-        int spinnerTypeCode = android.R.layout.simple_spinner_dropdown_item;
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, spinnerTypeCode, SettingOptions.storageOptions);
+        //int spinnerTypeCode = android.R.layout.simple_spinner_dropdown_item;
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, SettingOptions.storageOptions);
         spinner1.setAdapter(adapter);
 
-        ArrayAdapter<String> adapter2 = new ArrayAdapter<>(this, spinnerTypeCode, SettingOptions.LeftOrRight);
+        ArrayAdapter<String> adapter2 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, SettingOptions.LeftOrRight);
         spinner2.setAdapter(adapter2);
 
-        ArrayAdapter<String> adapter3 = new ArrayAdapter<>(this, spinnerTypeCode, SettingOptions.LengthRecords);
+        ArrayAdapter<String> adapter3 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, SettingOptions.LengthRecords);
         spinner3.setAdapter(adapter3);
 
-        ArrayAdapter<String> adapter4 = new ArrayAdapter<>(this, spinnerTypeCode, SettingOptions.SizeVideo);
+        ArrayAdapter<String> adapter4 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, SettingOptions.SizeVideo);
         spinner4.setAdapter(adapter4);
 
-        ArrayAdapter<String> adapter5 = new ArrayAdapter<>(this, spinnerTypeCode, SettingOptions.EmergencyBefore);
+        ArrayAdapter<String> adapter5 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, SettingOptions.EmergencyBefore);
         spinner5.setAdapter(adapter5);
 
-        ArrayAdapter<String> adapter6 = new ArrayAdapter<>(this, spinnerTypeCode, SettingOptions.EmergencyAfter);
+        ArrayAdapter<String> adapter6 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, SettingOptions.EmergencyAfter);
         spinner6.setAdapter(adapter6);
     }
     private void setSwitchListeners() {
@@ -118,6 +124,26 @@ public class Settings extends AppCompatActivity {
             //  zapisanie do pliku po wyjściu z tej aktywności
         });
     }
+
+
+    private void setSpinnerListeners() {
+        for (int i = 1; i < spinners.length; i++) {
+            spinners[i].setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    saveSettingsToFile();
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+                    // Nie trzeba implementować, jeśli nie jest potrzebne
+                }
+            });
+        }
+    }
+
+
+
     private void switchListener(CompoundButton buttonView, boolean isChecked) {
         for(int i = 1; i < mSwitch.length; i++) {
             if(buttonView == mSwitch[i]) {
@@ -133,11 +159,14 @@ public class Settings extends AppCompatActivity {
         }
     }
 
+
+
     @Override
     protected void onPause() {
         super.onPause();
         saveSettingsToFile();
     }
+
 
     private void saveSettingsToFile() {
         try {
@@ -145,10 +174,11 @@ public class Settings extends AppCompatActivity {
 
             for(int i = 1; i < mSwitch.length; i++)
                 settings.put(SettingNames.switches[i], mSwitch[i].isChecked());
-            for(int i = 1; i < spinners.length; i++)
+            for (int i = 1; i < spinners.length; i++)
                 settings.put(SettingNames.spinners[i], spinners[i].getSelectedItemPosition());
 
-            settings.put("mode", mode); // po co dodatkowo zapisujemy mode, skoro jest też w przełączniku?
+
+            //settings.put("mode", mode); // po co dodatkowo zapisujemy mode, skoro jest też w przełączniku?
 
             new SettingsProvider().writeSettings(this, settings); // zapisz ustawienia
         } catch (JSONException e) {
@@ -164,13 +194,15 @@ public class Settings extends AppCompatActivity {
             // ustawienie opcji
             for(int i = 1; i < mSwitch.length; i++)
                 mSwitch[i].setChecked(sprov.getSettingBool(SettingNames.switches[i]));
-            for(int i = 1; i < spinners.length; i++)
+            for (int i = 1; i < spinners.length; i++)
                 spinners[i].setSelection(sprov.getSettingInt(SettingNames.spinners[i]));
+
 
             mode = sprov.getSettingInt("mode");
             AppCompatDelegate.setDefaultNightMode(mode);
 
         } catch (JSONException e) {
+            Log.e("Settings", ">>> błąd podczas odczytu ustawień");
             e.printStackTrace();
         }
     }
