@@ -16,7 +16,7 @@ import com.example.odyn.main_service.types.IconType;
 
 // TODO przerób na Foreground Service
 public class MainService extends Service {
-	private Notification notif;
+	private Notification notif = null;
 	private Cam cam; // dostęp do kamery
 
 	// nagrywanie przeniesione tutaj. gdy potrzeba zdjęcia, MainScreen (Activity) może wołać tę klasę
@@ -51,19 +51,29 @@ public class MainService extends Service {
 		// utwórz MainScreen
 		startMainScreen();
 
-		// TODO utwórz Notification
+		// utwórz Notification
+		createNotif();
 
 		ServiceConnector.setOnClickHandle(this::buttonHandler);
 		ServiceConnector.setCamReceiver(this::receiveCam); // MainScreen dostarczy Cam
 
 		// Z Logcat'a: Skipped 36 frames!  The application may be doing too much work on its main thread.
 		// TODO utworzyć wątek, na kamerę
-
-		// utwórz Cam, trzeba dostarczyć do konstruktora MainScreen Activity
-		//cam = new Cam(ServiceConnector.getActivity(), ServiceConnector.getActivity());
-		// tutaj nie działa, cam musi być utworzony w głównym wątku
-		// OD TERAZ: Cam tworzone w MainScreen.createCam() i przekazywane tu do setCam()
 	}
+
+	@Override
+	public void onCreate() {
+		super.onCreate();
+		Log.v("MainService", ">>> MainService created");
+	}
+
+	@Override
+	public void onDestroy() {
+		Log.v("MainService", ">>> MainService destroyed");
+		super.onDestroy();
+	}
+
+	// uruchamia ekran aplikacji
 	private void startMainScreen() {
 		// DrawerActivity zawiera MainScreen, więc ok.
 		Intent startMainScreen = new Intent(this, MainScreen.class);
@@ -90,7 +100,7 @@ public class MainService extends Service {
 				// nottodo: MainScreen będzie otwierać menu
 				break;
 			case back_to_app:
-				startMainScreen(); // ? należy otworzyć MainScreen, a to tworzy. Można tak???
+				startMainScreen(); // ? należy otworzyć MainScreen, a to tworzy.
 				break;
 			case display_notif:
 				// nieaktywne, Service wersja 1
@@ -101,6 +111,32 @@ public class MainService extends Service {
 		}
 	}
 
+	public void createNotif() {
+		if(notif == null) {
+			notif = new NotificationCreator(this).create();
+		}
+	}
+
+	private void receiveCam(Cam cam) {
+		this.cam = cam;
+	}
+
+	// obsłuż intent'y. żądania nagrywania, itp.
+	public void onHandleIntent(Intent intent) { // ???
+		// odczytaj, co zrobić RecType i ActionType
+		if(intent != null) {
+			if(intent.hasExtra("RecType") && intent.hasExtra("ActionType")) {
+				Log.w("MainService", ">>> odbieranie Intent'ów z polem \"RecType\" nie jest już wspierane");
+			}
+			if(intent.hasExtra("IconType")) {
+				IconType iconType = (IconType) intent.getSerializableExtra("IconType");
+				buttonHandler(iconType);
+			}
+		}
+	}
+
+	// w wersji service 1 te metody poniżej nieaktywne:
+
 	// użytkownik wyszedł z aplikacji nie zamykając jej. wyświetl powiadomienie, że aplikacja nadal nagrywa. wywołać w MainScreen.onStop()
 	public void appNotOnScreen() {
 		notif = new NotificationCreator(this).create();
@@ -110,22 +146,6 @@ public class MainService extends Service {
 	public void appBackOnScreen() {
 		//
 		// zamknij powiadomienie ???
-	}
-
-	@Override
-	public void onCreate() {
-		super.onCreate();
-		Log.v("MainService", ">>> MainService created");
-	}
-
-	@Override
-	public void onDestroy() {
-		Log.v("MainService", ">>> MainService destroyed");
-		super.onDestroy();
-	}
-
-	private void receiveCam(Cam cam) {
-		this.cam = cam;
 	}
 
 }

@@ -33,21 +33,21 @@ public class ServiceConnector {
 	// onClickHandler:
 	private static IconTypeInterface handler;
 	// w argumencie podać, jak obsłużyć przyciski: Cam.camAction()
-	public static void setOnClickHandle(IconTypeInterface handler) {
+	public static void setOnClickHandle(IconTypeInterface handler) { // ustaw interface
 		ServiceConnector.handler = handler;
 	}
 	// wywoływane, gdy jakiś przycisk kliknięto
-	public static void onClickIcon(IconType it) {
+	public static void onClickIcon(IconType it) { // wykonaj metodę interface'u
 		handler.onIconClick(it);
 	}
 
 
 	// przekazywanie Cam z MainScreen do MainActivity:
 	public static RecieveCamInterface camReceiver;
-	public static void setCamReceiver(RecieveCamInterface camReceiver) {
+	public static void setCamReceiver(RecieveCamInterface camReceiver) { // ustaw interface
 		ServiceConnector.camReceiver = camReceiver;
 	}
-	public static void sendCam(Cam cam) {
+	public static void sendCam(Cam cam) { // wykonaj metodę interface'u
 		camReceiver.recieveCam(cam);
 	}
 }

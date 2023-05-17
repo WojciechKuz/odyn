@@ -29,21 +29,6 @@ public class Cam extends CamAccess {
 	// emergency()
 	// uruchamiane poprzez camAction(IconType)
 
-	// obsłuż intent'y. żądania nagrywania, itp.
-	public void onHandleIntent(Intent intent) { // ???
-		// odczytaj, co zrobić RecType i ActionType
-		if(intent != null) {
-			if(intent.hasExtra("RecType") && intent.hasExtra("ActionType")) {
-				Log.w("Cam", ">>> odbieranie Intent'ów z polem \"RecType\" przez Cam nie jest już wspierane");
-			}
-			if(intent.hasExtra("IconType")) {
-				IconType iconType = (IconType) intent.getSerializableExtra("IconType");
-				camAction(iconType);
-			}
-		}
-	}
-
-
 	public void camAction(IconType iconType) {
 		switch(iconType) {
 			case photo:
