@@ -3,11 +3,14 @@ package com.example.odyn.cam;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.SurfaceTexture;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCharacteristics;
 import android.hardware.camera2.CameraManager;
 import android.hardware.camera2.params.StreamConfigurationMap;
+import android.media.Image;
 import android.util.Log;
 import android.util.Size;
 import android.widget.Toast;
@@ -18,6 +21,7 @@ import androidx.camera.core.Camera;
 import androidx.camera.core.CameraSelector;
 import androidx.camera.core.ImageCapture;
 import androidx.camera.core.ImageCaptureException;
+import androidx.camera.core.ImageProxy;
 import androidx.camera.core.Preview;
 import androidx.camera.core.VideoCapture;
 import androidx.camera.lifecycle.ProcessCameraProvider;
@@ -30,6 +34,7 @@ import com.example.odyn.R;
 import com.google.common.util.concurrent.ListenableFuture;
 
 import java.io.File;
+import java.nio.ByteBuffer;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ExecutionException;
@@ -90,6 +95,9 @@ public class CamAccess {
                 .setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY)
                 .setTargetRotation(main.getWindowManager().getDefaultDisplay().getRotation())
                 .build();
+
+
+
         VideoCapture.Builder builder_vid = new VideoCapture.Builder();
         videoCapture = builder_vid
                 .setVideoFrameRate(60)
@@ -122,8 +130,31 @@ public class CamAccess {
         private float FOV;
         private float width;
         private float height;
-
-
+        private Bitmap BMP;
+        private Bitmap imageProxyToBitmap(ImageProxy imageProxy) {
+            Image image = imageProxy.getImage();
+            ByteBuffer buffer = image.getPlanes()[0].getBuffer();
+            byte[] bytes = new byte[buffer.remaining()];
+            buffer.get(bytes);
+            return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+        }
+        public void takePictureBMP(){
+            imageCapture.takePicture(ContextCompat.getMainExecutor(main), new ImageCapture.OnImageCapturedCallback() {
+                @Override
+                public void onCaptureSuccess(@NonNull ImageProxy image) {
+                    // Tutaj otrzymujesz obraz z kamery, możesz go przetwarzać lub zapisać w pamięci
+                    // Uwaga: Ta metoda jest wywoływana na innym wątku, więc musisz obsłużyć go odpowiednio
+                    super.onCaptureSuccess(image);
+                    BMP = imageProxyToBitmap(image);
+                    // Zapisz obraz w pamięci podręcznej
+                }
+                @Override
+                public void onError(@NonNull ImageCaptureException exception) {
+                    // Obsłuż błędy związane z wykonywaniem zdjęcia
+                    super.onError(exception);
+                }
+            });
+        }
         public float calculateFOV(float focalLength, float aperture) {
             float horizontalFOV = (float) (2 * Math.atan2(aperture, (2 * focalLength)));
             float verticalFOV = (float) (2 * Math.atan2(aperture, (2 * focalLength)));
@@ -136,7 +167,6 @@ public class CamAccess {
                 CameraManager cameraManager = (CameraManager) main.getSystemService(Context.CAMERA_SERVICE);
                 String cameraId = cameraManager.getCameraIdList()[1]; // wybierz pierwszą kamerę
                 CameraCharacteristics characteristics = cameraManager.getCameraCharacteristics(cameraId);
-
                 // uzyskanie wartości FOV
                 float[] focalLengths = characteristics.get(CameraCharacteristics.LENS_INFO_AVAILABLE_FOCAL_LENGTHS);
                 float[] apertures = characteristics.get(CameraCharacteristics.LENS_INFO_AVAILABLE_APERTURES);
