@@ -14,7 +14,6 @@ import android.media.Image;
 import android.util.Log;
 import android.util.Size;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.camera.core.Camera;
@@ -28,11 +27,9 @@ import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.camera.view.PreviewView;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LifecycleOwner;
-
 import com.example.odyn.FileHandler;
 import com.example.odyn.R;
 import com.google.common.util.concurrent.ListenableFuture;
-
 import java.io.File;
 import java.nio.ByteBuffer;
 import java.util.Timer;
@@ -55,7 +52,6 @@ public class CamAccess {
         otrzymanie CameraManager
         utworzenie tosta
     */
-
     // konstruktor. PreviewView służy do wyświetlenia w nim obrazu z kamery
     public CamAccess(Activity main) {
         this.main = main;
@@ -63,7 +59,6 @@ public class CamAccess {
         cameraProviderSetup(prView2);
         Log.v("CamAccess", ">>> CamAccess constructor");
     }
-
     // te dwie poniższe funkcje służą do przygotowania kamery do przekazywania obrazu do <PreviewView> i robienia zdjęć
     @SuppressLint("RestrictedApi")
     private void cameraProviderSetup(PreviewView prView) {
@@ -76,9 +71,7 @@ public class CamAccess {
                 // gdzie przechwycenie ???
             }
         }, ContextCompat.getMainExecutor(main));
-
     }
-
     @SuppressLint("RestrictedApi")
     private void bindPreview(ProcessCameraProvider cameraProvider, PreviewView prView) {
 
@@ -89,14 +82,12 @@ public class CamAccess {
         // Set up the preview use case
         Preview preview = new Preview.Builder().build();
         preview.setSurfaceProvider(prView.getSurfaceProvider());
-
         ImageCapture.Builder builder = new ImageCapture.Builder();
+
         imageCapture = builder
                 .setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY)
                 .setTargetRotation(main.getWindowManager().getDefaultDisplay().getRotation())
                 .build();
-
-
 
         VideoCapture.Builder builder_vid = new VideoCapture.Builder();
         videoCapture = builder_vid
@@ -108,7 +99,6 @@ public class CamAccess {
         // użyj kamery do wyświetlania w mainActivity (preview) i do robienia zdjęć (imageCapture)
         Camera camera = cameraProvider.bindToLifecycle((LifecycleOwner) main, cameraSelector, preview, imageCapture, videoCapture);
     }
-
     // robi zdjęcie
     public void takePicture(File file) {
         // Set up the output file and capture the image
@@ -125,7 +115,6 @@ public class CamAccess {
             }
         });
     }
-
     public class camInfo {
         private float FOV;
         private float width;
@@ -159,9 +148,7 @@ public class CamAccess {
             float horizontalFOV = (float) (2 * Math.atan2(aperture, (2 * focalLength)));
             float verticalFOV = (float) (2 * Math.atan2(aperture, (2 * focalLength)));
             return (float) Math.toDegrees(Math.sqrt(Math.pow(horizontalFOV, 2) + Math.pow(verticalFOV, 2)));
-
         }
-
         public void getInfo() {
             try {
                 CameraManager cameraManager = (CameraManager) main.getSystemService(Context.CAMERA_SERVICE);
@@ -203,7 +190,6 @@ public class CamAccess {
                                 System.out.println("----------ZapisywanieVID----------");
                                 Log.i("CamAccess", ">>> Zapisano nagranie");
                             }
-
                             @Override
                             public void onError(int videoCaptureError, @NonNull String message, @Nullable Throwable cause) {
                                 System.out.println("----------GownoVID----------");

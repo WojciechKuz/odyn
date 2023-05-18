@@ -67,16 +67,8 @@ public class FileHandler {
         }
         return null;
     }
-
     public File createPicture() {
         String fileName = youNameIt("ODYN-img", "jpg");
-        File file = new File(context.getExternalMediaDirs()[0].getAbsolutePath(), fileName);
-        // getExternalMediaDirs()[0] = wylistuj mi zewnętrzne nośniki danych i wybierz pierwszy
-        // TODO wybierana ścieżka zapisu
-        return file;
-    }
-    public File createPictureBMP() {
-        String fileName = youNameIt("ODYN-img", "bmp");
         File file = new File(context.getExternalMediaDirs()[0].getAbsolutePath(), fileName);
         // getExternalMediaDirs()[0] = wylistuj mi zewnętrzne nośniki danych i wybierz pierwszy
         // TODO wybierana ścieżka zapisu
