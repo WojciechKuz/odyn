@@ -23,6 +23,7 @@ public class SettingsProvider {
 	public synchronized boolean getSettingBool(String settingName) throws JSONException {
 		return settings.getBoolean(settingName);
 	}
+
 	public synchronized int getSettingInt(String settingName) throws JSONException {
 		return settings.getInt(settingName);
 	}
@@ -32,10 +33,10 @@ public class SettingsProvider {
 	public synchronized void setSetting(String settingName, boolean value) throws JSONException {
 		settings.put(settingName, value);
 	}
+
 	public synchronized void setSetting(String settingName, int value) throws JSONException {
 		settings.put(settingName, value);
 	}
-
 
 
 	// zapisuje / nadpisuje plik ustawień. z założenia pisać będzie tylko Settings.java
@@ -48,15 +49,17 @@ public class SettingsProvider {
 			Log.e("SettingsProvider", ">>> Nie udało się zapisać ustawień");
 		}
 	}
-	public void writeSettings(Context context) {
+
+	public synchronized void writeSettings(Context context) {
 		writeSettings(context, settings);
 	}
+
 	private void firstWriteSetting() {
 		try {
 			settings = new JSONObject();
-			for(int i = 1; i < SettingNames.switches.length; i++)
+			for (int i = 1; i < SettingNames.switches.length; i++)
 				settings.put(SettingNames.switches[i], false);
-			for(int i = 1; i < SettingNames.spinners.length; i++)
+			for (int i = 1; i < SettingNames.spinners.length; i++)
 				settings.put(SettingNames.spinners[i], SettingOptions.optionsOrder[i]);
 		} catch (JSONException e) {
 			Log.e("SettingsProvider", ">>> Nie udało się wqpisać początkowych wartości");
@@ -69,7 +72,7 @@ public class SettingsProvider {
 		try {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(context.openFileInput("settings.json")));
 			StringBuilder stringBuilder = new StringBuilder();
-			while(reader.ready()) {
+			while (reader.ready()) {
 				stringBuilder.append(reader.readLine()).append('\n');
 			}
 			reader.close();
@@ -80,13 +83,13 @@ public class SettingsProvider {
 		} catch (IOException | JSONException e) {
 			e.printStackTrace();
 		}
-		if(settings == null) {
+		if (settings == null) {
 			firstWriteSetting();
 		}
 	}
-	// motyw jasny/ciemny nie jest konieczny na tym etapie
-	// akcje związane z ustawieniami, np. włącz ciemny motyw. Jak będzie dużo akcji to przenieść do nowej klasy
-	/*private void settingActions() {
+}
+	/*// akcje związane z ustawieniami, np. włącz ciemny motyw. Jak będzie dużo akcji to przenieść do nowej klasy
+	private void settingActions() {
 		try {
 			boolean isChecked = this.getSettingBool("mode");
 			int mode;
@@ -99,6 +102,6 @@ public class SettingsProvider {
 		} catch (JSONException e) {
 			throw new RuntimeException(e);
 		}
-	}*/
+	}
 
-}
+*/

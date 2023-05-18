@@ -10,6 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+
+
         <com.google.android.material.switchmaterial.SwitchMaterial
             android:id="@+id/switch1"
             android:layout_width="match_parent"
@@ -52,13 +54,6 @@
             android:textSize="@dimen/switch_text_size"
             android:text="@string/switch6desc" />
 
-        <com.google.android.material.switchmaterial.SwitchMaterial
-            android:id="@+id/switch7"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/switch_text_size"
-            android:text="@string/switch7desc" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -86,7 +81,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:background="@android:drawable/btn_dropdown"
-                    android:contentDescription="Gdzie zapis"
+                    android:contentDescription="@string/spinner1desc"
                     android:spinnerMode="dropdown" />
 
             </RelativeLayout>
@@ -114,7 +109,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:background="@android:drawable/btn_dropdown"
-                    android:contentDescription="uklad ikonek"
+                    android:contentDescription="@string/spinner2desc"
                     android:spinnerMode="dropdown" />
 
             </RelativeLayout>
@@ -141,7 +136,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:background="@android:drawable/btn_dropdown"
-                    android:contentDescription="Dlugosc zapisu"
+                    android:contentDescription="@string/spinner3desc"
                     android:spinnerMode="dropdown" />
 
             </RelativeLayout>
@@ -168,7 +163,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:background="@android:drawable/btn_dropdown"
-                    android:contentDescription="Rozmiar zapisu"
+                    android:contentDescription="@string/spinner4desc"
                     android:spinnerMode="dropdown" />
 
             </RelativeLayout>
@@ -184,7 +179,7 @@
                     android:layout_height="match_parent"
                     android:layout_alignParentLeft="true"
                     android:layout_toLeftOf="@id/spinner5"
-                    android:text="@string/spinner5desc"
+                    android:text="@string/spinner4desc"
                     android:textColor="@color/black"
                     android:textSize="@dimen/spinner_description_text_size"
                     tools:ignore="RtlHardcoded" />
@@ -193,39 +188,13 @@
                     android:id="@+id/spinner5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="7dp"
                     android:layout_alignParentEnd="true"
                     android:background="@android:drawable/btn_dropdown"
-                    android:contentDescription="czas nagran awaryjnych przed"
+                    android:contentDescription="@string/spinner5desc"
                     android:spinnerMode="dropdown" />
 
             </RelativeLayout>
 
-            <RelativeLayout
-                android:id="@+id/row6"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TextView
-                    android:id="@+id/textView6"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentLeft="true"
-                    android:layout_toLeftOf="@id/spinner6"
-                    android:text="@string/spinner6desc"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/spinner_description_text_size"
-                    tools:ignore="RtlHardcoded" />
-
-                <Spinner
-                    android:id="@+id/spinner6"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:background="@android:drawable/btn_dropdown"
-                    android:contentDescription="czas nagran awaryjnych po"
-                    android:spinnerMode="dropdown" />
-            </RelativeLayout>
 
         </LinearLayout>
 

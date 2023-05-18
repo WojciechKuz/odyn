@@ -1,26 +1,30 @@
 package com.example.odyn.cam;
 
-import static android.content.ContentValues.TAG;
+import com.example.odyn.settings.SettingOptions;
+import com.example.odyn.settings.SettingsProvider;
+import com.example.odyn.settings.SettingNames;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.SurfaceTexture;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCharacteristics;
 import android.hardware.camera2.CameraManager;
 import android.hardware.camera2.params.StreamConfigurationMap;
+import android.media.Image;
 import android.util.Log;
 import android.util.Size;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.camera.core.Camera;
 import androidx.camera.core.CameraSelector;
 import androidx.camera.core.ImageCapture;
 import androidx.camera.core.ImageCaptureException;
+import androidx.camera.core.ImageProxy;
 import androidx.camera.core.Preview;
 import androidx.camera.core.VideoCapture;
 import androidx.camera.lifecycle.ProcessCameraProvider;
@@ -32,7 +36,10 @@ import com.example.odyn.FileHandler;
 import com.example.odyn.R;
 import com.google.common.util.concurrent.ListenableFuture;
 
+import org.json.JSONException;
+
 import java.io.File;
+import java.nio.ByteBuffer;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ExecutionException;
@@ -41,6 +48,7 @@ import java.util.concurrent.ExecutionException;
 public class CamAccess {
     private ImageCapture imageCapture;
     private VideoCapture videoCapture;
+    private SettingsProvider settingsProvider;
     protected Activity main; // póki co spełnia dwie role: wątek (Context) i aktywność (wyświetlanie), później warto rozważyć rozdzielenie
     // korzysta z tego też klasa Cam (dziedziczy)
     /* Activity używane do:
@@ -53,14 +61,30 @@ public class CamAccess {
         otrzymanie CameraManager
         utworzenie tosta
     */
-
     // konstruktor. PreviewView służy do wyświetlenia w nim obrazu z kamery
     public CamAccess(Activity main) {
         this.main = main;
+        settingsProvider = new SettingsProvider();
+
         PreviewView prView2 = main.findViewById(R.id.previewView);
         cameraProviderSetup(prView2);
         Log.v("CamAccess", ">>> CamAccess constructor");
     }
+
+    private long getLimitLength() {
+        try {
+            int selectedPosition = settingsProvider.getSettingInt(SettingNames.spinners[3]);
+            String selectedValue = SettingOptions.LengthRecords[selectedPosition];
+            long limit = Long.parseLong(selectedValue); // Konwersja wartości na long
+            Log.d("CamAccess", "Aktualna wartość limitu: " + limit);
+            return limit;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+
 
     // te dwie poniższe funkcje służą do przygotowania kamery do przekazywania obrazu do <PreviewView> i robienia zdjęć
     @SuppressLint("RestrictedApi")
@@ -74,7 +98,6 @@ public class CamAccess {
                 // gdzie przechwycenie ???
             }
         }, ContextCompat.getMainExecutor(main));
-
     }
     @SuppressLint("RestrictedApi")
     private void bindPreview(ProcessCameraProvider cameraProvider, PreviewView prView) {
@@ -86,23 +109,43 @@ public class CamAccess {
         // Set up the preview use case
         Preview preview = new Preview.Builder().build();
         preview.setSurfaceProvider(prView.getSurfaceProvider());
-
         ImageCapture.Builder builder = new ImageCapture.Builder();
+
         imageCapture = builder
                 .setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY)
                 .setTargetRotation(main.getWindowManager().getDefaultDisplay().getRotation())
                 .build();
-        VideoCapture.Builder builder_vid = new VideoCapture.Builder();
-        videoCapture = builder_vid
-                .setVideoFrameRate(60)
-                .setAudioChannelCount(1)
-                .setAudioBitRate(64000)
-                .build();
+
+        /* TODO settings nagrywanie z i bez dzwieku */
+        //Teoretycznie switch działa, ale nie działa wyłącznie audio w nagraniu, testowałem na sucho ustawienia
+        //które dają wyciszenie audio a i tak dalej u mnie było
+        try {
+            boolean switchValue = settingsProvider.getSettingBool(SettingNames.switches[6]);
+            Log.d("CamAccess", "Wartość przełącznika: " + switchValue);
+
+
+            if (switchValue) {
+                VideoCapture.Builder builder_vid = new VideoCapture.Builder();
+                videoCapture = builder_vid
+                        .setVideoFrameRate(60)
+                        .setAudioChannelCount(1)
+                        .setAudioBitRate(64000)
+                        .build();
+            } else {
+                VideoCapture.Builder builder_vid_noaudio = new VideoCapture.Builder();
+                videoCapture = builder_vid_noaudio
+                        .setVideoFrameRate(60)
+                        .setAudioChannelCount(0)
+                        .setAudioBitRate(64000)
+                        .build();
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         // użyj kamery do wyświetlania w mainActivity (preview) i do robienia zdjęć (imageCapture)
-        Camera camera = cameraProvider.bindToLifecycle((LifecycleOwner)main, cameraSelector, preview, imageCapture,videoCapture);
+        Camera camera = cameraProvider.bindToLifecycle((LifecycleOwner) main, cameraSelector, preview, imageCapture, videoCapture);
     }
-
     // robi zdjęcie
     public void takePicture(File file) {
         // Set up the output file and capture the image
@@ -113,44 +156,68 @@ public class CamAccess {
                 // The image has been saved to the file
                 Log.v("CamAccess", "---------ZapisywanieIMG---------");
             }
-
             @Override
             public void onError(@NonNull ImageCaptureException exception) {
                 // Handle any errors here
             }
         });
     }
+    public class camInfo {
+        private float FOV;
+        private float width;
+        private float height;
+        private Bitmap BMP;
+        private Bitmap imageProxyToBitmap(ImageProxy imageProxy) {
+            Image image = imageProxy.getImage();
+            ByteBuffer buffer = image.getPlanes()[0].getBuffer();
+            byte[] bytes = new byte[buffer.remaining()];
+            buffer.get(bytes);
+            return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+        }
+        public void takePictureBMP(){
+            imageCapture.takePicture(ContextCompat.getMainExecutor(main), new ImageCapture.OnImageCapturedCallback() {
+                @Override
+                public void onCaptureSuccess(@NonNull ImageProxy image) {
+                    // Tutaj otrzymujesz obraz z kamery, możesz go przetwarzać lub zapisać w pamięci
+                    // Uwaga: Ta metoda jest wywoływana na innym wątku, więc musisz obsłużyć go odpowiednio
+                    super.onCaptureSuccess(image);
+                    BMP = imageProxyToBitmap(image);
+                    // Zapisz obraz w pamięci podręcznej
+                }
+                @Override
+                public void onError(@NonNull ImageCaptureException exception) {
+                    // Obsłuż błędy związane z wykonywaniem zdjęcia
+                    super.onError(exception);
+                }
+            });
+        }
+        public float calculateFOV(float focalLength, float aperture) {
+            float horizontalFOV = (float) (2 * Math.atan2(aperture, (2 * focalLength)));
+            float verticalFOV = (float) (2 * Math.atan2(aperture, (2 * focalLength)));
+            return (float) Math.toDegrees(Math.sqrt(Math.pow(horizontalFOV, 2) + Math.pow(verticalFOV, 2)));
+        }
+        public void getInfo() {
+            try {
+                CameraManager cameraManager = (CameraManager) main.getSystemService(Context.CAMERA_SERVICE);
+                String cameraId = cameraManager.getCameraIdList()[1]; // wybierz pierwszą kamerę
+                CameraCharacteristics characteristics = cameraManager.getCameraCharacteristics(cameraId);
+                // uzyskanie wartości FOV
+                float[] focalLengths = characteristics.get(CameraCharacteristics.LENS_INFO_AVAILABLE_FOCAL_LENGTHS);
+                float[] apertures = characteristics.get(CameraCharacteristics.LENS_INFO_AVAILABLE_APERTURES);
+                FOV = calculateFOV(focalLengths[0], apertures[0]);
 
-    public static float calculateFOV(float focalLength, float aperture) {
-        float horizontalFOV = (float) (2 * Math.atan2(aperture, (2 * focalLength)));
-        float verticalFOV = (float) (2 * Math.atan2(aperture, (2 * focalLength)));
-        return (float) Math.toDegrees(Math.sqrt(Math.pow(horizontalFOV, 2) + Math.pow(verticalFOV, 2)));
-    }
+                // uzyskanie wartości rozdzielczości
+                StreamConfigurationMap map = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
+                Size[] sizes = map.getOutputSizes(SurfaceTexture.class);
+                Size resolution = sizes[0];
+                width = resolution.getWidth();
+                height = resolution.getHeight();
 
-
-    public void fov_resInfo(){
-        try {
-            CameraManager cameraManager = (CameraManager) main.getSystemService(Context.CAMERA_SERVICE);
-            String cameraId = cameraManager.getCameraIdList()[1]; // wybierz pierwszą kamerę
-            CameraCharacteristics characteristics = cameraManager.getCameraCharacteristics(cameraId);
-
-            // uzyskanie wartości FOV
-            float[] focalLengths = characteristics.get(CameraCharacteristics.LENS_INFO_AVAILABLE_FOCAL_LENGTHS);
-            float[] apertures = characteristics.get(CameraCharacteristics.LENS_INFO_AVAILABLE_APERTURES);
-            float fov = calculateFOV(focalLengths[0], apertures[0]);
-
-            // uzyskanie wartości rozdzielczości
-            StreamConfigurationMap map = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
-            Size[] sizes = map.getOutputSizes(SurfaceTexture.class);
-            Size resolution = sizes[0];
-
-            Log.d(TAG, "FOV: " + fov);
-            Log.d(TAG, "Rozdzielczość: " + resolution.getWidth() + " x " + resolution.getHeight());
-
-        } catch (CameraAccessException e) {
-            e.printStackTrace();
-            Toast.makeText(main, "Wystąpił błąd podczas korzystania z kamery", Toast.LENGTH_LONG).show();
-            Log.e("CamAccess", ">>> Wystąpił błąd podczas korzystania z kamery");
+            } catch (CameraAccessException e) {
+                e.printStackTrace();
+                Toast.makeText(main, "Wystąpił błąd podczas korzystania z kamery", Toast.LENGTH_LONG).show();
+                Log.e("CamAccess", ">>> Wystąpił błąd podczas korzystania z kamery");
+            }
         }
     }
     Timer timer = new Timer();
@@ -170,7 +237,6 @@ public class CamAccess {
                                 System.out.println("----------ZapisywanieVID----------");
                                 Log.i("CamAccess", ">>> Zapisano nagranie");
                             }
-
                             @Override
                             public void onError(int videoCaptureError, @NonNull String message, @Nullable Throwable cause) {
                                 System.out.println("----------GownoVID----------");
@@ -179,9 +245,11 @@ public class CamAccess {
                         });
                     }
                     count++;
+                    /* TODO settings - dlugosc nagrania */
                     //System.out.println("Czas: " + count + " sekund");
                     //10+2 -> 2 to opoznienie aby nagrac film 10 sekundowy
-                    if (count >= 10+2) {
+                    long limit = getLimitLength();
+                    if (count >= limit) {
                         videoCapture.stopRecording();
                         count = 0;
                     }
@@ -191,8 +259,8 @@ public class CamAccess {
         }
         else
         {
-             timer.cancel();
-             videoCapture.stopRecording();
+            timer.cancel();
+            videoCapture.stopRecording();
         }
     } // end of takeVideo()
 

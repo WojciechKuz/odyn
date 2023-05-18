@@ -27,19 +27,19 @@ public class Settings extends AppCompatActivity {
     private SwitchMaterial switch4;
     private SwitchMaterial switch5;
     private SwitchMaterial switch6;
-    private SwitchMaterial switch7;
     private int mode;
     private Spinner spinner1;
     private Spinner spinner2;
     private Spinner spinner3;
     private Spinner spinner4;
     private Spinner spinner5;
-    private Spinner spinner6;
 
     // elementy umieściłem w tablicy, dla ułatwienia użytkowania
     private SwitchMaterial[] mSwitch;
     private Spinner[] spinners;
 
+
+    private SettingsProvider settingsProvider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +57,9 @@ public class Settings extends AppCompatActivity {
 
         loadSettingsFromFile();
     }
+
+
+
     private void findUIElements() {
         switch1 = findViewById(R.id.switch1);
         switch2 = findViewById(R.id.switch2);
@@ -64,15 +67,13 @@ public class Settings extends AppCompatActivity {
         switch4 = findViewById(R.id.switch4);
         switch5 = findViewById(R.id.switch5);
         switch6 = findViewById(R.id.switch6);
-        switch7 = findViewById(R.id.switch7);
         spinner1 = findViewById(R.id.spinner1);
         spinner2 = findViewById(R.id.spinner2);
         spinner3 = findViewById(R.id.spinner3);
         spinner4 = findViewById(R.id.spinner4);
         spinner5 = findViewById(R.id.spinner5);
-        spinner6 = findViewById(R.id.spinner6);
-        mSwitch = new SwitchMaterial[] {null, switch1, switch2, switch3, switch4, switch5, switch6, switch7};
-        spinners = new Spinner[] {null, spinner1, spinner2, spinner3, spinner4, spinner5, spinner6};
+        mSwitch = new SwitchMaterial[] {null, switch1, switch2, switch3, switch4, switch5, switch6};
+        spinners = new Spinner[] {null, spinner1, spinner2, spinner3, spinner4, spinner5};
     }
     private void setSwitches() {
         // Ustawienie wartości przełączników
@@ -101,11 +102,9 @@ public class Settings extends AppCompatActivity {
         ArrayAdapter<String> adapter4 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, SettingOptions.SizeVideo);
         spinner4.setAdapter(adapter4);
 
-        ArrayAdapter<String> adapter5 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, SettingOptions.EmergencyBefore);
+        ArrayAdapter<String> adapter5 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, SettingOptions.SizeEmergency);
         spinner5.setAdapter(adapter5);
 
-        ArrayAdapter<String> adapter6 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, SettingOptions.EmergencyAfter);
-        spinner6.setAdapter(adapter6);
     }
     private void setSwitchListeners() {
         // Dodanie obsługi zdarzeń dla przełączników
@@ -187,6 +186,8 @@ public class Settings extends AppCompatActivity {
         }
     }
 
+
+
     private void loadSettingsFromFile() {
         try {
             SettingsProvider sprov = new SettingsProvider();
@@ -205,5 +206,11 @@ public class Settings extends AppCompatActivity {
             Log.e("Settings", ">>> błąd podczas odczytu ustawień");
             e.printStackTrace();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        settingsProvider.writeSettings(this);
     }
 }

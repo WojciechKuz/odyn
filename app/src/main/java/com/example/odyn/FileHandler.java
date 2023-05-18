@@ -31,10 +31,12 @@ public class FileHandler {
     private String dataSubdir = "data";
     private Context context;
 
-    private int selectedOptionIndex = 0;
+    private SettingsProvider settingsProvider;
+
 
     public FileHandler(Context mainActivity) {
         // TODO ustawianie czy w pamięci telefonu, czy na karcie SD. (pobierane z ustawień)
+        settingsProvider = new SettingsProvider();
         context = mainActivity;
         //dir = context.getFilesDir().getAbsolutePath();
         dir = context.getExternalMediaDirs()[0].getAbsolutePath();
@@ -53,7 +55,6 @@ public class FileHandler {
     private String getDirPath(String subDir) {
         return context.getExternalMediaDirs()[0].getAbsolutePath() + File.separator + "Odyn" + File.separator + subDir;
     }
-
     private void createDirIfNotExists(String path) {
         File dir = new File(path);
         if (!dir.exists()) {
@@ -83,21 +84,47 @@ public class FileHandler {
 
 
     private long getLimitFromSettings() {
-        String selectedOption = SettingOptions.SizeVideo[selectedOptionIndex]; // Przykład pobrania wybranej opcji z ustawień
-        String sizeString = selectedOption.replaceAll("[^0-9]", ""); // Usuń wszystko oprócz cyfr
-        long sizeInMB = Long.parseLong(sizeString);
-        long sizeInBytes = sizeInMB * 1024 * 1024; // Przelicz na bajty
-        return sizeInBytes;
+        try {
+            int selectedPosition = settingsProvider.getSettingInt(SettingNames.spinners[4]);
+            String selectedValue = SettingOptions.SizeVideo[selectedPosition];
+            String sizeString = selectedValue.replaceAll("[^0-9]", "");
+            long sizeInMB = Long.parseLong(sizeString);
+            long sizeInBytes = sizeInMB * 1024 * 1024;
+            Log.d("FileHandler", "Aktualna wartość limitu: " + sizeInMB);
+            return sizeInBytes;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+
+
+    private long getLimitFromEmergency() {
+        try {
+            int selectedPosition = settingsProvider.getSettingInt(SettingNames.spinners[5]);
+            String selectedValue = SettingOptions.SizeEmergency[selectedPosition];
+            String sizeString = selectedValue.replaceAll("[^0-9]", "");
+            long sizeInMB = Long.parseLong(sizeString);
+            long sizeInBytes = sizeInMB * 1024 * 1024;
+            Log.d("FileHandler", "Aktualna wartość limitu: " + sizeInMB);
+            return sizeInBytes;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return 0;
+        }
     }
 
     public void sprawdzRozmiar() {
-        long rozmiarKatalogów = getTotalDirSize();
-        long limit = 1000000000; // Przykładowy limit rozmiaru (1 GB)
+        long rozmiarWideo = getVideoDirSize(); // Pobierz sumaryczny rozmiar wideo
+        long rozmiarAwaryjnych = getEmergencyDirSize(); // Pobierz sumaryczny rozmiar wideo awaryjnych
+        long limit = getLimitFromSettings(); // limit rozmiaru z ustawień
+        long limit2 = getLimitFromEmergency(); // limit rozmiaru z ustawień
 
-        if (rozmiarKatalogów > limit) {
-            int numVideosToDelete = 2; // Liczba najstarszych nagran do usunięcia
+        if (rozmiarWideo > limit || rozmiarAwaryjnych > limit2) {
+            int numVideosToDelete = 2; // Przykładowa liczba najstarszych nagran do usunięcia
             deleteOldestVideos(numVideosToDelete); // Usuń najstarsze nagrania z vidSubdir
-            sprawdzRozmiar();
+            sprawdzRozmiar(); // Rekurencyjnie sprawdź rozmiar ponownie
         }
     }
 
