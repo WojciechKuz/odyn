@@ -89,13 +89,23 @@ public class CamAccess {
                 .setTargetRotation(main.getWindowManager().getDefaultDisplay().getRotation())
                 .build();
 
-        VideoCapture.Builder builder_vid = new VideoCapture.Builder();
-        videoCapture = builder_vid
-                .setVideoFrameRate(60)
-                .setAudioChannelCount(1)
-                .setAudioBitRate(64000)
-                .build();
+        /* TODO settings nagrywanie z i bez dzwieku */
+        //if(dzwiek) {
 
+    VideoCapture.Builder builder_vid = new VideoCapture.Builder();
+    videoCapture = builder_vid
+            .setVideoFrameRate(60)
+            .setAudioChannelCount(1)
+            .setAudioBitRate(64000)
+            .build();
+//}else {
+    VideoCapture.Builder builder_vid_noaudio = new VideoCapture.Builder();
+    videoCapture = builder_vid_noaudio
+            .setVideoFrameRate(60)
+            .setAudioChannelCount(0)
+            .setAudioBitRate(64000)
+            .build();
+//}
         // użyj kamery do wyświetlania w mainActivity (preview) i do robienia zdjęć (imageCapture)
         Camera camera = cameraProvider.bindToLifecycle((LifecycleOwner) main, cameraSelector, preview, imageCapture, videoCapture);
     }

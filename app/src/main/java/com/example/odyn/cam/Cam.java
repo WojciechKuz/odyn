@@ -61,15 +61,8 @@ public class Cam extends CamAccess {
 		}
 	}
 	private void photo(int opcja) {
-		if(opcja == 1) {
 			File file = new FileHandler(main).createPicture();
 			takePicture(file);
-			}
-		//Druga opcja do zapisania zdj jako mapy bitowej. Przydatne do AI
-		if(opcja ==2){
-			File file = new FileHandler(main).createPictureBMP();
-			takePicture(file);
-			}
 	}
 	private void record() {
 		if (!isRecording) {
