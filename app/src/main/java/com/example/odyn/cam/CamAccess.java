@@ -182,6 +182,7 @@ public class CamAccess {
                         });
                     }
                     count++;
+                    /* TODO settings - dlugosc nagrania */
                     //System.out.println("Czas: " + count + " sekund");
                     //10+2 -> 2 to opoznienie aby nagrac film 10 sekundowy
                     if (count >= 10+2) {
