@@ -5,6 +5,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -250,11 +251,9 @@ public class MainScreen extends AppCompatActivity {
 
 	// Przejdź do listy nagrań
 	public void onClickRecordingsList(MenuItem item) {
-		// Początkowo może przekierowywać do innej aplikacji
-
-		Intent doListy = new Intent(this, RecordingList.class);
-		// tu można dołączyć dodatkowe informacje dla listy nagrań
-		startActivity(doListy);
+		Intent intent = new Intent(Intent.ACTION_VIEW);
+		intent.setDataAndType(Uri.parse("content://media/internal/images/media"), "image/*");
+		startActivity(intent);
 	}
 
 	// Przejdź do ustawień
