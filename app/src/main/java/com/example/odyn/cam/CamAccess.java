@@ -180,9 +180,9 @@ public class CamAccess {
                 e.printStackTrace();
                 Toast.makeText(main, "Wystąpił błąd podczas korzystania z kamery", Toast.LENGTH_LONG).show();
                 Log.e("CamAccess", ">>> Wystąpił błąd podczas korzystania z kamery");
-                }
             }
         }
+    }
     Timer timer = new Timer();
     @SuppressLint({"RestrictedApi", "MissingPermission"})
     public void takeVideo(boolean opcja) {
