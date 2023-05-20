@@ -74,9 +74,8 @@ public class CamAccess {
     private long getLimitLength() {
         try {
             int selectedPosition = settingsProvider.getSettingInt(SettingNames.spinners[3]);
-            String selectedValue = SettingOptions.LengthRecords[selectedPosition];
-            long limit = Long.parseLong(selectedValue); // Konwersja wartości na long
-            Log.d("CamAccess", "Aktualna wartość limitu: " + limit);
+            long limit = SettingOptions.lengthValuesSeconds[selectedPosition];
+            Log.d("CamAccess", ">> Aktualna wartość limitu: " + limit);
             return limit;
         } catch (Exception e) {
             e.printStackTrace();
@@ -121,7 +120,7 @@ public class CamAccess {
         //które dają wyciszenie audio a i tak dalej u mnie było
         try {
             boolean switchValue = settingsProvider.getSettingBool(SettingNames.switches[6]);
-            Log.d("CamAccess", "Wartość przełącznika: " + switchValue);
+            Log.d("CamAccess", ">>> Wartość przełącznika: " + switchValue);
 
 
             if (switchValue) {

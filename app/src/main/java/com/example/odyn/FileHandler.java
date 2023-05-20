@@ -4,19 +4,16 @@ import com.example.odyn.settings.SettingOptions;
 import com.example.odyn.settings.SettingsProvider;
 import com.example.odyn.settings.SettingNames;
 import android.content.Context;
-import android.os.Build;
 import android.util.Log;
 
 import com.example.odyn.cam.RecType;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
 
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.Locale;
 
@@ -60,7 +57,7 @@ public class FileHandler {
         if (!dir.exists()) {
             boolean success = dir.mkdirs();
             if (!success) {
-                Log.e("FileHandler", "Nie udalo sie stworzyc katalogu: " + path);
+                Log.e("FileHandler", ">>> Nie udalo sie stworzyc katalogu: " + path);
             }
         }
     }
@@ -86,11 +83,9 @@ public class FileHandler {
     private long getLimitFromSettings() {
         try {
             int selectedPosition = settingsProvider.getSettingInt(SettingNames.spinners[4]);
-            String selectedValue = SettingOptions.SizeVideo[selectedPosition];
-            String sizeString = selectedValue.replaceAll("[^0-9]", "");
-            long sizeInMB = Long.parseLong(sizeString);
+            long sizeInMB = SettingOptions.sizeValuesMB[selectedPosition];
             long sizeInBytes = sizeInMB * 1024 * 1024;
-            Log.d("FileHandler", "Aktualna wartość limitu: " + sizeInMB);
+            Log.d("FileHandler", ">>> Aktualna wartość limitu filów: " + sizeInMB);
             return sizeInBytes;
         } catch (JSONException e) {
             e.printStackTrace();
@@ -103,11 +98,9 @@ public class FileHandler {
     private long getLimitFromEmergency() {
         try {
             int selectedPosition = settingsProvider.getSettingInt(SettingNames.spinners[5]);
-            String selectedValue = SettingOptions.SizeEmergency[selectedPosition];
-            String sizeString = selectedValue.replaceAll("[^0-9]", "");
-            long sizeInMB = Long.parseLong(sizeString);
+            long sizeInMB = SettingOptions.sizeValuesMB[selectedPosition];
             long sizeInBytes = sizeInMB * 1024 * 1024;
-            Log.d("FileHandler", "Aktualna wartość limitu: " + sizeInMB);
+            Log.d("FileHandler", ">>> Aktualna wartość limitu emergency: " + sizeInMB);
             return sizeInBytes;
         } catch (JSONException e) {
             e.printStackTrace();
@@ -144,9 +137,9 @@ public class FileHandler {
             // Usuń najstarsze pliki
             for (int i = 0; i < numVideosToDelete; i++) {
                 if (videoFiles[i].delete()) {
-                    Log.d("FileHandler", "Usunięto plik: " + videoFiles[i].getName());
+                    Log.d("FileHandler", ">>> Usunięto plik: " + videoFiles[i].getName());
                 } else {
-                    Log.e("FileHandler", "Nie udało się usunąć pliku: " + videoFiles[i].getName());
+                    Log.e("FileHandler", ">>> Nie udało się usunąć pliku: " + videoFiles[i].getName());
                 }
             }
         }
@@ -181,20 +174,17 @@ public class FileHandler {
 
     public long getPictureDirSize() {
         String pictureDirPath = getDirPath(pictSubdir);
-        long dirSize = getDirectorySize(pictureDirPath);
-        return dirSize;
+        return getDirectorySize(pictureDirPath);
     }
 
     public long getVideoDirSize() {
         String videoDirPath = getDirPath(vidSubdir);
-        long dirSize = getDirectorySize(videoDirPath);
-        return dirSize;
+        return getDirectorySize(videoDirPath);
     }
 
     public long getEmergencyDirSize() {
         String emergencyDirPath = getDirPath(emergSubdir);
-        long dirSize = getDirectorySize(emergencyDirPath);
-        return dirSize;
+        return getDirectorySize(emergencyDirPath);
     }
 
     public long getTotalDirSize() {
@@ -235,10 +225,10 @@ public class FileHandler {
     public File createVideo(String format) {
         String fileName = youNameIt("ODYN-vid", format);
         File file = new File(getDirPath(vidSubdir), fileName);
-        Log.d("FileHandler", "Ścieżka pliku: " + file.getAbsolutePath());
+        Log.d("FileHandler", ">>> Ścieżka pliku: " + file.getAbsolutePath());
         // Sprawdź rozmiar katalogu wideo
         long videoDirSize = getVideoDirSize();
-        Log.d("FileHandler", "Rozmiar katalogu wideo: " + videoDirSize);
+        Log.d("FileHandler", ">>> Rozmiar katalogu wideo: " + videoDirSize);
 
         return file;
     }
