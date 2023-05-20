@@ -28,9 +28,9 @@
     <!-- FIXME names that i put here in "" are ambiguous. fix it. -->
     <string name="spinner1desc">Lokalizacja zapisu</string><!-- karta sd / p. wewn. -->
     <string name="spinner2desc">Położenie menu</string> <!-- po której stronie mają być ikony i menu -->
-    <string name="spinner3desc">"Dlugosc nagrania"</string>
-    <string name="spinner4desc">"Rozmiar katalogu nagrań"</string>
-    <string name="spinner5desc">"Rozmiar katalogu nagrań awaryjnych"</string>
+    <string name="spinner3desc">Długość nagrania</string>
+    <string name="spinner4desc">Rozmiar katalogu nagrań</string>
+    <string name="spinner5desc">Rozmiar katalogu nagrań awaryjnych</string>
 
     <string name="spinner7desc">Język, Language</string>
 </resources>
