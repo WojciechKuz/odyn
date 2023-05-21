@@ -18,6 +18,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+/**
+ * Jest to wątek odpowiedzialny za obliczanie czasu nagrywania.
+ */
 public class TimerThread extends Thread {
 	private boolean stopTimer = false;
 	private int count = 0;
@@ -31,6 +34,9 @@ public class TimerThread extends Thread {
 	}
 
 	// FIXME probably better solution would be scheduled execution. Here, sleep() blocks thread.
+	/**
+	 * Jest to metoda służąca do uruchamiania licznika czasu nagrywania.
+	 */
 	@Override
 	public void run() {
 		while (!stopTimer) {
@@ -59,6 +65,9 @@ public class TimerThread extends Thread {
 		}
 	}
 
+	/**
+	 * Jest to metoda służąca do zatrzymania licznika czasu nagrywania.
+	 */
 	public void stopTimer() {
 		stopTimer = true;
 	}

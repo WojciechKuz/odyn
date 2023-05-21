@@ -18,7 +18,9 @@ import java.util.Date;
 import java.util.Locale;
 
 
-
+/**
+ * Jest to klasa odpowiedzialna za obsługę plików.
+ */
 public class FileHandler {
     // metoda, podajesz plik, typ i zapisuje pod odpowiednią ścieżką i nazwą
     private String dir;
@@ -54,6 +56,9 @@ public class FileHandler {
 
 
     // TWORZENIE PLIKÓW
+    /**
+     * Jest to metoda służąca do tworzenia plików.
+     */
     public File createFile(String namePrefix, String format) {
         String fileName = youNameIt(namePrefix, format);
         File file = new File(context.getExternalMediaDirs()[0].getAbsolutePath(), fileName);
@@ -74,6 +79,10 @@ public class FileHandler {
         }
         return null;
     }
+
+    /**
+     * Jest to metoda służąca do tworzenia plików obrazów w formacie ODYN-img-yyyy-MM-dd_HH-mm-ss.jpg.
+     */
     public File createPicture() {
         String fileName = youNameIt("ODYN-img", "jpg");
         File file = new File(context.getExternalMediaDirs()[0].getAbsolutePath(), fileName);
@@ -81,38 +90,62 @@ public class FileHandler {
         // TODO wybierana ścieżka zapisu
         return file;
     }
+
+    /**
+     * Jest to metoda służąca do tworzenia plików video w formacie ODYN-vid-yyyy-MM-dd_HH-mm-ss.mp4.
+     */
     public File createVideo(String format) {
         String fileName = youNameIt("ODYN-vid", format);
         File file = new File(context.getExternalMediaDirs()[0].getAbsolutePath(), fileName);
         return file;
     }
+
+    /**
+     * Jest to metoda służąca do tworzenia plików video nagrywanych w tle w formacie ODYN-emr-yyyy-MM-dd_HH-mm-ss.mp4.
+     */
     public File createEmergencyVideo(String format) {
         String fileName = youNameIt("ODYN-emr", format);
         File file = new File(context.getExternalMediaDirs()[0].getAbsolutePath(), fileName);
         return file;
     }
+
+    /**
+     * Jest to metoda służąca do tworzenia plików związanych z danymi w formacie ODYN-dat-yyyy-MM-dd_HH-mm-ss.srt.
+     */
     public File createDataFile(String format) {
         String fileName = youNameIt("ODYN-dat", format);
         File file = new File(context.getExternalMediaDirs()[0].getAbsolutePath(), fileName);
         return file;
     }
 
-
+    /**
+     * Jest to metoda służąca do nazywania plików wraz z podanym przez użytkownika formatem pliku.
+     */
     private String youNameIt(String namePrefix, String fileFormat) {
         String timeStamp = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss", Locale.getDefault()).format(new Date());
         return namePrefix + '-' + timeStamp + '.' + fileFormat;
     }
 
+    /**
+     * Jest to metoda służąca do tworzenia katalogu.
+     */
     private void createDir(String path) {
         if(!ifDirExists(path)) {
             new File(path).mkdir();
         }
     }
+
+    /**
+     * Jest to metoda służąca do sprawdzenia czy dany katalog istnieje.
+     */
     private boolean ifDirExists(String path) {
         return new File(path).exists();
     }
 
     // usuwa '/' jeśli jest na ostatniej pozycji
+    /**
+     * Jest to metoda służąca do usuwania "/" ze ścieżki jeżeli znajduje się na ostatniej pozycji.
+     */
     private String removeSlash(String path) {
         int lastPos = path.length()-1;
         if(path.charAt(lastPos) == '/') {

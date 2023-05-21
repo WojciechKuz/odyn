@@ -22,6 +22,9 @@ import android.widget.TextView;
 
 import androidx.core.app.ActivityCompat;
 
+/**
+ * Jest to wątek, który odpowiada za nawigację GPS w naszej aplikacji.
+ */
 public class GPSThread extends Thread {
 	private LocationManager locationManager;
 	private LocationListener locationListener;
@@ -34,11 +37,17 @@ public class GPSThread extends Thread {
 		this.changer = changer;
 	}
 
+	/**
+	 * Jest to metoda uruchamiająca wątek do obsługi GPS.
+	 */
 	@Override
 	public void run() {
 
 		locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
 		locationListener = new LocationListener() {
+			/**
+			 * Jest to metoda odpowiadająca za zmianę lokalizacji.
+			 */
 			@Override
 			public void onLocationChanged(Location location) {
 				Log.d("GPSThread", "Latitude: " + location.getLatitude() + ", Longitude: " + location.getLongitude() + ", Speed: " + location.getSpeed() * 3.6 + "km/h");
@@ -47,16 +56,30 @@ public class GPSThread extends Thread {
 				changer.changeTextField("Speed: " + String.format("%.1f", location.getSpeed() * 3.6), GPSValues.speed);
 			}
 
+			/**
+			 * Jest to metoda odpowiadająca za zmianę statusu wątku nawigacji.
+			 * @param provider Dostawca
+			 * @param status Status
+			 * @param extras Wiązka dodatkowych argumentów
+			 */
 			@Override
 			public void onStatusChanged(String provider, int status, Bundle extras) {
 
 			}
 
+			/**
+			 * Jest to metoda odpowiadająca za działania po uruchomieniu pracy dostawcy.
+			 * @param provider Dostawca
+			 */
 			@Override
 			public void onProviderEnabled(String provider) {
 
 			}
 
+			/**
+			 * Jest to metoda odpowiadająca za działania po zakończeniu pracy dostawcy.
+			 * @param provider Dostawca
+			 */
 			@Override
 			public void onProviderDisabled(String provider) {
 
@@ -75,6 +98,9 @@ public class GPSThread extends Thread {
 		locationManager.removeUpdates(locationListener);
 	}
 
+	/**
+	 * Jest to metoda odpowiadająca za wykonanie żądania o uprawnienia do GPS.
+	 */
 	public void requestGPSPermissions(){
 		// Request permissions
 		if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -83,6 +109,9 @@ public class GPSThread extends Thread {
 		}
 	}
 
+	/**
+	 * Jest to metoda odpowiadająca za zakończenie pracy wątku GPS.
+	 */
 	public void stopGPS() {
 		locationManager.removeUpdates(locationListener);
 		interrupt();

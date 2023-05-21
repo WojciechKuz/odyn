@@ -10,12 +10,20 @@ package com.example.odyn.main_service.types;
 import com.example.odyn.R;
 
 // klasa służąca do otrzymania id zasobów dla podanej ikony. Później, jak będzie potrzeba, może zwracać Drawable albo Icon
+/**
+ * Jest to klasa służąca do otrzymania ID zasobów dla podanej ikony.
+ */
 public class IconProvider {
-
+	/**
+	 * Jest to metoda uzyskująca ID ikony.
+	 */
 	public static int getIconId(IconType it) {
 		return getIconId(it, false);
 	}
 	// zwróci id ikony, drugi argument: false - nasze ikony, true - domyślne ikony android "material design"
+	/**
+	 * Jest to metoda uzyskująca ID ikony, która sprawdza dodatkowo czy ikona nie jest domyślną ikoną Androida.
+	 */
 	public static int getIconId(IconType it, boolean material) {
 		if(material) {
 			return resIdMaterial(it);
@@ -35,6 +43,9 @@ public class IconProvider {
 	}
 
 	// użyj domyślnych ikon androida
+	/**
+	 * Jest to metoda która pozwala na użycie domyślnych ikon Androida.
+	 */
 	private static int resIdMaterial(IconType it) {
 		switch(it) {
 			case photo:

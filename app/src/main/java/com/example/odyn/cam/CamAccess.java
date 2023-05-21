@@ -43,6 +43,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ExecutionException;
 
+/**
+ * Jest to klasa odpowiadająca za dostęp do kamery.
+ */
 @SuppressWarnings("ALL")
 public class CamAccess {
     private ImageCapture imageCapture;
@@ -67,6 +70,9 @@ public class CamAccess {
         Log.v("CamAccess", ">>> CamAccess constructor");
     }
     // te dwie poniższe funkcje służą do przygotowania kamery do przekazywania obrazu do <PreviewView> i robienia zdjęć
+    /**
+     * Jest to metoda służąca do przygotowania kamery do przekazywania obrazu.
+     */
     @SuppressLint("RestrictedApi")
     private void cameraProviderSetup(PreviewView prView) {
         ListenableFuture<ProcessCameraProvider> cameraProviderFuture = ProcessCameraProvider.getInstance(main);
@@ -79,6 +85,10 @@ public class CamAccess {
             }
         }, ContextCompat.getMainExecutor(main));
     }
+
+    /**
+     * Jest to metoda służąca do obsługi robienia zdjęć.
+     */
     @SuppressLint("RestrictedApi")
     private void bindPreview(ProcessCameraProvider cameraProvider, PreviewView prView) {
 
@@ -117,26 +127,45 @@ public class CamAccess {
         Camera camera = cameraProvider.bindToLifecycle((LifecycleOwner) main, cameraSelector, preview, imageCapture, videoCapture);
     }
     // robi zdjęcie
+    /**
+     * Jest to metoda odpowiadająca za funkcję obsługi robienia zdjęcia.
+     */
     public void takePicture(File file) {
         // Set up the output file and capture the image
         ImageCapture.OutputFileOptions outputFileOptions = new ImageCapture.OutputFileOptions.Builder(file).build();
         imageCapture.takePicture(outputFileOptions, ContextCompat.getMainExecutor(main), new ImageCapture.OnImageSavedCallback() {
+
+            /**
+             * Jest to metoda służąca do informacji o zapisie zdjęcia.
+             */
             @Override
             public void onImageSaved(@NonNull ImageCapture.OutputFileResults outputFileResults) {
                 // The image has been saved to the file
                 Log.v("CamAccess", "---------ZapisywanieIMG---------");
             }
+
+            /**
+             * Jest to metoda służąca do informacji o wystąpionym błędzie przy zapisie zdjęcia.
+             */
             @Override
             public void onError(@NonNull ImageCaptureException exception) {
                 // Handle any errors here
             }
         });
     }
-    public class camInfo {
+
+    /**
+     * Jest to klasa zawierająca informacje o kamerze.
+     */
+    public class CamInfo {
         private float FOV;
         private float width;
         private float height;
         private Bitmap BMP;
+
+        /**
+         * Jest to metoda odpowiadająca za otrzymywanie bitmapy.
+         */
         private Bitmap imageProxyToBitmap(ImageProxy imageProxy) {
             Image image = imageProxy.getImage();
             ByteBuffer buffer = image.getPlanes()[0].getBuffer();
@@ -144,8 +173,15 @@ public class CamAccess {
             buffer.get(bytes);
             return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
         }
+
+        /**
+         * Jest to metoda odpowiadająca za dostarczenie obrazu do analizy AI.
+         */
         public void takePictureBMP(){
             imageCapture.takePicture(ContextCompat.getMainExecutor(main), new ImageCapture.OnImageCapturedCallback() {
+                /**
+                 * Jest to metoda odpowiedzialna za obsługę otrzymania bitmapy.
+                 */
                 @Override
                 public void onCaptureSuccess(@NonNull ImageProxy image) {
                     // Tutaj otrzymujesz obraz z kamery, możesz go przetwarzać lub zapisać w pamięci
@@ -154,6 +190,10 @@ public class CamAccess {
                     BMP = imageProxyToBitmap(image);
                     // Zapisz obraz w pamięci podręcznej
                 }
+
+                /**
+                 * Jest to metoda odpowiedzialna za obsługę błędu przy tworzeniu bitmapy.
+                 */
                 @Override
                 public void onError(@NonNull ImageCaptureException exception) {
                     // Obsłuż błędy związane z wykonywaniem zdjęcia
@@ -161,11 +201,19 @@ public class CamAccess {
                 }
             });
         }
+
+        /**
+         * Jest to metoda służąca do obliczania pola widzenia.
+         */
         public float calculateFOV(float focalLength, float aperture) {
             float horizontalFOV = (float) (2 * Math.atan2(aperture, (2 * focalLength)));
             float verticalFOV = (float) (2 * Math.atan2(aperture, (2 * focalLength)));
             return (float) Math.toDegrees(Math.sqrt(Math.pow(horizontalFOV, 2) + Math.pow(verticalFOV, 2)));
         }
+
+        /**
+         * Jest to metoda służąca do otrzymywania informacji o obliczonym polu widzenia i rozdzielczości.
+         */
         public void getInfo() {
             try {
                 CameraManager cameraManager = (CameraManager) main.getSystemService(Context.CAMERA_SERVICE);
@@ -191,22 +239,38 @@ public class CamAccess {
         }
     }
     Timer timer = new Timer();
+
+    /**
+     * Jest to metoda odpowiadająca za funkcję obsługi nagrywania video.
+     */
     @SuppressLint({"RestrictedApi", "MissingPermission"})
     public void takeVideo(boolean opcja) {
         if(opcja) {
             TimerTask task = new TimerTask() {
                 int count = 0;
+
+                /**
+                 * Jest to metoda odpowiadająca za uruchamianie procesu nagrywania.
+                 */
                 public void run() {
                     if(count == 0)
                     {
                         File file = new FileHandler(main).createVideo("mp4");
                         VideoCapture.OutputFileOptions outputFileOptions = new VideoCapture.OutputFileOptions.Builder(file).build();
                         videoCapture.startRecording(outputFileOptions, ContextCompat.getMainExecutor(main), new VideoCapture.OnVideoSavedCallback() {
+
+                            /**
+                             * Jest to metoda służąca do informacji o zapisie video.
+                             */
                             @Override
                             public void onVideoSaved(@NonNull VideoCapture.OutputFileResults outputFileResults) {
                                 System.out.println("----------ZapisywanieVID----------");
                                 Log.i("CamAccess", ">>> Zapisano nagranie");
                             }
+
+                            /**
+                             * Jest to metoda służąca do informacji o wystąpionym błędzie przy zapisie video.
+                             */
                             @Override
                             public void onError(int videoCaptureError, @NonNull String message, @Nullable Throwable cause) {
                                 System.out.println("----------GownoVID----------");

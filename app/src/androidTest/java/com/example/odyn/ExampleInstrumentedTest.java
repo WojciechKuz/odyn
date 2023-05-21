@@ -18,7 +18,7 @@ import org.junit.runner.RunWith;
 import static org.junit.Assert.*;
 
 /**
- * Instrumented test, which will execute on an Android device.
+ * Test instrumentalny, który zostanie wykonany na urządzeniu z systemem Android.
  *
  * @see <a href="http://d.android.com/tools/testing">Dokumentacja testowa</a>
  */

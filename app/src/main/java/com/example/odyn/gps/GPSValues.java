@@ -12,6 +12,9 @@ import android.widget.TextView;
 import com.example.odyn.R;
 
 // typy danych związanych z gps
+/**
+ * Jest to typ wyliczeniowy związany z GPS.
+ */
 public enum GPSValues {
 	timer,
 	counter,

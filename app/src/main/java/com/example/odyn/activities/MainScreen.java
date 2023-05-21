@@ -61,6 +61,9 @@ onClickBackground
 darkSideOfMenu
 */
 
+/**
+ * Jest to aktywność odpowiadająca za główny ekran aplikacji.
+ */
 public class MainScreen extends AppCompatActivity {
 
 	private TimerThread timerThread;
@@ -71,6 +74,10 @@ public class MainScreen extends AppCompatActivity {
 	private boolean isEmergencyActive = false;
 	private boolean isVideoActive = false;
 
+	/**
+	 * Jest to metoda tworząca główny ekran aplikacji.
+	 * @param savedInstanceState Wiązka argumentów
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -82,6 +89,9 @@ public class MainScreen extends AppCompatActivity {
 		setupGPS();
 	}
 
+	/**
+	 * Jest to metoda odpowiadająca za ustawienie prawidłowego działania ekranu głównego.
+	 */
 	private void setupMainScreen() {
 		ServiceConnector.setActivity(this); // static, usunięcie w onDestroy()
 		ServiceConnector.sendCam(new Cam(this)); // zwraca do MainService, jak się da to tworzenie z powrotem przenieść do MainService
@@ -94,6 +104,9 @@ public class MainScreen extends AppCompatActivity {
 		findViewById(R.id.EmergencyButton).setOnClickListener(this::onClickEmergency);
 	}
 
+	/**
+	 * Jest to metoda odpowiadająca za ustawienie i zainicjalizowanie działania GPS.
+	 */
 	// ustawia i inicjalizuje rzeczy związane z GPSem
 	private void setupGPS() {
 		timerThread = new TimerThread(this, this::changeTextField);
@@ -109,6 +122,9 @@ public class MainScreen extends AppCompatActivity {
 		srtWriter.start();
 	}
 
+	/**
+	 * Jest to metoda odpowiadająca za dostarczanie informacji o lokalizacji i prędkości do zapisania.
+	 */
 	public Map<String, String> textProvider() {
 		TextView timerText = findViewById(R.id.timerText);
 		TextView counterText = findViewById(R.id.counterText);
@@ -127,7 +143,9 @@ public class MainScreen extends AppCompatActivity {
 		return textMap;
 	}
 
-
+	/**
+	 * Jest to metoda odpowiadająca za wyświetlanie informacji o lokalizacji i prędkości do zapisania.
+	 */
 	private void changeTextField(String text, GPSValues whatValue) {
 		switch(whatValue) {
 			case timer:
@@ -156,18 +174,32 @@ public class MainScreen extends AppCompatActivity {
 
 	// metody cyklu życia aktywności
 	// Zamknij/otwórz powiadomienie (nieaktywne w wersji service 1)
+	/**
+	 * Jest to metoda wywoływana, gdy aplikacja przestaje być widoczna.
+	 * Zadaniem tej metody jest wyświetlanie powiadomienia.
+	 */
 	@Override
 	protected void onStop() {
 		// nieaktywne, ponieważ powiadomienie widoczne cały czas. Service wersja 1
 		ServiceConnector.onClickIcon(IconType.display_notif); // utwórz pływające powiadomienie
 		super.onStop();
 	}
+
+	/**
+	 * Jest to metoda wywoływana, gdy aplikacja jest przywracana do stanu widocznego.
+	 * Zadaniem tej metody jest zamykanie powiadomienia.
+	 */
 	@Override
 	protected void onRestart() {
 		super.onRestart();
 		// nieaktywne, ponieważ powiadomienie widoczne cały czas. Service wersja 1
 		ServiceConnector.onClickIcon(IconType.hide_notif); // zamknij pływające powiadomienie
 	}
+
+	/**
+	 * Jest to metoda wywoływana przez Android, gdy aktywność jest niszczona.
+	 * Zamyka wątki, Usuwa referencje na siebie.
+	 */
 	@Override
 	protected void onDestroy() {
 		ServiceConnector.removeActivity(); // trzeba się pozbyć referencji, aby poprawnie usunąć Aktywność
@@ -182,6 +214,9 @@ public class MainScreen extends AppCompatActivity {
 	// Przyciski ekranu:
 
 	// Otwórz panel menu
+	/**
+	 * Jest to metoda odpowiadająca za otwarcie menu aplikacji.
+	 */
 	public void onClickMenu(View view) {
 		Log.d("MainScreen", ">>> otwórz menu");
 		DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -191,6 +226,9 @@ public class MainScreen extends AppCompatActivity {
 	}
 
 	// Zrób zdjęcie
+	/**
+	 * Jest to metoda odpowiadająca za obsługę przycisku do wykonywania zdjęcia.
+	 */
 	public void onClickPhoto(View view) {
 		Log.d("MainScreen", ">>> zrób zdjęcie");
 		ServiceConnector.onClickIcon(IconType.photo);
@@ -208,6 +246,9 @@ public class MainScreen extends AppCompatActivity {
 	}
 
 	// Nagrywanie awaryjne
+	/**
+	 * Jest to metoda odpowiadająca za obsługę przycisku do nagrywania awaryjnego.
+	 */
 	public void onClickEmergency(View view) {
 		Log.d("MainScreen", ">>> nagrywanie awaryjne");
 		ServiceConnector.onClickIcon(IconType.emergency);
@@ -228,6 +269,9 @@ public class MainScreen extends AppCompatActivity {
 	}
 
 	// Nagraj wideo
+	/**
+	 * Jest to metoda odpowiadająca za obsługę przycisku do nagrywania video.
+	 */
 	public void onClickRecord(View view) {
 		Log.d("MainScreen", ">>> nagraj");
 		ServiceConnector.onClickIcon(IconType.recording);
@@ -248,6 +292,9 @@ public class MainScreen extends AppCompatActivity {
 	// Z menu:
 
 	// Zamknij menu
+	/**
+	 * Jest to metoda odpowiadająca za zamykanie menu aplikacji z poziomu menu.
+	 */
 	public void onClickCloseMenu(MenuItem item) {
 		Log.d("MainScreen", ">>> zamknij menu");
 		DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -257,6 +304,9 @@ public class MainScreen extends AppCompatActivity {
 	}
 
 	// Przejdź do listy nagrań
+	/**
+	 * Jest to metoda odpowiadająca za przejście do listy nagrań z poziomu menu.
+	 */
 	public void onClickRecordingsList(MenuItem item) {
 		Intent intent = new Intent(Intent.ACTION_VIEW);
 		intent.setDataAndType(Uri.parse("content://media/internal/images/media"), "image/*");
@@ -264,6 +314,9 @@ public class MainScreen extends AppCompatActivity {
 	}
 
 	// Przejdź do ustawień
+	/**
+	 * Jest to metoda odpowiadająca za przejście do ustawień z poziomu menu.
+	 */
 	public void onClickSettings(MenuItem item) {
 		Intent doUstaw = new Intent(this, Settings.class);
 		doUstaw.putExtra("settings_file", "settings.xml");
@@ -272,6 +325,9 @@ public class MainScreen extends AppCompatActivity {
 	}
 
 	// Wyjdź i nagrywaj w tle
+	/**
+	 * Jest to metoda odpowiadająca za wyjście z aplikacji i nagrywanie w tle.
+	 */
 	public void onClickBackground(MenuItem item) {
 		// ???
 		Intent intent = new Intent(Intent.ACTION_MAIN);
@@ -282,6 +338,9 @@ public class MainScreen extends AppCompatActivity {
 
 
 	// podaj, po której stronie menu. Gravity .LEFT / .RIGHT
+	/**
+	 * Jest to metoda odpowiadająca za ustawienie menu po lewej/prawej stronie.
+	 */
 	@SuppressLint("RtlHardcoded")
 	private int darkSideOfMenu() {
 		if(true/* todo put setting here */) {

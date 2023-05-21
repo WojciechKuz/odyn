@@ -25,6 +25,10 @@ import android.util.Log;
 	Jeżeli nie chce się, aby aplikacja nagrywała dźwięk,
 	albo pokazywała lokalizację, można to wyłączyć poprzez ustawienia aplikacji.
 */
+
+/**
+ * Jest to aktywność pytająca użytkownika o uprawnienia przed uruchomieniem głównego ekranu aplikacji.
+ */
 public class StartActivity extends AppCompatActivity {
 
 	//private static final int MY_CAMERA_REQUEST_CODE = 100;
@@ -47,7 +51,10 @@ public class StartActivity extends AppCompatActivity {
 			Manifest.permission.ACCESS_COARSE_LOCATION
 	};
 
-
+	/**
+	 * Jest to metoda tworząca główny widok aplikacji.
+	 * @param savedInstanceState Wiązka argumentów
+	 */
 	@Override
 	protected synchronized void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -61,6 +68,12 @@ public class StartActivity extends AppCompatActivity {
 	}
 
 	// sprawdzenie odpowiedzi z okna proszącego o uprawnienia
+	/**
+	 * Jest to metoda odpowiadająca za sprawdzenie odpowiedzi z okna proszącego o uprawnienia.
+	 * @param requestCode Kod odpowiedzi
+	 * @param permissions Tablica uprawień
+	 * @param grantResults Tablica zwróconych kodów zgód na uprawnienia
+	 */
 	@Override
 	public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
 		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -85,6 +98,9 @@ public class StartActivity extends AppCompatActivity {
 
 
 	// wstępne sprawdzenie
+	/**
+	 * Jest to metoda odpowiadająca za wstępne sprawdzenie nowych uprawnień aplikacji.
+	 */
 	private void permCheckNew() {
 		if (allPerm()) {
 			startMainService();
@@ -93,6 +109,10 @@ public class StartActivity extends AppCompatActivity {
 			ActivityCompat.requestPermissions(this, perms, permCode);
 		}
 	}
+
+	/**
+	 * Jest to metoda odpowiadająca za wstępne sprawdzenie wszystkich uprawnień aplikacji.
+	 */
 	private boolean allPerm() {
 		boolean permSum = true;
 		for(String perm : perms)
@@ -101,6 +121,9 @@ public class StartActivity extends AppCompatActivity {
 	}
 
 	// uruchom aplikację
+	/**
+	 * Jest to metoda uruchamiająca główny serwis aplikacji.
+	 */
 	private void startMainService() {
 		Intent service = new Intent(this, MainService.class);
 		service.putExtra("start", 1);

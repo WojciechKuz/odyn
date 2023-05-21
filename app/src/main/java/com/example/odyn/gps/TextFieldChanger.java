@@ -7,6 +7,9 @@
 
 package com.example.odyn.gps;
 
+/**
+ * Jest to interfejs odpowiedzialny za zmianę tekstu.
+ */
 public interface TextFieldChanger {
 	void changeTextField(String text, GPSValues whatValue);
 }

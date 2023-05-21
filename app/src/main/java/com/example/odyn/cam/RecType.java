@@ -8,6 +8,9 @@
 package com.example.odyn.cam;
 
 // typy danych
+/**
+ * Jest to typ wyliczeniowy zawierający typy danych.
+ */
 public enum RecType {
 	picture,
 	video,
