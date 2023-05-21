@@ -154,18 +154,10 @@ public class CamAccess {
         });
     }
 
-    /**
-     * Jest to klasa zawierająca informacje o kamerze.
-     */
-    public class CamInfo {
-        private float FOV;
-        private float width;
-        private float height;
-        private Bitmap BMP;
-
-        /**
-         * Jest to metoda odpowiadająca za otrzymywanie bitmapy.
-         */
+    public class CamInfoProvider {
+        private float FOV = 0;
+        private float width = 0, height = 0;
+        private Bitmap BMP = null;
         private Bitmap imageProxyToBitmap(ImageProxy imageProxy) {
             Image image = imageProxy.getImage();
             ByteBuffer buffer = image.getPlanes()[0].getBuffer();
@@ -173,11 +165,7 @@ public class CamAccess {
             buffer.get(bytes);
             return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
         }
-
-        /**
-         * Jest to metoda odpowiadająca za dostarczenie obrazu do analizy AI.
-         */
-        public void takePictureBMP(){
+        private void takePictureBMP(){
             imageCapture.takePicture(ContextCompat.getMainExecutor(main), new ImageCapture.OnImageCapturedCallback() {
                 /**
                  * Jest to metoda odpowiedzialna za obsługę otrzymania bitmapy.
@@ -201,20 +189,12 @@ public class CamAccess {
                 }
             });
         }
-
-        /**
-         * Jest to metoda służąca do obliczania pola widzenia.
-         */
-        public float calculateFOV(float focalLength, float aperture) {
+        private float calculateFOV(float focalLength, float aperture) {
             float horizontalFOV = (float) (2 * Math.atan2(aperture, (2 * focalLength)));
             float verticalFOV = (float) (2 * Math.atan2(aperture, (2 * focalLength)));
             return (float) Math.toDegrees(Math.sqrt(Math.pow(horizontalFOV, 2) + Math.pow(verticalFOV, 2)));
         }
-
-        /**
-         * Jest to metoda służąca do otrzymywania informacji o obliczonym polu widzenia i rozdzielczości.
-         */
-        public void getInfo() {
+        private void getInfo() { // ustawia FOV, width i height
             try {
                 CameraManager cameraManager = (CameraManager) main.getSystemService(Context.CAMERA_SERVICE);
                 String cameraId = cameraManager.getCameraIdList()[1]; // wybierz pierwszą kamerę
@@ -237,6 +217,17 @@ public class CamAccess {
                 Log.e("CamAccess", ">>> Wystąpił błąd podczas korzystania z kamery");
             }
         }
+
+        public CamInfo getCamInfo() {
+            if(FOV == 0 || width == 0 || height == 0) {
+                getInfo();
+            }
+            takePictureBMP();
+            return new CamInfo(FOV, width, height, BMP);
+        }
+    }
+    public CamInfo getCamInfo() {
+        return new CamInfoProvider().getCamInfo();
     }
     Timer timer = new Timer();
 

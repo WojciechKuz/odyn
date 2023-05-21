@@ -25,6 +25,8 @@ import android.widget.TextView;
 import com.example.odyn.FileHandler;
 import com.example.odyn.R;
 import com.example.odyn.cam.Cam;
+import com.example.odyn.cam.CamAccess;
+import com.example.odyn.cam.CamInfo;
 import com.example.odyn.gps.GPSThread;
 import com.example.odyn.gps.GPSValues;
 import com.example.odyn.gps.TextFieldChanger;
@@ -94,7 +96,10 @@ public class MainScreen extends AppCompatActivity {
 	 */
 	private void setupMainScreen() {
 		ServiceConnector.setActivity(this); // static, usunięcie w onDestroy()
-		ServiceConnector.sendCam(new Cam(this)); // zwraca do MainService, jak się da to tworzenie z powrotem przenieść do MainService
+		Cam cam = new Cam(this);
+		ServiceConnector.sendCam(cam); // zwraca do MainService, jak się da to tworzenie z powrotem przenieść do MainService
+
+		CamInfo camInfo = cam.getCamInfo();	// TODO use bitmap and info to analyze image
 
 		// obsługa przycisków, metody do obsługi (np. this::onClickPhoto) znajdują się poniżej
 		View mainScreenLayout = findViewById(R.id.layout_incepcja);
