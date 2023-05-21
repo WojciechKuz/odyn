@@ -19,19 +19,18 @@
     <string name="record_in_background">nagrywaj w tle</string>
 
     <!-- Ustawienia -->
-    <string name="switch1desc">Czy analizować obraz</string>
-    <string name="switch2desc">Czy odczytywać tablice rejestracyjne</string>
-    <string name="switch3desc">Czy mierzyć odległość od pojazdu z przodu</string>
-    <string name="switch4desc">Czy wyświetlać lokalizację</string>
-    <string name="switch5desc">Czy zapisywać lokalizację</string>
-    <string name="switch6desc">Czy wyświetlać prędkość</string>
-    <string name="switch7desc">Czy zapisywać prędkość</string>
+    <string name="switch1desc">Czy mierzyć odległość od pojazdu z przodu</string>
+    <string name="switch2desc">Czy wyświetlać lokalizację</string>
+    <string name="switch3desc">Czy zapisywać lokalizację</string>
+    <string name="switch4desc">Czy wyświetlać prędkość</string>
+    <string name="switch5desc">Czy zapisywać prędkość</string>
+    <string name="switch6desc">Czy nagrywać dźwięk</string>
     <!-- FIXME names that i put here in "" are ambiguous. fix it. -->
     <string name="spinner1desc">Lokalizacja zapisu</string><!-- karta sd / p. wewn. -->
     <string name="spinner2desc">Położenie menu</string> <!-- po której stronie mają być ikony i menu -->
-    <string name="spinner3desc">"Dlugosc zapisu"</string>
-    <string name="spinner4desc">"rozmiar zapisu"</string>
-    <string name="spinner5desc">Długość nagrania awaryjnego przed naciśnięciem przycisku</string>
-    <string name="spinner6desc">Długość nagrania awaryjnego po naciśnięciu przycisku</string>
+    <string name="spinner3desc">Długość nagrania</string>
+    <string name="spinner4desc">Rozmiar katalogu nagrań</string>
+    <string name="spinner5desc">Rozmiar katalogu nagrań awaryjnych</string>
+
     <string name="spinner7desc">Język, Language</string>
 </resources>
