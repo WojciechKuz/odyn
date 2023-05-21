@@ -38,7 +38,8 @@
 
         <service
             android:name=".main_service.MainService"
-            android:exported="false" />
+            android:exported="false"
+            android:foregroundServiceType="camera|microphone|location"/>
 
         <activity
             android:name=".activities.RecordingList"

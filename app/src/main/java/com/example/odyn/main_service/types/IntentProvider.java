@@ -13,59 +13,42 @@ import android.content.Intent;
 import com.example.odyn.cam.ActionType;
 import com.example.odyn.cam.Cam;
 import com.example.odyn.cam.RecType;
+import com.example.odyn.main_service.MainService;
 
 // IntentProvider to klasa, która dla każdej ikony dostarcza (wykonuje) powiązaną z nią akcję
 /**
  * Jest to klasa, która dla każdej ikony wykonuje powoiązaną z nią akcję.
  */
 public class IntentProvider {
+
+	public static final String extraName = "iconType";
+
 	/**
 	 * Jest to metoda, która dla każdej ikony dotarcza powoiązaną z nią akcję.
 	 */
-	public static void iconClicked(Context context, IconType iconType) {
+	public static Intent iconClicked(Context context, IconType iconType) {
+		Class<?> actionReciever = MainService.class;
 		Intent intent;
 		switch(iconType) {
 			case photo:
-				// send request to CamAccess
-				intent = new Intent(context, Cam.class);
-				intent.putExtra("RecType", RecType.picture); // enum casted to Serializable
-				intent.putExtra("ActionType", ActionType.toggle);
-				break;
 			case recording:
-				// send request to CamAccess
-				intent = new Intent(context, Cam.class);
-				intent.putExtra("RecType", RecType.video); // enum casted to Serializable
-				intent.putExtra("ActionType", ActionType.toggle);
-				break;
 			case emergency:
-				// send request to CamAccess
-				intent = new Intent(context, Cam.class);
-				intent.putExtra("RecType", RecType.emergency); // enum casted to Serializable
-				intent.putExtra("ActionType", ActionType.toggle);
-				break;
+			case back_to_app:
+				intent = new Intent(context, actionReciever);
+				intent.putExtra(extraName, iconType); // enum casted to Serializable
+				return intent;
 			case close:
 				// close app
 				intent = new Intent(Intent.ACTION_MAIN);
 				intent.addCategory(Intent.CATEGORY_HOME);
-				break;
+				return intent;
 			case menu:
-				// start menuActivity ??? does not exist yet
-				// TODO first, menu Activity is needed
+				// start menuActivity ???
+				// TODO
 
-				return; // temporary, FIXME
-				//break;
-			case back_to_app:
-				// start MainScreen Activity
-				// hmmm, a samo się nie wystartuje po powrocie na ekran?
-				// tzn. jeśli zamkniemy service w MainScreen.onRestart(),
-				// to ten Intent do MainScreen jest zbędny.
-				// TODO close notification, open MainScreen
-
-				return; // temporary, FIXME
-				//break;
+				return null; // temporary
 			default:
-				return; // zabezpieczenie
+				return null; // zabezpieczenie
 		}
-		context.startActivity(intent);
 	}
 }

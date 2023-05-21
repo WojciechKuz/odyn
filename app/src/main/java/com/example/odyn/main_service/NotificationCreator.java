@@ -8,16 +8,24 @@
 package com.example.odyn.main_service;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Icon;
+import android.os.Build;
+import android.util.Log;
+
+import androidx.annotation.RequiresApi;
+import androidx.core.app.NotificationCompat;
 
 import com.example.odyn.R;
 import com.example.odyn.activities.MainScreen;
 import com.example.odyn.cam.RecType;
 import com.example.odyn.main_service.types.IconProvider;
 import com.example.odyn.main_service.types.IconType;
+import com.example.odyn.main_service.types.IntentProvider;
 
 /**
  Jest to klasa odpowiedzialna za tworzenie powiadomień.
@@ -39,7 +47,13 @@ public class NotificationCreator {
 				//.setLargeIcon(bitmap) // TODO, potrzebna ikonka
 				.setContentTitle(context.getString(R.string.notif_title))
 				.setContentText(context.getString(R.string.notif_text))
+				.setPriority(Notification.PRIORITY_DEFAULT)
 				.setAutoCancel(false);
+				//.setOngoing(true)
+
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+			builder.setChannelId(setChannel());
+		}
 
 		// TODO ikonki akcji
 		builder.addAction(getAction(IconType.emergency));
@@ -48,12 +62,12 @@ public class NotificationCreator {
 		builder.addAction(getAction(IconType.back_to_app));
 
 		builder.setContentIntent(contentIntent()); // naciśniesz > otworzy się apka
-		/* ✔ utworzone
+		/*  ✔ utworzone
 		 *  ✔ ikonka (domyślna)
 		 *  ✔ tekst
 		 *  ✔ akcja po naciśnięciu powiadomienia: otwórz aplikację
-		 * ❌ przyciski akcji: zdjęcie, nagraj, emergency, zamknij
-		 * ❌ nagrywanie
+		 *  ✔ przyciski akcji: zdjęcie, nagraj, emergency, zamknij
+		 *  ✔ nagrywanie
 		 * */
 		return builder.build();
 	}
@@ -74,21 +88,28 @@ public class NotificationCreator {
 	 */
 	private Notification.Action getAction(IconType iconType) {
 		Notification.Action.Builder builder = new Notification.Action.Builder(
-				Icon.createWithResource(context, IconProvider.getIconId(iconType, false)),
+				Icon.createWithResource(context, IconProvider.getIconId(iconType, true)),
 				iconType.toString(),
-				(PendingIntent) null	// TODO dodaj Intent'a, zamień null'a
+				pendingIntentProvider(iconType)
 		);
 		// FIXME jeśli ikony nie wyświetlają się poprawnie, to zmień 4 linijki wyżej z getIcon(..., false) na getIcon(..., true)
 
 		return builder.build();
 	}
-	private String recTypeProvider(RecType type) {
-		//
-		return null; // temporary, TODO
+	private PendingIntent pendingIntentProvider(IconType type) {
+		Intent intent = IntentProvider.iconClicked(context, type);    // Tak, MainService wysyła do siebie te intenty futureTODO
+		if(intent == null)
+			Log.e("NotificationCreator", ">>> ERROR, intent nie istnieje, typ ikony: "+ type);
+		return PendingIntent.getService(context, 7, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 	}
-	private PendingIntent pendingIntentProvider(RecType type) {
-		//
-		return null; // temporary, TODO
+
+	@RequiresApi(api = Build.VERSION_CODES.O)
+	private String setChannel() {
+		String channelid = "CHANNEL1";
+		NotificationChannel channel = new NotificationChannel(channelid, "notifChannel", NotificationManager.IMPORTANCE_DEFAULT);
+		NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
+		notificationManager.createNotificationChannel(channel);
+		return channelid;
 	}
 
 	/*

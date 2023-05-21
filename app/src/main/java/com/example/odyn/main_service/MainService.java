@@ -15,6 +15,7 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import com.example.odyn.main_service.types.IntentProvider;
 import com.example.odyn.settings.SettingsProvider;
 import com.example.odyn.activities.MainScreen;
 import com.example.odyn.cam.Cam;
@@ -46,41 +47,48 @@ public class MainService extends Service {
 	 * @param startId początkowe ID
 	 */
 	@Override
-	public int onStartCommand(Intent intent, int flags, int startId) {
+	public synchronized int onStartCommand(Intent intent, int flags, int startId) {
 		//return super.onStartCommand(intent, flags, startId);
 
-		if(intent != null && intent.hasExtra("start"))
-		{
-			if(intent.getIntExtra("start", 0) != 1) {
-				Log.w("MainService", ">>> MainService started with wrong value in intent!");
+		if(intent != null) {
+			if(intent.hasExtra(IntentProvider.extraName)) {
+				IconType recvType = (IconType) intent.getSerializableExtra(IntentProvider.extraName);
+				buttonHandler(recvType);
+				Log.v("MainService", ">>> recieved action call");
+			}
+		 	else if(intent.hasExtra("start")) {
+				// start serwisu, uruchomienie
+				if(intent.getIntExtra("start", 0) != 1) {
+					Log.w("MainService", ">>> MainService started with wrong value in intent!");
+				}
+				mainServiceStart();
+
+				// utwórz MainScreen
+				startMainScreen();
+
+				// utwórz powiadomienie
+				foregroundStarter();
+
+				Log.v("MainService", ">>> MainService started");
 			}
 		}
-		mainServiceStart();
-
-		Log.v("MainService", ">>> MainService started");
 		return START_STICKY; // uruchomienie / wyłączenie serwisu, tylko gdy się tego zażąda
 	}
 
 	/**
 	 Jest to metoda służąca do ustawiania parametrów MainService.
 	 */
-	private synchronized void mainServiceStart() { // ma się wykonywać pokolei
+	private void mainServiceStart() { // ma się wykonywać pokolei
 		Log.v("MainService", ">>> setting up MainService");
 
 		new SettingsProvider().loadSettings(this); // wczyta ustawienia
 
 		// KOLEJNOŚĆ TWORZENIA WERSJA 1
 
-		// utwórz MainScreen
-		startMainScreen();
-
 		// TODO utwórz Notification
 
 		ServiceConnector.setOnClickHandle(this::buttonHandler);
 		ServiceConnector.setCamReceiver(this::receiveCam); // MainScreen dostarczy Cam
-
-		// Z Logcat'a: Skipped 36 frames!  The application may be doing too much work on its main thread.
-		// TODO utworzyć wątek, na kamerę
 
 		// utwórz Cam, trzeba dostarczyć do konstruktora MainScreen Activity
 		//cam = new Cam(ServiceConnector.getActivity(), ServiceConnector.getActivity());
@@ -98,19 +106,30 @@ public class MainService extends Service {
 		startActivity(startMainScreen);
 	}
 
+	/**
+	 * Uruchamia service w trybie Foreground, tworzy powiadomienie
+	 */
+	private void foregroundStarter() {
+		//
+		int ajdi = 5; // trzeba sprawdzić, TEMPORARY
+		NotificationCreator creator = new NotificationCreator(this);
+		startForeground(ajdi, creator.create());
+	}
+
 
 	// tu obsłuż przyciski, te powiązane z wideo przekaż do Cam
 	/**
 	 Jest to metoda służąca do obsługiwania przycisków aplikacji.
 	 */
 	private void buttonHandler(IconType it) {
+		Log.d("MainService", ">>> ikonka akcji "+ it);
 		// niestety, android jest oparty starym JDK i nie ma enchanced switch'a
 		switch(it) {
 			// bloki switch case działają jak go to label, więc dozwolone.
 			case photo:
 			case recording:
 			case emergency:
-				Log.d("MainService", ">>> naciśnięto jeden z przycisków");
+				Log.d("MainService", ">>> naciśnięto jeden z przycisków ");
 				cam.camAction(it);
 				break;
 			case close:
