@@ -60,7 +60,7 @@ public class SRTWriter extends Thread {
 					srtLine += "\n" + timerText + " | " + speedText + " | ";
 					srtLine += latitudeText + ", ";
 					srtLine += longitudeText + "\n\n";
-					Log.d("GPS", srtLine);
+					//Log.d("GPS", srtLine);
 					writer.write(srtLine);
 					writer.flush();
 					//Log.d("GPSThread","Wrote srt line");
