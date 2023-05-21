@@ -40,7 +40,7 @@ public class SettingsProvider {
 
 
 	// zapisuje / nadpisuje plik ustawień. z założenia pisać będzie tylko Settings.java
-	public synchronized void writeSettings(Context context, JSONObject settings) {
+	private synchronized void writeSettings(Context context, JSONObject settings) {
 		try {
 			BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(context.openFileOutput("settings.json", MODE_PRIVATE)));
 			writer.write(settings.toString());
@@ -50,7 +50,7 @@ public class SettingsProvider {
 		}
 	}
 
-	public synchronized void writeSettings(Context context) {
+	public void writeSettings(Context context) {
 		writeSettings(context, settings);
 	}
 

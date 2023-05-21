@@ -39,8 +39,6 @@ public class Settings extends AppCompatActivity {
     private Spinner[] spinners;
 
 
-    private SettingsProvider settingsProvider;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -151,7 +149,7 @@ public class Settings extends AppCompatActivity {
                 } catch (JSONException e) {
                     Log.w("Settings", ">>> nie udało się zapisać ustawienia");
                 }
-                saveSettingsToFile(); // ??? wydaje się niepotrzebne
+                //saveSettingsToFile(); // ??? wydaje się niepotrzebne
 
                 break; // jak już znaleźliśmy element, to nie iterujemy dalej
             }
@@ -168,18 +166,19 @@ public class Settings extends AppCompatActivity {
 
 
     private void saveSettingsToFile() {
+        // w zasadzie, to teżź zbędne, opcje zapisują się przy przełączaniu
         try {
-            JSONObject settings = new JSONObject();
+            SettingsProvider sprov = new SettingsProvider();
 
             for(int i = 1; i < mSwitch.length; i++)
-                settings.put(SettingNames.switches[i], mSwitch[i].isChecked());
+                sprov.setSetting(SettingNames.switches[i], mSwitch[i].isChecked());
             for (int i = 1; i < spinners.length; i++)
-                settings.put(SettingNames.spinners[i], spinners[i].getSelectedItemPosition());
+                sprov.setSetting(SettingNames.spinners[i], spinners[i].getSelectedItemPosition());
 
 
             //settings.put("mode", mode); // po co dodatkowo zapisujemy mode, skoro jest też w przełączniku?
 
-            new SettingsProvider().writeSettings(this, settings); // zapisz ustawienia
+            new SettingsProvider().writeSettings(this); // zapisz ustawienia
         } catch (JSONException e) {
             Log.e("Settings", ">>> błąd podczas tworzenia obiektu JSON");
             e.printStackTrace();
@@ -211,6 +210,6 @@ public class Settings extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        settingsProvider.writeSettings(this);
+        new SettingsProvider().writeSettings(this);
     }
 }
