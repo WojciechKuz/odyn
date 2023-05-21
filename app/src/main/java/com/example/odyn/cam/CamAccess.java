@@ -50,6 +50,8 @@ import java.util.concurrent.ExecutionException;
 public class CamAccess {
     private ImageCapture imageCapture;
     private VideoCapture videoCapture;
+
+    private GetCamInterface doItLaterIntf = null; // jeśli trzeba zaczekać na otrzymanie CamInfo()
     protected Activity main; // póki co spełnia dwie role: wątek (Context) i aktywność (wyświetlanie), później warto rozważyć rozdzielenie
     // korzysta z tego też klasa Cam (dziedziczy)
     /* Activity używane do:
@@ -68,6 +70,11 @@ public class CamAccess {
         PreviewView prView2 = main.findViewById(R.id.previewView);
         cameraProviderSetup(prView2);
         Log.v("CamAccess", ">>> CamAccess constructor");
+
+        //
+        if(doItLaterIntf != null) {
+            doItLaterIntf.getCamInfoLater(getCamInfo());
+        }
     }
     // te dwie poniższe funkcje służą do przygotowania kamery do przekazywania obrazu do <PreviewView> i robienia zdjęć
     /**
@@ -226,9 +233,43 @@ public class CamAccess {
             return new CamInfo(FOV, width, height, BMP);
         }
     }
+
+    /**
+     * Otrzymaj CamInfo, obiekt przechowujący bitmapę, FOV,szerokość i wysokość obrazu.
+     * Przed wywołaniem getCamInfo() należy sprawdzić za pomocą canIgetCamInfo(), czy można to wywołać,
+     * ponieważ składowa imageCapture, z której te metody korzystają, może jeszcze nie być zainicjalizowana.
+     *
+     * Problem z wywołaniem tej metody może nastąpić na początku programu, zaraz po konstruktorze Cam albo CamAccess.
+     * Jeśli nie da się uruchomić, to można poczekać chwilę, albo skorzystać z setImgCaptureCreatedListener().
+     *
+     * // Sprawdzenie:
+     * if(cam.canIgetCamInfo()) {
+     *     cam.getCamInfo();
+     * }
+     *
+     */
     public CamInfo getCamInfo() {
-        return new CamInfoProvider().getCamInfo();
+        // może się zdarzyć, że imageCapture (getCamInfo() z tego korzysta) nie jest jeszcze zainicjalizowane.
+        if(imageCapture != null) {
+            return new CamInfoProvider().getCamInfo();
+        }
+        return null;
     }
+
+    /**
+     * Sprawdź, czy można wykonać getCamInfo()
+     */
+    public boolean canIgetCamInfo() {
+        return imageCapture != null;
+    }
+    /**
+     * Jeśli nie można jeszcze wykonać getCamInfo() można tu podać dowolną metodę zwraca (void, przyjmuje CamInfo),
+     * która ma się wykonać, po tym jak będzie już możliwe wykonanie getCamInfo().
+     */
+    public void setImgCaptureCreatedListener(GetCamInterface interf) {
+        doItLaterIntf = interf;
+    }
+
     Timer timer = new Timer();
 
     /**

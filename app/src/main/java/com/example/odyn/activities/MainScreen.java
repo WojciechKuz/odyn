@@ -99,7 +99,14 @@ public class MainScreen extends AppCompatActivity {
 		Cam cam = new Cam(this);
 		ServiceConnector.sendCam(cam); // zwraca do MainService, jak się da to tworzenie z powrotem przenieść do MainService
 
-		CamInfo camInfo = cam.getCamInfo();	// TODO use bitmap and info to analyze image
+		CamInfo camInfo = null;
+		if(cam.canIgetCamInfo()) {
+			camInfo = cam.getCamInfo();	// TODO use bitmap and info to analyze image
+			Log.d("MainScreen", ">>> Otrzymano CamInfo");
+		}
+		else {
+			Log.d("MainScreen", ">>> Nie można tu jeszcze otrzymać CamInfo");
+		}
 
 		// obsługa przycisków, metody do obsługi (np. this::onClickPhoto) znajdują się poniżej
 		View mainScreenLayout = findViewById(R.id.layout_incepcja);
