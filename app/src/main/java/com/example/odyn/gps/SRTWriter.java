@@ -18,6 +18,10 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.example.odyn.activities.MainScreen;
+import com.example.odyn.settings.SettingNames;
+import com.example.odyn.settings.SettingsProvider;
+
+import org.json.JSONException;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -58,14 +62,28 @@ public class SRTWriter extends Thread {
 				String latitudeText = textMap.get("latitudeText");
 				String longitudeText = textMap.get("longitudeText");
 				String speedText = textMap.get("speedText");
+				Boolean writeLocation, writeSpeed;
+				try {
+					SettingsProvider settingsProvider = new SettingsProvider();
+					writeLocation = settingsProvider.getSettingBool(SettingNames.switches[3]);
+					writeSpeed = settingsProvider.getSettingBool(SettingNames.switches[5]);
+				} catch (JSONException e) {
+					throw new RuntimeException(e);
+				}
 
-                if (timerText != null && latitudeText != null && longitudeText != null) {
+				if (timerText != null && latitudeText != null && longitudeText != null) {
                     // Write the data in SRT format
 					srtLine = "\n";
 					srtLine += secondsToTimestamp(Integer.parseInt(counterText) - 1) + " --> " + secondsToTimestamp(Integer.parseInt(counterText));
-					srtLine += "\n" + timerText + " | " + speedText + " | ";
-					srtLine += latitudeText + ", ";
-					srtLine += longitudeText + "\n\n";
+					srtLine += "\n" + timerText + " | ";
+					if (writeSpeed) {
+						srtLine += "\n" + speedText + " | ";
+					}
+					if (writeLocation) {
+						srtLine += latitudeText + ", ";
+						srtLine += longitudeText;
+					}
+					srtLine += "\n\n";
 					//Log.d("GPS", srtLine);
 					writer.write(srtLine);
 					writer.flush();
