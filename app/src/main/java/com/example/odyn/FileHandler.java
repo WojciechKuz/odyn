@@ -25,7 +25,9 @@ import java.util.Date;
 import java.util.Locale;
 
 
-
+/**
+ * Jest to klasa odpowiedzialna za obsługę plików.
+ */
 public class FileHandler {
     // metoda, podajesz plik, typ i zapisuje pod odpowiednią ścieżką i nazwą
     private String dir;
@@ -55,10 +57,18 @@ public class FileHandler {
         sprawdzRozmiar();
     }
 
-
+    /**
+     * Jest to metoda służąca do otrzymania ścieżki katalogu na podstawie podkatalogu.
+     * @param subDir Podkatalog
+     */
     private String getDirPath(String subDir) {
         return context.getExternalMediaDirs()[0].getAbsolutePath() + File.separator + "Odyn" + File.separator + subDir;
     }
+
+    /**
+     * Jest to metoda służąca do tworzenia katalogu jeżeli katalog o podanej ścieżce nie istnieje.
+     * @param path Ścieżka do katalogu
+     */
     private void createDirIfNotExists(String path) {
         File dir = new File(path);
         if (!dir.exists()) {
@@ -86,7 +96,9 @@ public class FileHandler {
 
 
 
-
+    /**
+     * Jest to metoda służąca do otrzymywania limitu pamięci w MB.
+     */
     private long getLimitFromSettings() {
         try {
             int selectedPosition = settingsProvider.getSettingInt(SettingNames.spinners[4]);
@@ -101,7 +113,9 @@ public class FileHandler {
     }
 
 
-
+    /**
+     * Jest to metoda służąca do otrzymywania limitu pamięci z nagrań awaryjnych w MB.
+     */
     private long getLimitFromEmergency() {
         try {
             int selectedPosition = settingsProvider.getSettingInt(SettingNames.spinners[5]);
@@ -115,20 +129,26 @@ public class FileHandler {
         }
     }
 
-    public void sprawdzRozmiar() {
-        long rozmiarWideo = getVideoDirSize(); // Pobierz sumaryczny rozmiar wideo
-        long rozmiarAwaryjnych = getEmergencyDirSize(); // Pobierz sumaryczny rozmiar wideo awaryjnych
-        long limit = getLimitFromSettings(); // limit rozmiaru z ustawień
-        long limit2 = getLimitFromEmergency(); // limit rozmiaru z ustawień
+    /**
+     * Jest to metoda służąca do sprawdzania rozmiaru katalogu z plikami video.
+     */
+    public void checkSize() {
+        long videoDirSize = getVideoDirSize(); // Pobierz sumaryczny rozmiar wideo
+        long emergencyDirSize = getEmergencyDirSize(); // Pobierz sumaryczny rozmiar wideo awaryjnych
+        long videoLimit = getLimitFromSettings(); // limit rozmiaru z ustawień
+        long emergencyLimit = getLimitFromEmergency(); // limit rozmiaru z ustawień
 
-        if (rozmiarWideo > limit || rozmiarAwaryjnych > limit2) {
+        if (videoDirSize > videoLimit || emergencyDirSize > emergencyLimit) {
             int numVideosToDelete = 2; // Przykładowa liczba najstarszych nagran do usunięcia
             deleteOldestVideos(numVideosToDelete); // Usuń najstarsze nagrania z vidSubdir
-            sprawdzRozmiar(); // Rekurencyjnie sprawdź rozmiar ponownie
+            checkSize(); // Rekurencyjnie sprawdź rozmiar ponownie
         }
     }
 
-
+    /**
+     * Jest to metoda służąca do usuwania najstarszych filmów.
+     * @param numVideosToDelete Ilość filmów do usunięcia
+     */
     public void deleteOldestVideos(int numVideosToDelete) {
         File videoDir = new File(getDirPath(vidSubdir));
         File[] videoFiles = videoDir.listFiles();
@@ -154,7 +174,10 @@ public class FileHandler {
 
 
 
-
+    /**
+     * Jest to metoda służąca do otrzymywania rozmiaru katalogu.
+     * @param directoryPath Ścieżka do katalogu
+     */
     private long getDirectorySize(String directoryPath) {
         File directory = new File(directoryPath);
         if (!directory.exists() || !directory.isDirectory()) {
@@ -178,29 +201,43 @@ public class FileHandler {
     }
 
 
-
+    /**
+     * Jest to metoda służąca do otrzymywania rozmiaru katalogu z plikami obrazów.
+     */
     public long getPictureDirSize() {
         String pictureDirPath = getDirPath(pictSubdir);
         return getDirectorySize(pictureDirPath);
     }
 
+    /**
+     * Jest to metoda służąca do otrzymywania rozmiaru katalogu z plikami video.
+     */
     public long getVideoDirSize() {
         String videoDirPath = getDirPath(vidSubdir);
         return getDirectorySize(videoDirPath);
     }
 
+    /**
+     * Jest to metoda służąca do otrzymywania rozmiaru katalogu z plikami video nagrywanymi w trybie awaryjnym.
+     */
     public long getEmergencyDirSize() {
         String emergencyDirPath = getDirPath(emergSubdir);
         return getDirectorySize(emergencyDirPath);
     }
 
+    /**
+     * Jest to metoda służąca do otrzymywania rozmiaru katalogu z plikami video i obrazami.
+     */
     public long getTotalDirSize() {
         return getPictureDirSize() + getVideoDirSize() + getEmergencyDirSize();
     }
 
-
-
     // TWORZENIE PLIKÓW
+    /**
+     * Jest to metoda służąca do tworzenia plików.
+     * @param namePrefix Prefix pliku
+     * @param format Format pliku
+     */
     public File createFile(String namePrefix, String format) {
         String fileName = youNameIt(namePrefix, format);
         File file = new File(context.getExternalMediaDirs()[0].getAbsolutePath(), fileName);
@@ -221,6 +258,10 @@ public class FileHandler {
         }
         return null;
     }
+
+    /**
+     * Jest to metoda służąca do tworzenia plików obrazów w formacie ODYN-img-yyyy-MM-dd_HH-mm-ss.jpg.
+     */
     public File createPicture() {
         String fileName = youNameIt("ODYN-img", "jpg");
         File file = new File(getDirPath(pictSubdir), fileName);
@@ -228,6 +269,11 @@ public class FileHandler {
         // TODO wybierana ścieżka zapisu
         return file;
     }
+
+    /**
+     * Jest to metoda służąca do tworzenia plików video w formacie ODYN-vid-yyyy-MM-dd_HH-mm-ss.mp4.
+     * @param format Format pliku
+     */
     public File createVideo(String format) {
         String fileName = youNameIt("ODYN-vid", format);
         File file = new File(getDirPath(vidSubdir), fileName);
@@ -239,34 +285,58 @@ public class FileHandler {
         return file;
     }
 
-
+    /**
+     * Jest to metoda służąca do tworzenia plików video nagrywanych w tle w formacie ODYN-emr-yyyy-MM-dd_HH-mm-ss.mp4.
+     * @param format Format pliku
+     */
     public File createEmergencyVideo(String format) {
         String fileName = youNameIt("ODYN-emr", format);
         File file = new File(getDirPath(emergSubdir), fileName);
         return file;
     }
+
+    /**
+     * Jest to metoda służąca do tworzenia plików związanych z danymi w formacie ODYN-dat-yyyy-MM-dd_HH-mm-ss.srt.
+     */
     public File createDataFile(String format) {
         String fileName = youNameIt("ODYN-dat", format);
         File file = new File(getDirPath(dataSubdir), fileName);
         return file;
     }
 
-
+    /**
+     * Jest to metoda służąca do nazywania plików wraz z podanym przez użytkownika formatem pliku.
+     * @param namePrefix Prefix pliku
+     * @param fileFormat Format pliku
+     */
     private String youNameIt(String namePrefix, String fileFormat) {
         String timeStamp = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss", Locale.getDefault()).format(new Date());
         return namePrefix + '-' + timeStamp + '.' + fileFormat;
     }
 
+    /**
+     * Jest to metoda służąca do tworzenia katalogu.
+     * @param path Ścieżka do katalogu
+     */
     private void createDir(String path) {
         if(!ifDirExists(path)) {
             new File(path).mkdir();
         }
     }
+
+    /**
+     * Jest to metoda służąca do sprawdzenia czy dany katalog istnieje.
+     * @param path Ścieżka do katalogu
+     */
     private boolean ifDirExists(String path) {
         return new File(path).exists();
     }
 
     // usuwa '/' jeśli jest na ostatniej pozycji
+    /**
+     * Jest to metoda służąca do usuwania "/" ze ścieżki jeżeli znajduje się na ostatniej pozycji.
+     * @param path Ścieżka do katalogu
+     */
     private String removeSlash(String path) {
         int lastPos = path.length()-1;
         if(path.charAt(lastPos) == '/') {

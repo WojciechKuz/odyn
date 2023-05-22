@@ -23,29 +23,53 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
+/**
+ * Jest to klasa odpowiedzialna za pobieranie informacji o ustawieniach w dowolnym miejscu aplikacji.
+ */
 public class SettingsProvider {
 	private static JSONObject settings;
 
 	// podaj nazwę ustawienia, zwróci wartość
+	/**
+	 * Jest to metoda zwracająca wartość ustawienia na podstawie nazwy.
+	 * @param settingName Nazwa ustawienia
+	 */
 	public synchronized boolean getSettingBool(String settingName) throws JSONException {
 		return settings.getBoolean(settingName);
 	}
 
+	/**
+	 * Jest to metoda zwracająca wartość ustawienia na podstawie nazwy.
+	 * @param settingName Nazwa ustawienia
+	 */
 	public synchronized int getSettingInt(String settingName) throws JSONException {
 		return settings.getInt(settingName);
 	}
 
-
+	/**
+	 * Jest to metoda odpowiedzialna za zapisywanie/nadpisywanie zmienionego ustawienia.
+	 * @param settingName Nazwa ustawienia
+	 * @param value Wartość
+	 */
 	// jeżeli tylko jedna rzecz się zmieniła. z założenia pisać będzie tylko Settings.java
 	public synchronized void setSetting(String settingName, boolean value) throws JSONException {
 		settings.put(settingName, value);
 	}
 
+	/**
+	 * Jest to metoda odpowiedzialna za zapisywanie/nadpisywanie zmienionego ustawienia.
+	 * @param settingName Nazwa ustawienia
+	 * @param value Wartość
+	 */
 	public synchronized void setSetting(String settingName, int value) throws JSONException {
 		settings.put(settingName, value);
 	}
 
-
+	/**
+	 * Jest to metoda zapisująca/nadpisująca plik ustawień.
+	 * @param context Kontekst
+	 * @param settings Ustawienia
+	 */
 	// zapisuje / nadpisuje plik ustawień. z założenia pisać będzie tylko Settings.java
 	private synchronized void writeSettings(Context context, JSONObject settings) {
 		try {
@@ -57,10 +81,18 @@ public class SettingsProvider {
 		}
 	}
 
+	/**
+	 * Jest to metoda zapisująca/nadpisująca plik ustawień.
+	 * @param context Kontekst
+	 */
 	public void writeSettings(Context context) {
 		writeSettings(context, settings);
 	}
 
+	/**
+	 * Jest to metoda zapisująca początkowe wartości w ustawieniach przy pierwszym uruchomieniu aplikacji.
+	 * @param context Kontekst
+	 */
 	private void firstWriteSetting() {
 		try {
 			settings = new JSONObject();
@@ -75,6 +107,10 @@ public class SettingsProvider {
 	}
 
 	// odczytuje ustawienia z pliku. wywołać na początku działania Aplikacji
+	/**
+	 * Jest to metoda odczytująca ustawienia z pliku, wywoływana na początku działania aplikacji.
+	 * @param context Kontekst
+	 */
 	public synchronized void loadSettings(Context context) {
 		try {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(context.openFileInput("settings.json")));

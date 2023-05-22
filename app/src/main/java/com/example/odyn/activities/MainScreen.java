@@ -102,7 +102,10 @@ public class MainScreen extends AppCompatActivity {
 		setupVisibility();
 	}
 
-	private void setupVisibility () {
+	/**
+	 * Jest to odpowiadająca za przełączanie widoczności lokalizacji i prędkości na ekranie.
+	 */
+	private void setupVisibility() {
 		Boolean showLocation, showSpeed;
 		TextView latitudeText = findViewById(R.id.latitudeText);
 		TextView longitudeText = findViewById(R.id.longitudeText);
@@ -194,6 +197,8 @@ public class MainScreen extends AppCompatActivity {
 
 	/**
 	 * Jest to metoda odpowiadająca za wyświetlanie informacji o lokalizacji i prędkości do zapisania.
+	 * @param text Tekst
+	 * @param whatValue Wartość GPS
 	 */
 	private void changeTextField(String text, GPSValues whatValue) {
 		switch(whatValue) {
@@ -266,6 +271,7 @@ public class MainScreen extends AppCompatActivity {
 	// Otwórz panel menu
 	/**
 	 * Jest to metoda odpowiadająca za otwarcie menu aplikacji.
+	 * @param view Widok
 	 */
 	public void onClickMenu(View view) {
 		Log.d("MainScreen", ">>> otwórz menu");
@@ -278,6 +284,7 @@ public class MainScreen extends AppCompatActivity {
 	// Zrób zdjęcie
 	/**
 	 * Jest to metoda odpowiadająca za obsługę przycisku do wykonywania zdjęcia.
+	 * @param view Widok
 	 */
 	public void onClickPhoto(View view) {
 		Log.d("MainScreen", ">>> zrób zdjęcie");
@@ -298,6 +305,7 @@ public class MainScreen extends AppCompatActivity {
 	// Nagrywanie awaryjne
 	/**
 	 * Jest to metoda odpowiadająca za obsługę przycisku do nagrywania awaryjnego.
+	 * @param view Widok
 	 */
 	public void onClickEmergency(View view) {
 		Log.d("MainScreen", ">>> nagrywanie awaryjne");
@@ -321,6 +329,7 @@ public class MainScreen extends AppCompatActivity {
 	// Nagraj wideo
 	/**
 	 * Jest to metoda odpowiadająca za obsługę przycisku do nagrywania video.
+	 * @param view Widok
 	 */
 	public void onClickRecord(View view) {
 		Log.d("MainScreen", ">>> nagraj");
@@ -344,6 +353,7 @@ public class MainScreen extends AppCompatActivity {
 	// Zamknij menu
 	/**
 	 * Jest to metoda odpowiadająca za zamykanie menu aplikacji z poziomu menu.
+	 * @param item Pozycja w menu
 	 */
 	public void onClickCloseMenu(MenuItem item) {
 		Log.d("MainScreen", ">>> zamknij menu");
@@ -356,6 +366,7 @@ public class MainScreen extends AppCompatActivity {
 	// Przejdź do listy nagrań
 	/**
 	 * Jest to metoda odpowiadająca za przejście do listy nagrań z poziomu menu.
+	 * @param item Pozycja w menu
 	 */
 	public void onClickRecordingsList(MenuItem item) {
 		Intent intent = new Intent(Intent.ACTION_VIEW);
@@ -366,6 +377,7 @@ public class MainScreen extends AppCompatActivity {
 	// Przejdź do ustawień
 	/**
 	 * Jest to metoda odpowiadająca za przejście do ustawień z poziomu menu.
+	 * @param item Pozycja w menu
 	 */
 	public void onClickSettings(MenuItem item) {
 		Intent doUstaw = new Intent(this, Settings.class);
@@ -377,6 +389,7 @@ public class MainScreen extends AppCompatActivity {
 	// Wyjdź i nagrywaj w tle
 	/**
 	 * Jest to metoda odpowiadająca za wyjście z aplikacji i nagrywanie w tle.
+	 * @param item Pozycja w menu
 	 */
 	public void onClickBackground(MenuItem item) {
 		// ???

@@ -42,6 +42,7 @@ public class Cam extends CamAccess {
 	// obsłuż intent'y. żądania nagrywania, itp.
 	/**
 	 * Jest to metoda służąca do obsługi intencji oraz żądań nagrywania.
+	 * @param intent Intent
 	 */
 	public void onHandleIntent(Intent intent) { // ???
 		// odczytaj, co zrobić RecType i ActionType
@@ -58,6 +59,7 @@ public class Cam extends CamAccess {
 
 	/**
 	 * Jest to metoda służąca do robienia zdjęć, nagrywania oraz nagrywania awaryjnego.
+	 * @param iconType Typ ikony
 	 */
 	public void camAction(IconType iconType) {
 		switch(iconType) {
@@ -78,10 +80,11 @@ public class Cam extends CamAccess {
 
 	/**
 	 * Jest to metoda służąca do tworzenia zdjęcia.
+	 * @param option Opcja
 	 */
-	private void photo(int opcja) {
+	private void photo(int option) {
 			File file = new FileHandler(main).createPicture();
-			takePicture(file);
+			takePicture(option);
 	}
 
 	/**

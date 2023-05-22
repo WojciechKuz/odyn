@@ -107,7 +107,7 @@ public class MainService extends Service {
 	}
 
 	/**
-	 * Uruchamia service w trybie Foreground, tworzy powiadomienie
+	 * Jest to metoda odpowiedzialna za uruchamianie serwisu w trybie Foreground, tworzy powiadomienie
 	 */
 	private void foregroundStarter() {
 		//
@@ -119,7 +119,8 @@ public class MainService extends Service {
 
 	// tu obsłuż przyciski, te powiązane z wideo przekaż do Cam
 	/**
-	 Jest to metoda służąca do obsługiwania przycisków aplikacji.
+	 * Jest to metoda służąca do obsługiwania przycisków aplikacji.
+	 * @param it Typ ikony
 	 */
 	private void buttonHandler(IconType it) {
 		Log.d("MainService", ">>> ikonka akcji "+ it);
@@ -187,6 +188,7 @@ public class MainService extends Service {
 
 	/**
 	 Jest to metoda służąca do otrzymywania kamery.
+	 @param cam Obiekt klasy Cam
 	 */
 	private void receiveCam(Cam cam) {
 		this.cam = cam;

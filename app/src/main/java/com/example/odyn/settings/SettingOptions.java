@@ -7,6 +7,9 @@
 
 package com.example.odyn.settings;
 
+/**
+ * Jest to klasa zawierająca opcje w ustawieniach.
+ */
 public class SettingOptions {
 	public static final String[] storageOptions = {"Karta SD", "Pamięć wewnętrzna"};
 	public static final String[] LeftOrRight = {"Lewo", "Prawo"};
