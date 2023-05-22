@@ -57,7 +57,7 @@ public class FileHandler {
 
 
     private String getDirPath(String subDir) {
-        return context.getExternalMediaDirs()[0].getAbsolutePath() + File.separator + "Odyn" + File.separator + subDir;
+        return context.getExternalMediaDirs()[0].getAbsolutePath() /*+ File.separator + "Odyn" + File.separator + subDir*/;
     }
     private void createDirIfNotExists(String path) {
         File dir = new File(path);
