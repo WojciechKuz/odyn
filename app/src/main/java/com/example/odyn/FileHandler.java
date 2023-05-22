@@ -54,7 +54,7 @@ public class FileHandler {
         createDirIfNotExists(getDirPath(dataSubdir));
 
 
-        sprawdzRozmiar();
+        checkSize();
     }
 
     /**
