@@ -56,7 +56,7 @@ public class GPSThread extends Thread implements SensorEventListener {
 	}
 
 	/**
-	 * This method starts the GPS thread.
+	 * Jest to metoda uruchamiająca wątek do obsługi GPS.
 	 */
 	@Override
 	public void run() {
@@ -140,6 +140,9 @@ public class GPSThread extends Thread implements SensorEventListener {
 		interrupt();
 	}
 
+	/**
+	 * Jest to metoda odpowiadająca za zmianę sensora.
+	 */
 	@Override
 	public void onSensorChanged(SensorEvent event) {
 		float x = event.values[0];
@@ -158,10 +161,16 @@ public class GPSThread extends Thread implements SensorEventListener {
 		}
 	}
 
+	/**
+	 * Jest to metoda odpowiadająca za zmianę dokładności.
+	 */
 	@Override
 	public void onAccuracyChanged(Sensor sensor, int accuracy) {
 	}
 
+	/**
+	 * Jest to metoda odpowiadająca za rozpoczęcie nagrywania awaryjnego.
+	 */
 	private void startEmergency() {
 		Log.d("GPSThread", ">>> nagrywanie awaryjne");
 		ServiceConnector.onClickIcon(IconType.emergency);

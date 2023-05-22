@@ -79,6 +79,7 @@ public class CamAccess {
     // te dwie poniższe funkcje służą do przygotowania kamery do przekazywania obrazu do <PreviewView> i robienia zdjęć
     /**
      * Jest to metoda służąca do przygotowania kamery do przekazywania obrazu.
+     * @param prView Widok podglądu
      */
     @SuppressLint("RestrictedApi")
     private void cameraProviderSetup(PreviewView prView) {
@@ -95,6 +96,8 @@ public class CamAccess {
 
     /**
      * Jest to metoda służąca do obsługi robienia zdjęć.
+     * @param cameraProvider Dostawca kamery
+     * @param prView Widok podglądu
      */
     @SuppressLint("RestrictedApi")
     private void bindPreview(ProcessCameraProvider cameraProvider, PreviewView prView) {
@@ -136,6 +139,7 @@ public class CamAccess {
     // robi zdjęcie
     /**
      * Jest to metoda odpowiadająca za funkcję obsługi robienia zdjęcia.
+     * @param file Plik
      */
     public void takePicture(File file) {
         // Set up the output file and capture the image
@@ -144,6 +148,7 @@ public class CamAccess {
 
             /**
              * Jest to metoda służąca do informacji o zapisie zdjęcia.
+             * @param outputFileResults Wyniki pliku wyjściowego
              */
             @Override
             public void onImageSaved(@NonNull ImageCapture.OutputFileResults outputFileResults) {
@@ -153,6 +158,7 @@ public class CamAccess {
 
             /**
              * Jest to metoda służąca do informacji o wystąpionym błędzie przy zapisie zdjęcia.
+             * @param exception Wyjątek
              */
             @Override
             public void onError(@NonNull ImageCaptureException exception) {
@@ -161,10 +167,18 @@ public class CamAccess {
         });
     }
 
+    /**
+     * Jest to klasa dostarczająca informacje o kamerze.
+     */
     public class CamInfoProvider {
         private float FOV = 0;
         private float width = 0, height = 0;
         private Bitmap BMP = null;
+
+        /**
+         * Jest to metoda odpowiedzialna za konwersję obrazu na bitmappę.
+         * @param imageProxy Obraz zamieniany na bitmapę
+         */
         private Bitmap imageProxyToBitmap(ImageProxy imageProxy) {
             Image image = imageProxy.getImage();
             ByteBuffer buffer = image.getPlanes()[0].getBuffer();
@@ -172,10 +186,15 @@ public class CamAccess {
             buffer.get(bytes);
             return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
         }
+
+        /**
+         * Jest to metoda odpowiedzialna za dostarczanie obrazu do analizy AI.
+         */
         private void takePictureBMP(){
             imageCapture.takePicture(ContextCompat.getMainExecutor(main), new ImageCapture.OnImageCapturedCallback() {
                 /**
                  * Jest to metoda odpowiedzialna za obsługę otrzymania bitmapy.
+                 * @param image Obraz
                  */
                 @Override
                 public void onCaptureSuccess(@NonNull ImageProxy image) {
@@ -188,6 +207,7 @@ public class CamAccess {
 
                 /**
                  * Jest to metoda odpowiedzialna za obsługę błędu przy tworzeniu bitmapy.
+                 * @param exception Wyjątek
                  */
                 @Override
                 public void onError(@NonNull ImageCaptureException exception) {
@@ -196,11 +216,21 @@ public class CamAccess {
                 }
             });
         }
+
+        /**
+         * Jest to metoda obliczająca pole widzenia.
+         * @param focalLength Długość ogniskowa
+         * @param aperture Otwór
+         */
         private float calculateFOV(float focalLength, float aperture) {
             float horizontalFOV = (float) (2 * Math.atan2(aperture, (2 * focalLength)));
             float verticalFOV = (float) (2 * Math.atan2(aperture, (2 * focalLength)));
             return (float) Math.toDegrees(Math.sqrt(Math.pow(horizontalFOV, 2) + Math.pow(verticalFOV, 2)));
         }
+
+        /**
+         * Jest to metoda ustawiająca pole widzenia, szerokość i wysokość.
+         */
         private void getInfo() { // ustawia FOV, width i height
             try {
                 CameraManager cameraManager = (CameraManager) main.getSystemService(Context.CAMERA_SERVICE);
@@ -225,6 +255,10 @@ public class CamAccess {
             }
         }
 
+        /**
+         * Jest to metoda służąca do otrzymywania informacji takich jak:
+         * obiekt przechowujący bitmapę, FOV,szerokość i wysokość obrazu.
+         */
         public CamInfo getCamInfo() {
             if(FOV == 0 || width == 0 || height == 0) {
                 getInfo();
@@ -235,7 +269,8 @@ public class CamAccess {
     }
 
     /**
-     * Otrzymaj CamInfo, obiekt przechowujący bitmapę, FOV,szerokość i wysokość obrazu.
+     * Jest to metoda służąca do otrzymywania informacji takich jak:
+     * obiekt przechowujący bitmapę, FOV,szerokość i wysokość obrazu.
      * Przed wywołaniem getCamInfo() należy sprawdzić za pomocą canIgetCamInfo(), czy można to wywołać,
      * ponieważ składowa imageCapture, z której te metody korzystają, może jeszcze nie być zainicjalizowana.
      *
@@ -257,7 +292,7 @@ public class CamAccess {
     }
 
     /**
-     * Sprawdź, czy można wykonać getCamInfo()
+     * Jest to metoda służąca do sprawdzenia, czy można wykonać getCamInfo()
      */
     public boolean canIgetCamInfo() {
         return imageCapture != null;
@@ -265,6 +300,7 @@ public class CamAccess {
     /**
      * Jeśli nie można jeszcze wykonać getCamInfo() można tu podać dowolną metodę zwraca (void, przyjmuje CamInfo),
      * która ma się wykonać, po tym jak będzie już możliwe wykonanie getCamInfo().
+     * @param interf Interfejs
      */
     public void setImgCaptureCreatedListener(GetCamInterface interf) {
         doItLaterIntf = interf;
@@ -274,10 +310,11 @@ public class CamAccess {
 
     /**
      * Jest to metoda odpowiadająca za funkcję obsługi nagrywania video.
+     * @param option Opcja
      */
     @SuppressLint({"RestrictedApi", "MissingPermission"})
-    public void takeVideo(boolean opcja) {
-        if(opcja) {
+    public void takeVideo(boolean option) {
+        if(option) {
             TimerTask task = new TimerTask() {
                 int count = 0;
 
@@ -293,6 +330,7 @@ public class CamAccess {
 
                             /**
                              * Jest to metoda służąca do informacji o zapisie video.
+                             * @param outputFileResults Wyniki pliku wyjściowego
                              */
                             @Override
                             public void onVideoSaved(@NonNull VideoCapture.OutputFileResults outputFileResults) {
@@ -302,6 +340,9 @@ public class CamAccess {
 
                             /**
                              * Jest to metoda służąca do informacji o wystąpionym błędzie przy zapisie video.
+                             * @param videoCaptureError Kod błędu
+                             * @param message Treść błędu
+                             * @param cause Przyczyna błędu
                              */
                             @Override
                             public void onError(int videoCaptureError, @NonNull String message, @Nullable Throwable cause) {

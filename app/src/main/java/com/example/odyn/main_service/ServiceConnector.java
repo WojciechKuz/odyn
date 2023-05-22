@@ -30,6 +30,7 @@ public class ServiceConnector {
 
 	/**
 	 Jest to metoda służąca do uzyskiwania aktywności.
+	 @param activity Aktywność
 	 */
 	public static Activity getActivity() {
 		return activity;
@@ -37,6 +38,7 @@ public class ServiceConnector {
 
 	/**
 	 Jest to metoda służąca do tworzenia nowej aktywności.
+	 @param activity Aktywność
 	 */
 	public static void setActivity(Activity activity) {
 		ServiceConnector.activity = activity;
@@ -62,6 +64,7 @@ public class ServiceConnector {
 	// w argumencie podać, jak obsłużyć przyciski: Cam.camAction()
 	/**
 	 Jest to metoda służąca do ustawiania obsługi przycisku.
+	 @param handler Uchwyt
 	 */
 	public static void setOnClickHandle(IconTypeInterface handler) {
 		ServiceConnector.handler = handler;
@@ -69,6 +72,7 @@ public class ServiceConnector {
 	// wywoływane, gdy jakiś przycisk kliknięto
 	/**
 	 Jest to metoda wywoływana po naciśnięciu przycisku.
+	 @param it Typ ikony
 	 */
 	public static void onClickIcon(IconType it) {
 		handler.onIconClick(it);
@@ -80,6 +84,7 @@ public class ServiceConnector {
 
 	/**
 	 Jest to metoda służąca do utworzenia przekaźnika klasy Cam z MainScreen do MainActivity.
+	 @param camReceiver Przekaźnik klasy Cam
 	 */
 	public static void setCamReceiver(RecieveCamInterface camReceiver) {
 		ServiceConnector.camReceiver = camReceiver;
@@ -87,6 +92,7 @@ public class ServiceConnector {
 
 	/**
 	 Jest to metoda służąca do przekazywania klasy Cam z MainScreen do MainActivity.
+	 @param cam Obiekt klasy Cam
 	 */
 	public static void sendCam(Cam cam) {
 		camReceiver.recieveCam(cam);

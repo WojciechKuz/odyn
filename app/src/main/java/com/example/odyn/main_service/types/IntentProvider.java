@@ -25,6 +25,8 @@ public class IntentProvider {
 
 	/**
 	 * Jest to metoda, która dla każdej ikony dotarcza powoiązaną z nią akcję.
+	 * @param context Kontekst
+	 * @param iconType Typ ikony
 	 */
 	public static Intent iconClicked(Context context, IconType iconType) {
 		Class<?> actionReciever = MainService.class;

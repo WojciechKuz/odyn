@@ -27,6 +27,9 @@ import com.google.android.material.switchmaterial.SwitchMaterial;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * Jest to aktywność odpowiadająca za obsługę panelu aplikacji.
+ */
 public class Settings extends AppCompatActivity {
     private SwitchMaterial switch1;
     private SwitchMaterial switch2;
@@ -45,7 +48,9 @@ public class Settings extends AppCompatActivity {
     private SwitchMaterial[] mSwitch;
     private Spinner[] spinners;
 
-
+    /**
+     * Jest to metoda tworząca widok ustawień aplikacji.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,7 +69,9 @@ public class Settings extends AppCompatActivity {
     }
 
 
-
+    /**
+     * Jest to metoda odpowiedzialna za znajdowanie elementów UI w XML.
+     */
     private void findUIElements() {
         switch1 = findViewById(R.id.switch1);
         switch2 = findViewById(R.id.switch2);
@@ -80,6 +87,10 @@ public class Settings extends AppCompatActivity {
         mSwitch = new SwitchMaterial[] {null, switch1, switch2, switch3, switch4, switch5, switch6};
         spinners = new Spinner[] {null, spinner1, spinner2, spinner3, spinner4, spinner5};
     }
+
+    /**
+     * Jest to metoda odpowiedzialna za ustawienie wartości przełączników.
+     */
     private void setSwitches() {
         // Ustawienie wartości przełączników
         String[] sw = SettingNames.switches;
@@ -92,6 +103,10 @@ public class Settings extends AppCompatActivity {
             }
         }
     }
+
+    /**
+     * Jest to metoda odpowiedzialna za ustawienie opcji spinnerów.
+     */
     private void initSpinners() {
         // Ustawienie opcji spinnera
         //int spinnerTypeCode = android.R.layout.simple_spinner_dropdown_item;
@@ -111,6 +126,10 @@ public class Settings extends AppCompatActivity {
         spinner5.setAdapter(adapter5);
 
     }
+
+    /**
+     * Jest to metoda odpowiedzialna za dodanie obsługi zdarzeń dla przełączników.
+     */
     private void setSwitchListeners() {
         // Dodanie obsługi zdarzeń dla przełączników
         for(int i = 1; i < mSwitch.length; i++) {
@@ -129,7 +148,9 @@ public class Settings extends AppCompatActivity {
         });
     }
 
-
+    /**
+     * Jest to metoda odpowiedzialna za dodanie obsługi zdarzeń dla spinnerów.
+     */
     private void setSpinnerListeners() {
         for (int i = 1; i < spinners.length; i++) {
             spinners[i].setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -147,7 +168,9 @@ public class Settings extends AppCompatActivity {
     }
 
 
-
+    /**
+     * Jest to metoda odpowiedzialna za dodanie obsługi zdarzeń dla konkretnego przełącznika.
+     */
     private void switchListener(CompoundButton buttonView, boolean isChecked) {
         for(int i = 1; i < mSwitch.length; i++) {
             if(buttonView == mSwitch[i]) {
@@ -164,14 +187,18 @@ public class Settings extends AppCompatActivity {
     }
 
 
-
+    /**
+     * Jest to metoda wywoływana po zatrzymaniu aplikacji.
+     */
     @Override
     protected void onPause() {
         super.onPause();
         saveSettingsToFile();
     }
 
-
+    /**
+     * Jest to metoda zapisująca ustawienia do pliku.
+     */
     private void saveSettingsToFile() {
         // w zasadzie, to teżź zbędne, opcje zapisują się przy przełączaniu
         try {
@@ -193,7 +220,9 @@ public class Settings extends AppCompatActivity {
     }
 
 
-
+    /**
+     * Jest to metoda uruchamiająca ustawienia z pliku.
+     */
     private void loadSettingsFromFile() {
         try {
             SettingsProvider sprov = new SettingsProvider();
@@ -214,6 +243,10 @@ public class Settings extends AppCompatActivity {
         }
     }
 
+    /**
+     * Jest to metoda wywoływana przez Android, gdy aktywność jest niszczona.
+     * Zamyka wątki, Usuwa referencje na siebie.
+     */
     @Override
     protected void onDestroy() {
         super.onDestroy();

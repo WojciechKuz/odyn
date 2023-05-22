@@ -16,6 +16,7 @@ import com.example.odyn.R;
 public class IconProvider {
 	/**
 	 * Jest to metoda uzyskująca ID ikony.
+	 * @param it Typ ikony
 	 */
 	public static int getIconId(IconType it) {
 		return getIconId(it, false);
@@ -23,6 +24,8 @@ public class IconProvider {
 	// zwróci id ikony, drugi argument: false - nasze ikony, true - domyślne ikony android "material design"
 	/**
 	 * Jest to metoda uzyskująca ID ikony, która sprawdza dodatkowo czy ikona nie jest domyślną ikoną Androida.
+	 * @param it Typ ikony
+	 * @param material Ikona domyślna z Androida
 	 */
 	public static int getIconId(IconType it, boolean material) {
 		if(material) {
@@ -45,6 +48,7 @@ public class IconProvider {
 	// użyj domyślnych ikon androida
 	/**
 	 * Jest to metoda która pozwala na użycie domyślnych ikon Androida.
+	 * @param it Typ ikony
 	 */
 	private static int resIdMaterial(IconType it) {
 		switch(it) {

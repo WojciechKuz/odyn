@@ -85,6 +85,7 @@ public class NotificationCreator {
 	// ustaw akcje dostępne pod przyciskami powiadomienia
 	/**
 	 Jest to metoda służąca do uzyskiwania akcji pod przyciskami powiadomienia.
+	 @param iconType Typ ikony
 	 */
 	private Notification.Action getAction(IconType iconType) {
 		Notification.Action.Builder builder = new Notification.Action.Builder(
@@ -96,6 +97,11 @@ public class NotificationCreator {
 
 		return builder.build();
 	}
+
+	/**
+	 Jest to metoda służąca do tworzenia pending intentów, jest to intent nie wykonujący się od razu, tylko w chwili naciśnięcia przycisku w powiadomieniu.
+	 @param type Typ ikony
+	 */
 	private PendingIntent pendingIntentProvider(IconType type) {
 		Intent intent = IntentProvider.iconClicked(context, type);    // Tak, MainService wysyła do siebie te intenty futureTODO
 		if(intent == null)
@@ -103,6 +109,9 @@ public class NotificationCreator {
 		return PendingIntent.getService(context, 7, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 	}
 
+	/**
+	 Jest to metoda służąca do tworzenia kanału powiadomień.
+	 */
 	@RequiresApi(api = Build.VERSION_CODES.O)
 	private String setChannel() {
 		String channelid = "CHANNEL1";
