@@ -1,0 +1,332 @@
+/*
+    BSD 3-Clause License
+    Copyright (c) Wojciech Kuźbiński <wojkuzb@mat.umk.pl>, Jakub Orłowski <orljak@mat.umk.pl>, 2023
+
+    See https://aleks-2.mat.umk.pl/pz2022/zesp10/#/project-info for see license text.
+*/
+
+package com.example.odyn.cam;
+
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.SurfaceTexture;
+import android.hardware.camera2.CameraAccessException;
+import android.hardware.camera2.CameraCharacteristics;
+import android.hardware.camera2.CameraManager;
+import android.hardware.camera2.params.StreamConfigurationMap;
+import android.media.Image;
+import android.util.Log;
+import android.util.Size;
+import android.widget.Toast;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.camera.core.Camera;
+import androidx.camera.core.CameraSelector;
+import androidx.camera.core.ImageCapture;
+import androidx.camera.core.ImageCaptureException;
+import androidx.camera.core.ImageProxy;
+import androidx.camera.core.Preview;
+import androidx.camera.core.VideoCapture;
+import androidx.camera.lifecycle.ProcessCameraProvider;
+import androidx.camera.view.PreviewView;
+import androidx.core.content.ContextCompat;
+import androidx.lifecycle.LifecycleOwner;
+import com.example.odyn.FileHandler;
+import com.example.odyn.R;
+import com.google.common.util.concurrent.ListenableFuture;
+import java.io.File;
+import java.nio.ByteBuffer;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.ExecutionException;
+
+/**
+ * Jest to klasa odpowiadająca za dostęp do kamery.
+ */
+@SuppressWarnings("ALL")
+public class CamAccess {
+    private ImageCapture imageCapture;
+    private VideoCapture videoCapture;
+
+    private GetCamInterface doItLaterIntf = null; // jeśli trzeba zaczekać na otrzymanie CamInfo()
+    protected Activity main; // póki co spełnia dwie role: wątek (Context) i aktywność (wyświetlanie), później warto rozważyć rozdzielenie
+    // korzysta z tego też klasa Cam (dziedziczy)
+    /* Activity używane do:
+        dostarczenia FileHandler'owi kontekstu x2
+        bind widoku PreviewView
+        otrzymanie CameraProvider
+        otrzymanie wykonawcy x3
+        menedżera okien
+        otrzymanie LiveCycleOwner
+        otrzymanie CameraManager
+        utworzenie tosta
+    */
+    // konstruktor. PreviewView służy do wyświetlenia w nim obrazu z kamery
+    public CamAccess(Activity main) {
+        this.main = main;
+        PreviewView prView2 = main.findViewById(R.id.previewView);
+        cameraProviderSetup(prView2);
+        Log.v("CamAccess", ">>> CamAccess constructor");
+
+        //
+        if(doItLaterIntf != null) {
+            doItLaterIntf.getCamInfoLater(getCamInfo());
+        }
+    }
+    // te dwie poniższe funkcje służą do przygotowania kamery do przekazywania obrazu do <PreviewView> i robienia zdjęć
+    /**
+     * Jest to metoda służąca do przygotowania kamery do przekazywania obrazu.
+     */
+    @SuppressLint("RestrictedApi")
+    private void cameraProviderSetup(PreviewView prView) {
+        ListenableFuture<ProcessCameraProvider> cameraProviderFuture = ProcessCameraProvider.getInstance(main);
+        cameraProviderFuture.addListener(() -> {
+            try {
+                ProcessCameraProvider cameraProvider = cameraProviderFuture.get();
+                bindPreview(cameraProvider, prView);
+            } catch (ExecutionException | InterruptedException e) {
+                // gdzie przechwycenie ???
+            }
+        }, ContextCompat.getMainExecutor(main));
+    }
+
+    /**
+     * Jest to metoda służąca do obsługi robienia zdjęć.
+     */
+    @SuppressLint("RestrictedApi")
+    private void bindPreview(ProcessCameraProvider cameraProvider, PreviewView prView) {
+
+        CameraSelector cameraSelector = new CameraSelector.Builder()
+                .requireLensFacing(CameraSelector.LENS_FACING_BACK)
+                .build();
+
+        // Set up the preview use case
+        Preview preview = new Preview.Builder().build();
+        preview.setSurfaceProvider(prView.getSurfaceProvider());
+        ImageCapture.Builder builder = new ImageCapture.Builder();
+
+        imageCapture = builder
+                .setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY)
+                .setTargetRotation(main.getWindowManager().getDefaultDisplay().getRotation())
+                .build();
+
+        /* TODO settings nagrywanie z i bez dzwieku */
+        //if(dzwiek) {
+
+    VideoCapture.Builder builder_vid = new VideoCapture.Builder();
+    videoCapture = builder_vid
+            .setVideoFrameRate(60)
+            .setAudioChannelCount(1)
+            .setAudioBitRate(64000)
+            .build();
+//}else {
+    VideoCapture.Builder builder_vid_noaudio = new VideoCapture.Builder();
+    videoCapture = builder_vid_noaudio
+            .setVideoFrameRate(60)
+            .setAudioChannelCount(0)
+            .setAudioBitRate(64000)
+            .build();
+//}
+        // użyj kamery do wyświetlania w mainActivity (preview) i do robienia zdjęć (imageCapture)
+        Camera camera = cameraProvider.bindToLifecycle((LifecycleOwner) main, cameraSelector, preview, imageCapture, videoCapture);
+    }
+    // robi zdjęcie
+    /**
+     * Jest to metoda odpowiadająca za funkcję obsługi robienia zdjęcia.
+     */
+    public void takePicture(File file) {
+        // Set up the output file and capture the image
+        ImageCapture.OutputFileOptions outputFileOptions = new ImageCapture.OutputFileOptions.Builder(file).build();
+        imageCapture.takePicture(outputFileOptions, ContextCompat.getMainExecutor(main), new ImageCapture.OnImageSavedCallback() {
+
+            /**
+             * Jest to metoda służąca do informacji o zapisie zdjęcia.
+             */
+            @Override
+            public void onImageSaved(@NonNull ImageCapture.OutputFileResults outputFileResults) {
+                // The image has been saved to the file
+                Log.v("CamAccess", "---------ZapisywanieIMG---------");
+            }
+
+            /**
+             * Jest to metoda służąca do informacji o wystąpionym błędzie przy zapisie zdjęcia.
+             */
+            @Override
+            public void onError(@NonNull ImageCaptureException exception) {
+                // Handle any errors here
+            }
+        });
+    }
+
+    public class CamInfoProvider {
+        private float FOV = 0;
+        private float width = 0, height = 0;
+        private Bitmap BMP = null;
+        private Bitmap imageProxyToBitmap(ImageProxy imageProxy) {
+            Image image = imageProxy.getImage();
+            ByteBuffer buffer = image.getPlanes()[0].getBuffer();
+            byte[] bytes = new byte[buffer.remaining()];
+            buffer.get(bytes);
+            return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+        }
+        private void takePictureBMP(){
+            imageCapture.takePicture(ContextCompat.getMainExecutor(main), new ImageCapture.OnImageCapturedCallback() {
+                /**
+                 * Jest to metoda odpowiedzialna za obsługę otrzymania bitmapy.
+                 */
+                @Override
+                public void onCaptureSuccess(@NonNull ImageProxy image) {
+                    // Tutaj otrzymujesz obraz z kamery, możesz go przetwarzać lub zapisać w pamięci
+                    // Uwaga: Ta metoda jest wywoływana na innym wątku, więc musisz obsłużyć go odpowiednio
+                    super.onCaptureSuccess(image);
+                    BMP = imageProxyToBitmap(image);
+                    // Zapisz obraz w pamięci podręcznej
+                }
+
+                /**
+                 * Jest to metoda odpowiedzialna za obsługę błędu przy tworzeniu bitmapy.
+                 */
+                @Override
+                public void onError(@NonNull ImageCaptureException exception) {
+                    // Obsłuż błędy związane z wykonywaniem zdjęcia
+                    super.onError(exception);
+                }
+            });
+        }
+        private float calculateFOV(float focalLength, float aperture) {
+            float horizontalFOV = (float) (2 * Math.atan2(aperture, (2 * focalLength)));
+            float verticalFOV = (float) (2 * Math.atan2(aperture, (2 * focalLength)));
+            return (float) Math.toDegrees(Math.sqrt(Math.pow(horizontalFOV, 2) + Math.pow(verticalFOV, 2)));
+        }
+        private void getInfo() { // ustawia FOV, width i height
+            try {
+                CameraManager cameraManager = (CameraManager) main.getSystemService(Context.CAMERA_SERVICE);
+                String cameraId = cameraManager.getCameraIdList()[1]; // wybierz pierwszą kamerę
+                CameraCharacteristics characteristics = cameraManager.getCameraCharacteristics(cameraId);
+                // uzyskanie wartości FOV
+                float[] focalLengths = characteristics.get(CameraCharacteristics.LENS_INFO_AVAILABLE_FOCAL_LENGTHS);
+                float[] apertures = characteristics.get(CameraCharacteristics.LENS_INFO_AVAILABLE_APERTURES);
+                FOV = calculateFOV(focalLengths[0], apertures[0]);
+
+                // uzyskanie wartości rozdzielczości
+                StreamConfigurationMap map = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
+                Size[] sizes = map.getOutputSizes(SurfaceTexture.class);
+                Size resolution = sizes[0];
+                width = resolution.getWidth();
+                height = resolution.getHeight();
+
+            } catch (CameraAccessException e) {
+                e.printStackTrace();
+                Toast.makeText(main, "Wystąpił błąd podczas korzystania z kamery", Toast.LENGTH_LONG).show();
+                Log.e("CamAccess", ">>> Wystąpił błąd podczas korzystania z kamery");
+            }
+        }
+
+        public CamInfo getCamInfo() {
+            if(FOV == 0 || width == 0 || height == 0) {
+                getInfo();
+            }
+            takePictureBMP();
+            return new CamInfo(FOV, width, height, BMP);
+        }
+    }
+
+    /**
+     * Otrzymaj CamInfo, obiekt przechowujący bitmapę, FOV,szerokość i wysokość obrazu.
+     * Przed wywołaniem getCamInfo() należy sprawdzić za pomocą canIgetCamInfo(), czy można to wywołać,
+     * ponieważ składowa imageCapture, z której te metody korzystają, może jeszcze nie być zainicjalizowana.
+     *
+     * Problem z wywołaniem tej metody może nastąpić na początku programu, zaraz po konstruktorze Cam albo CamAccess.
+     * Jeśli nie da się uruchomić, to można poczekać chwilę, albo skorzystać z setImgCaptureCreatedListener().
+     *
+     * // Sprawdzenie:
+     * if(cam.canIgetCamInfo()) {
+     *     cam.getCamInfo();
+     * }
+     *
+     */
+    public CamInfo getCamInfo() {
+        // może się zdarzyć, że imageCapture (getCamInfo() z tego korzysta) nie jest jeszcze zainicjalizowane.
+        if(imageCapture != null) {
+            return new CamInfoProvider().getCamInfo();
+        }
+        return null;
+    }
+
+    /**
+     * Sprawdź, czy można wykonać getCamInfo()
+     */
+    public boolean canIgetCamInfo() {
+        return imageCapture != null;
+    }
+    /**
+     * Jeśli nie można jeszcze wykonać getCamInfo() można tu podać dowolną metodę zwraca (void, przyjmuje CamInfo),
+     * która ma się wykonać, po tym jak będzie już możliwe wykonanie getCamInfo().
+     */
+    public void setImgCaptureCreatedListener(GetCamInterface interf) {
+        doItLaterIntf = interf;
+    }
+
+    Timer timer = new Timer();
+
+    /**
+     * Jest to metoda odpowiadająca za funkcję obsługi nagrywania video.
+     */
+    @SuppressLint({"RestrictedApi", "MissingPermission"})
+    public void takeVideo(boolean opcja) {
+        if(opcja) {
+            TimerTask task = new TimerTask() {
+                int count = 0;
+
+                /**
+                 * Jest to metoda odpowiadająca za uruchamianie procesu nagrywania.
+                 */
+                public void run() {
+                    if(count == 0)
+                    {
+                        File file = new FileHandler(main).createVideo("mp4");
+                        VideoCapture.OutputFileOptions outputFileOptions = new VideoCapture.OutputFileOptions.Builder(file).build();
+                        videoCapture.startRecording(outputFileOptions, ContextCompat.getMainExecutor(main), new VideoCapture.OnVideoSavedCallback() {
+
+                            /**
+                             * Jest to metoda służąca do informacji o zapisie video.
+                             */
+                            @Override
+                            public void onVideoSaved(@NonNull VideoCapture.OutputFileResults outputFileResults) {
+                                System.out.println("----------ZapisywanieVID----------");
+                                Log.i("CamAccess", ">>> Zapisano nagranie");
+                            }
+
+                            /**
+                             * Jest to metoda służąca do informacji o wystąpionym błędzie przy zapisie video.
+                             */
+                            @Override
+                            public void onError(int videoCaptureError, @NonNull String message, @Nullable Throwable cause) {
+                                System.out.println("----------GownoVID----------");
+                                Log.e("CamAccess", ">>> Nie udało się zapisać nagrania");
+                            }
+                        });
+                    }
+                    count++;
+                    /* TODO settings - dlugosc nagrania */
+                    //System.out.println("Czas: " + count + " sekund");
+                    //10+2 -> 2 to opoznienie aby nagrac film 10 sekundowy
+                    if (count >= 10+2) {
+                        videoCapture.stopRecording();
+                        count = 0;
+                    }
+                }
+            };
+            timer.schedule(task, 0, 1000);
+        }
+        else
+        {
+             timer.cancel();
+             videoCapture.stopRecording();
+        }
+    } // end of takeVideo()
+
+}
