@@ -30,7 +30,7 @@ public class ServiceConnector {
 
 	/**
 	 Jest to metoda służąca do uzyskiwania aktywności.
-	 @param activity Aktywność
+	 @return activity Aktywność
 	 */
 	public static Activity getActivity() {
 		return activity;
