@@ -34,34 +34,47 @@ public class NotificationCreator {
 	private Context context;
 	public NotificationCreator(Context context) {
 		this.context = context;
+		emerg = getAction(IconType.emergency);
+		recrd = getAction(IconType.recording);
+		photo = getAction(IconType.photo);
+		back = getAction(IconType.back_to_app);
 	}
 
 	// użyj, aby utworzyć powiadomienie
 	/**
 	 Jest to metoda służąca do tworzenia powiadomień.
 	 */
+	private Notification.Action emerg;
+	private Notification.Action recrd;
+	private Notification.Action photo;
+	private Notification.Action back;
+
 	public Notification create() {
 		Notification.Builder builder = new Notification.Builder(context);
 		builder
-				.setSmallIcon(android.R.drawable.sym_def_app_icon)
+				.setSmallIcon(R.drawable.cam_icon)
 				//.setLargeIcon(bitmap) // TODO, potrzebna ikonka
 				.setContentTitle(context.getString(R.string.notif_title))
 				.setContentText(context.getString(R.string.notif_text))
 				.setPriority(Notification.PRIORITY_DEFAULT)
-				.setAutoCancel(false);
-				//.setOngoing(true)
+				.setAutoCancel(false)
+				.setOngoing(false);
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 			builder.setChannelId(setChannel());
 		}
 
-		// TODO ikonki akcji
-		builder.addAction(getAction(IconType.emergency));
-		builder.addAction(getAction(IconType.recording));
-		builder.addAction(getAction(IconType.photo));
-		builder.addAction(getAction(IconType.back_to_app));
+		// ikonki akcji
+		builder.addAction(emerg);
+		builder.addAction(recrd);
+		builder.addAction(photo);
+		builder.addAction(back); // FIXME wydaje się, że nadpisuje inne ikony
 
-		builder.setContentIntent(contentIntent()); // naciśniesz > otworzy się apka
+		// zamknie się powiadomienie, to apka też się zamknie
+		builder.setDeleteIntent(pendingIntentProvider(IconType.close));
+
+		// naciśniesz > otworzy się apka. czy przyciski wliczone jako content?
+		//builder.setContentIntent(pendingIntentProvider(IconType.back_to_app));
 		/*  ✔ utworzone
 		 *  ✔ ikonka (domyślna)
 		 *  ✔ tekst
@@ -70,16 +83,6 @@ public class NotificationCreator {
 		 *  ✔ nagrywanie
 		 * */
 		return builder.build();
-	}
-
-	// akcja po naciśnięciu tła powiadomienia - powrót do aplikacji
-	/**
-	 Jest to metoda służąca do powrotu do aplikacji po naciśnięciu tła powiadomienia.
-	 */
-	private PendingIntent contentIntent() {
-		// po naciśnięciu tła powiadomienia otworzy się ekran główny
-		Intent openApp = new Intent(context, MainScreen.class);
-		return PendingIntent.getActivity(context, 0, openApp, PendingIntent.FLAG_UPDATE_CURRENT);
 	}
 
 	// ustaw akcje dostępne pod przyciskami powiadomienia
@@ -103,6 +106,7 @@ public class NotificationCreator {
 	 @param type Typ ikony
 	 */
 	private PendingIntent pendingIntentProvider(IconType type) {
+		Log.d("NotificationCreator", ">>> Tworzę akcję dla " + type);
 		Intent intent = IntentProvider.iconClicked(context, type);    // Tak, MainService wysyła do siebie te intenty futureTODO
 		if(intent == null)
 			Log.e("NotificationCreator", ">>> ERROR, intent nie istnieje, typ ikony: "+ type);

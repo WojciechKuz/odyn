@@ -9,6 +9,7 @@ package com.example.odyn.main_service.types;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import com.example.odyn.cam.ActionType;
 import com.example.odyn.cam.Cam;
@@ -24,7 +25,7 @@ public class IntentProvider {
 	public static final String extraName = "iconType";
 
 	/**
-	 * Jest to metoda, która dla każdej ikony dotarcza powoiązaną z nią akcję.
+	 * Jest to metoda, która dla każdej ikony dotarcza powiązaną z nią akcję.
 	 * @param context Kontekst
 	 * @param iconType Typ ikony
 	 */
@@ -36,20 +37,18 @@ public class IntentProvider {
 			case recording:
 			case emergency:
 			case back_to_app:
+				Log.d("IntentProvider", ">>> przekazano typ ikony " + iconType);
 				intent = new Intent(context, actionReciever);
 				intent.putExtra(extraName, iconType); // enum casted to Serializable
 				return intent;
 			case close:
 				// close app
+				Log.d("IntentProvider", ">>> przekazano typ close");
 				intent = new Intent(Intent.ACTION_MAIN);
 				intent.addCategory(Intent.CATEGORY_HOME);
 				return intent;
-			case menu:
-				// start menuActivity ???
-				// TODO
-
-				return null; // temporary
-			default:
+			default:	// default oraz menu
+				Log.w("IntentProvider", ">>> intent niezdefiniowany dla "+ iconType);
 				return null; // zabezpieczenie
 		}
 	}
