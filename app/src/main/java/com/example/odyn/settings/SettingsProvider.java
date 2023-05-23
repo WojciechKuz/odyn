@@ -12,8 +12,6 @@ import static android.content.Context.MODE_PRIVATE;
 import android.content.Context;
 import android.util.Log;
 
-import androidx.appcompat.app.AppCompatDelegate;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -91,15 +89,14 @@ public class SettingsProvider {
 
 	/**
 	 * Jest to metoda zapisująca początkowe wartości w ustawieniach przy pierwszym uruchomieniu aplikacji.
-	 * @param context Kontekst
 	 */
 	private void firstWriteSetting() {
 		try {
 			settings = new JSONObject();
 			for (int i = 1; i < SettingNames.switches.length; i++)
-				settings.put(SettingNames.switches[i], false);
+				settings.put(SettingNames.switches[i], SettingOptions.defaultSwitches[i]);
 			for (int i = 1; i < SettingNames.spinners.length; i++)
-				settings.put(SettingNames.spinners[i], SettingOptions.optionsOrder[i]);
+				settings.put(SettingNames.spinners[i], SettingOptions.defaultSpinners[i]);
 		} catch (JSONException e) {
 			Log.e("SettingsProvider", ">>> Nie udało się wqpisać początkowych wartości");
 		}

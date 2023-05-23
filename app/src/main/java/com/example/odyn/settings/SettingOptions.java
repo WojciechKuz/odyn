@@ -23,4 +23,7 @@ public class SettingOptions {
 	// te nie będą w Layou'cie. Lista wartości wykorzystywana przy logice ustawień
 	public static final int[] lengthValuesSeconds = {30, 60, 120, 180, 240, 300};  // musi odpowiadać wartościom w LengthRecords tylko że w sekundach
 	public static final int[] sizeValuesMB = {512, 1024, 2048, 4096, 8192, 12288, 16384, 32768, 65536, 131072}; // musi odpowiadać wartościom w SizeVideo tylko że w MegaBajtach
+
+	public static final boolean[] defaultSwitches = {false, true, true, true, true, true, true}; // indeksy domyślnych opcji, pierwszej nie ma
+	public static final int[] defaultSpinners = {-1, 0, 0, 3, 3, 3}; // indeksy domyślnych opcji, pierwszej nie ma
 }

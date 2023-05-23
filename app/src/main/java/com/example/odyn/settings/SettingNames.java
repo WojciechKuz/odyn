@@ -12,7 +12,7 @@ package com.example.odyn.settings;
  */
 public class SettingNames {
 	public static final String[] switches = {
-			"no 0", "switch1", "switch2", "switch3","switch4", "switch5", "switch6"
+			"no 0", "AI", "dispLoc", "saveLoc", "dispSpeed", "saveSpeed", "recAudio"
 	};
 	public static final String[] spinners = {
 			"no 0", "storage_option", "Left_Right", "Length_record", "Size_video", "Size_emergency"
