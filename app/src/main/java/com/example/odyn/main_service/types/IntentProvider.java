@@ -37,13 +37,13 @@ public class IntentProvider {
 			case recording:
 			case emergency:
 			case back_to_app:
-				Log.d("IntentProvider", ">>> przekazano typ ikony " + iconType);
+				//Log.d("IntentProvider", ">>> przekazano typ ikony " + iconType);
 				intent = new Intent(context, actionReciever);
 				intent.putExtra(extraName, iconType); // enum casted to Serializable
 				return intent;
 			case close:
 				// close app
-				Log.d("IntentProvider", ">>> przekazano typ close");
+				//Log.d("IntentProvider", ">>> przekazano typ close");
 				intent = new Intent(Intent.ACTION_MAIN);
 				intent.addCategory(Intent.CATEGORY_HOME);
 				return intent;

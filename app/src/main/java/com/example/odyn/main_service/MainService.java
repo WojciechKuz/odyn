@@ -131,7 +131,6 @@ public class MainService extends Service {
 			case photo:
 			case recording:
 			case emergency:
-				Log.d("MainService", ">>> naciśnięto jeden z przycisków ");
 				cam.camAction(it);
 				break;
 			case close:

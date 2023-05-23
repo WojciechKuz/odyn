@@ -37,7 +37,7 @@ public class NotificationCreator {
 		emerg = getAction(IconType.emergency);
 		recrd = getAction(IconType.recording);
 		photo = getAction(IconType.photo);
-		back = getAction(IconType.back_to_app);
+		//back = getAction(IconType.back_to_app);
 	}
 
 	// użyj, aby utworzyć powiadomienie
@@ -49,6 +49,8 @@ public class NotificationCreator {
 	private Notification.Action photo;
 	private Notification.Action back;
 
+	private static int code = 3;
+
 	public Notification create() {
 		Notification.Builder builder = new Notification.Builder(context);
 		builder
@@ -57,6 +59,7 @@ public class NotificationCreator {
 				.setContentTitle(context.getString(R.string.notif_title))
 				.setContentText(context.getString(R.string.notif_text))
 				.setPriority(Notification.PRIORITY_DEFAULT)
+				.setVisibility(Notification.VISIBILITY_PUBLIC)
 				.setAutoCancel(false)
 				.setOngoing(false);
 
@@ -91,6 +94,7 @@ public class NotificationCreator {
 	 @param iconType Typ ikony
 	 */
 	private Notification.Action getAction(IconType iconType) {
+		//Log.d("NotificationCreator", ">>> Tworzę akcję dla " + iconType);
 		Notification.Action.Builder builder = new Notification.Action.Builder(
 				Icon.createWithResource(context, IconProvider.getIconId(iconType, true)),
 				iconType.toString(),
@@ -106,11 +110,11 @@ public class NotificationCreator {
 	 @param type Typ ikony
 	 */
 	private PendingIntent pendingIntentProvider(IconType type) {
-		Log.d("NotificationCreator", ">>> Tworzę akcję dla " + type);
+		//Log.d("NotificationCreator", ">>> Tworzę PendingIntenta dla " + type);
 		Intent intent = IntentProvider.iconClicked(context, type);    // Tak, MainService wysyła do siebie te intenty futureTODO
 		if(intent == null)
 			Log.e("NotificationCreator", ">>> ERROR, intent nie istnieje, typ ikony: "+ type);
-		return PendingIntent.getService(context, 7, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+		return PendingIntent.getService(context, code++, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 	}
 
 	/**
@@ -119,7 +123,7 @@ public class NotificationCreator {
 	@RequiresApi(api = Build.VERSION_CODES.O)
 	private String setChannel() {
 		String channelid = "CHANNEL1";
-		NotificationChannel channel = new NotificationChannel(channelid, "notifChannel", NotificationManager.IMPORTANCE_DEFAULT);
+		NotificationChannel channel = new NotificationChannel(channelid, "Notification with buttons", NotificationManager.IMPORTANCE_DEFAULT);
 		NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
 		notificationManager.createNotificationChannel(channel);
 		return channelid;
