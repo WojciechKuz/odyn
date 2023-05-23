@@ -17,6 +17,7 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -120,6 +121,9 @@ public class SettingsProvider {
 
 			// akcje związane z ustawieniami, np. włącz ciemny motyw.
 			//settingActions();
+		} catch(FileNotFoundException e) {
+			firstWriteSetting();
+			return;
 		} catch (IOException | JSONException e) {
 			e.printStackTrace();
 		}
