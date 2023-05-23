@@ -16,6 +16,7 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 
 import com.example.odyn.main_service.types.IntentProvider;
+import com.example.odyn.main_service.types.ServCounter;
 import com.example.odyn.settings.SettingsProvider;
 import com.example.odyn.activities.MainScreen;
 import com.example.odyn.cam.Cam;
@@ -134,20 +135,27 @@ public class MainService extends Service {
 				cam.camAction(it);
 				break;
 			case close:
-				// todo - zamknij apkę
+				// zamknij apkę
+				Log.d("MainService", ">>> zamykam aplikację");
+				startService(IntentProvider.iconClicked(this, IconType.close));
 				break;
 			case menu:
 				// nottodo: MainScreen będzie otwierać menu
 				break;
 			case back_to_app:
+				Log.d("MainService", ">>> powrót do aplikacji");
 				startMainScreen(); // ? należy otworzyć MainScreen, a to tworzy. Można tak???
 				break;
 			case display_notif:
 				// nieaktywne, Service wersja 1
+				Log.wtf("MainService", ">>> What, display_notif? Powiadomienie widoczne cały czas");
 				break;
 			case hide_notif:
 				// nieaktywne, Service wersja 1
+				Log.wtf("MainService", ">>> What, hide_notif? Powiadomienie widoczne cały czas");
 				break;
+			default:
+				Log.wtf("MainService", ">>> What? ikonka "+ it);
 		}
 	}
 
@@ -174,6 +182,7 @@ public class MainService extends Service {
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		ServCounter.serviceStarted();
 		Log.v("MainService", ">>> MainService created");
 	}
 
@@ -183,6 +192,7 @@ public class MainService extends Service {
 	@Override
 	public void onDestroy() {
 		Log.v("MainService", ">>> MainService destroyed");
+		ServCounter.serviceStopped();
 		super.onDestroy();
 	}
 
