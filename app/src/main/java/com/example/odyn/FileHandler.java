@@ -46,9 +46,9 @@ public class FileHandler {
         context = mainActivity;
         //dir = context.getFilesDir().getAbsolutePath();
         dir = context.getExternalMediaDirs()[0].getAbsolutePath();
-        Log.e("FileHandler", ">>> Dir: " + dir);
+        Log.d("FileHandler", ">>> Dir: " + dir);
         dir = removeSlash(dir) + '/' + "Odyn";
-       Log.e("FileHandler", ">>> dir removSlash: " + dir);
+        Log.d("FileHandler", ">>> dir removSlash: " + dir);
         createDirIfNotExists(getDirPath(pictSubdir));
         createDirIfNotExists(getDirPath(vidSubdir));
         createDirIfNotExists(getDirPath(emergSubdir));
@@ -108,7 +108,7 @@ public class FileHandler {
             Log.d("FileHandler", ">>> Aktualna wartość limitu filów: " + sizeInMB);
             return sizeInBytes;
         } catch (JSONException e) {
-            e.printStackTrace();
+            Log.e("FileHandler", ">>> ERROR, "+ e);
             return 0;
         }
     }
