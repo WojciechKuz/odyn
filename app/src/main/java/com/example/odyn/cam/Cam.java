@@ -64,7 +64,7 @@ public class Cam extends CamAccess {
 	public void camAction(IconType iconType) {
 		switch(iconType) {
 			case photo:
-				photo(1);
+				photo();
 				break;
 			case recording:
 				record();
@@ -80,11 +80,10 @@ public class Cam extends CamAccess {
 
 	/**
 	 * Jest to metoda służąca do tworzenia zdjęcia.
-	 * @param option Opcja
 	 */
-	private void photo(int option) {
+	private void photo() {
 			File file = new FileHandler(main).createPicture();
-			takePicture(option);
+			takePicture(file);
 	}
 
 	/**
