@@ -38,6 +38,7 @@ public class FileHandler {
     private Context context;
 
     private SettingsProvider settingsProvider;
+    private boolean isEmergency = false;
 
 
     public FileHandler(Context mainActivity) {
@@ -168,6 +169,33 @@ public class FileHandler {
                     Log.d("FileHandler", ">>> Usunięto plik: " + videoFiles[i].getName());
                 } else {
                     Log.e("FileHandler", ">>> Nie udało się usunąć pliku: " + videoFiles[i].getName());
+                }
+            }
+        }
+    }
+
+    /**
+     * Jest to metoda służąca do przenoszenia nagrań awaryjnych z katalogu "videos" do katalogu "emergency_recordings".
+     */
+    public void moveEmergencyRecordings() {
+        File videoDir = new File(getDirPath(vidSubdir));
+        File[] videoFiles = videoDir.listFiles();
+
+        if (videoFiles != null) {
+            File emergDir = new File(getDirPath(emergSubdir));
+            createDirIfNotExists(emergDir.getAbsolutePath()); // Upewnij się, że katalog "emergency_recordings" istnieje
+
+            for (File file : videoFiles) {
+                if (file.isFile()) {
+                    String fileName = file.getName();
+                    String destinationPath = getDirPath(emergSubdir) + File.separator + fileName;
+
+                    File destinationFile = new File(destinationPath);
+                    if (file.renameTo(destinationFile)) {
+                        Log.d("FileHandler", ">>> Przeniesiono plik do awaryjnych: " + fileName);
+                    } else {
+                        Log.e("FileHandler", ">>> Nie udało się przenieść pliku do awaryjnych: " + fileName);
+                    }
                 }
             }
         }

@@ -1,6 +1,6 @@
 /*
     BSD 3-Clause License
-    Copyright (c) Wojciech Kuźbiński <wojkuzb@mat.umk.pl>, 2023
+    Copyright (c) Wojciech Kuźbiński <wojkuzb@mat.umk.pl>, Viacheslav Kushinir <kushnir@mat.umk.pl>, 2023
 
     See https://aleks-2.mat.umk.pl/pz2022/zesp10/#/project-info for see license text.
 */
@@ -15,6 +15,9 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import com.example.odyn.gps.GPSThread;
+import com.example.odyn.gps.SRTWriter;
+import com.example.odyn.gps.TimeHandlerThread;
 import com.example.odyn.main_service.types.IntentProvider;
 import com.example.odyn.main_service.types.ServCounter;
 import com.example.odyn.settings.SettingsProvider;
@@ -32,6 +35,9 @@ import com.example.odyn.main_service.types.IconType;
 public class MainService extends Service {
 	private Notification notif;
 	private Cam cam; // dostęp do kamery
+
+	private GPSThread gpsThread;
+	private TimeHandlerThread timeHandlerThread;
 
 	// nagrywanie przeniesione tutaj. gdy potrzeba zdjęcia, MainScreen (Activity) może wołać tę klasę
 
@@ -85,8 +91,6 @@ public class MainService extends Service {
 		new SettingsProvider().loadSettings(this); // wczyta ustawienia
 
 		// KOLEJNOŚĆ TWORZENIA WERSJA 1
-
-		// TODO utwórz Notification
 
 		ServiceConnector.setOnClickHandle(this::buttonHandler);
 		ServiceConnector.setCamReceiver(this::receiveCam); // MainScreen dostarczy Cam
@@ -181,6 +185,10 @@ public class MainService extends Service {
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		gpsThread = new GPSThread(getApplicationContext());
+		gpsThread.start();
+		timeHandlerThread = new TimeHandlerThread();
+		timeHandlerThread.start();
 		ServCounter.serviceStarted();
 		Log.v("MainService", ">>> MainService created");
 	}
@@ -192,6 +200,8 @@ public class MainService extends Service {
 	public void onDestroy() {
 		Log.v("MainService", ">>> MainService destroyed");
 		ServCounter.serviceStopped();
+		gpsThread.stopGPS();
+		timeHandlerThread.stopTimer();
 		Log.d("MainService", ">>> onDestroy, ilość kamer: " + ServCounter.getCamCount());
 		super.onDestroy();
 	}

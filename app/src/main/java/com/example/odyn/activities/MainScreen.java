@@ -19,8 +19,11 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.SpannableString;
+import android.text.style.RelativeSizeSpan;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
@@ -32,23 +35,21 @@ import com.example.odyn.R;
 import com.example.odyn.cam.Cam;
 import com.example.odyn.cam.CamAccess;
 import com.example.odyn.cam.CamInfo;
-import com.example.odyn.gps.GPSThread;
-import com.example.odyn.gps.GPSValues;
-import com.example.odyn.gps.TextFieldChanger;
+import com.example.odyn.gps.DataHolder;
 import com.example.odyn.main_service.ServiceConnector;
 import com.example.odyn.main_service.types.IconType;
 import com.example.odyn.gps.SRTWriter;
 import com.example.odyn.gps.TimerThread;
 import com.example.odyn.main_service.types.ServCounter;
 import com.example.odyn.settings.SettingNames;
+import com.example.odyn.settings.SettingOptions;
 import com.example.odyn.settings.SettingsProvider;
-import com.google.android.material.switchmaterial.SwitchMaterial;
+import com.google.android.material.navigation.NavigationView;
 
 import org.json.JSONException;
 
-import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /*  Kolejność metod:
 onCreate
@@ -79,11 +80,8 @@ darkSideOfMenu
  */
 public class MainScreen extends AppCompatActivity {
 
-	private TimerThread timerThread;
-	private GPSThread gpsThread;
-	private SRTWriter srtWriter;
 	private Handler delayHandler = new Handler();
-
+	Timer gpsTimer = new Timer();
 	private boolean isEmergencyActive = false;
 	private boolean isVideoActive = false;
 
@@ -99,8 +97,20 @@ public class MainScreen extends AppCompatActivity {
 		Log.d("MainScreen", ">>> onCreate DrawerActivity");
 
 		setupMainScreen();
-		setupGPS();
 		setupVisibility();
+		gpsInfoUpdate();
+
+		NavigationView navigationView = findViewById(R.id.nav_view);
+		Menu menu = navigationView.getMenu();
+		for (int i = 0; i < menu.size(); i++) {
+			MenuItem menuItem = menu.getItem(i);
+			SpannableString spannableString = new SpannableString(menuItem.getTitle());
+			spannableString.setSpan(new RelativeSizeSpan(1.7f), 0, spannableString.length(), 0);
+			menuItem.setTitle(spannableString);
+		}
+
+		// domyślnie włącza nagrywanie od razu po wejściu do aplikacji
+		onClickRecord(null);
 	}
 
 	/**
@@ -133,6 +143,31 @@ public class MainScreen extends AppCompatActivity {
 	}
 
 	/**
+	 * Jest to metoda odpowiedzialna za aktualizację wartości GPS na ekranie
+	 */
+	private void gpsInfoUpdate() {
+		final TextView latitudeText = findViewById(R.id.latitudeText);
+		final TextView longitudeText = findViewById(R.id.longitudeText);
+		final TextView speedText = findViewById(R.id.speedText);
+		final TextView timeText = findViewById(R.id.timerText);
+		TimerTask task = new TimerTask() {
+			public void run() {
+				runOnUiThread(new Runnable() {
+					public void run() {
+						DataHolder dataHolder = DataHolder.getInstance();
+						latitudeText.setText(dataHolder.getLatitude());
+						longitudeText.setText(dataHolder.getLongitude());
+						speedText.setText(dataHolder.getSpeed());
+						timeText.setText(dataHolder.getTimer());
+						setupVisibility();
+					}
+				});
+			}
+		};
+		gpsTimer.schedule(task, 0, 1000);
+	}
+
+	/**
 	 * Jest to metoda odpowiadająca za ustawienie prawidłowego działania ekranu głównego.
 	 */
 	private void setupMainScreen() {
@@ -156,77 +191,6 @@ public class MainScreen extends AppCompatActivity {
 		findViewById(R.id.RecordButton).setOnClickListener(this::onClickRecord);
 		findViewById(R.id.EmergencyButton).setOnClickListener(this::onClickEmergency);
 	}
-
-	/**
-	 * Jest to metoda odpowiadająca za ustawienie i zainicjalizowanie działania GPS.
-	 */
-	// ustawia i inicjalizuje rzeczy związane z GPSem
-	private void setupGPS() {
-		timerThread = new TimerThread(this, this::changeTextField);
-		timerThread.start();
-
-		gpsThread = new GPSThread(this, this::changeTextField);
-		gpsThread.requestGPSPermissions(); // TODO check permissions in StartActivity instead
-		gpsThread.start();
-
-		File file = new FileHandler(this).createDataFile("srt");
-		srtWriter = new SRTWriter(this, this, file);
-		srtWriter.requestWritePermissions();
-		srtWriter.start();
-	}
-
-	/**
-	 * Jest to metoda odpowiadająca za dostarczanie informacji o lokalizacji i prędkości do zapisania.
-	 */
-	public Map<String, String> textProvider() {
-		TextView timerText = findViewById(R.id.timerText);
-		TextView counterText = findViewById(R.id.counterText);
-		TextView latitudeText = findViewById(R.id.latitudeText);
-		TextView longitudeText = findViewById(R.id.longitudeText);
-		TextView speedText = findViewById(R.id.speedText);
-		TextView srtText = findViewById(R.id.srtText);
-
-		Map<String, String> textMap = new HashMap<>();
-		textMap.put("counterText", counterText.getText().toString());
-		textMap.put("timerText", timerText.getText().toString());
-		textMap.put("latitudeText", latitudeText.getText().toString());
-		textMap.put("longitudeText", longitudeText.getText().toString());
-		textMap.put("speedText", speedText.getText().toString());
-		textMap.put("srtText", srtText.getText().toString());
-		return textMap;
-	}
-
-	/**
-	 * Jest to metoda odpowiadająca za wyświetlanie informacji o lokalizacji i prędkości do zapisania.
-	 * @param text Tekst
-	 * @param whatValue Wartość GPS
-	 */
-	private void changeTextField(String text, GPSValues whatValue) {
-		switch(whatValue) {
-			case timer:
-				TextView timerText = findViewById(R.id.timerText);
-				timerText.setText(text);
-				break;
-			case counter:
-				TextView counterText = findViewById(R.id.counterText);
-				counterText.setText(text);
-				break;
-			case latitude:
-				TextView latitudeText = findViewById(R.id.latitudeText);
-				latitudeText.setText(text);
-				break;
-			case longitude:
-				TextView longitudeText = findViewById(R.id.longitudeText);
-				longitudeText.setText(text);
-				break;
-			case speed:
-				TextView speedText = findViewById(R.id.speedText);
-				speedText.setText(text + "km/h");
-		}
-		setupVisibility();
-	}
-
-
 
 	// metody cyklu życia aktywności
 	// Zamknij/otwórz powiadomienie (nieaktywne w wersji service 1)
@@ -260,9 +224,7 @@ public class MainScreen extends AppCompatActivity {
 	protected void onDestroy() {
 		ServiceConnector.removeActivity(); // trzeba się pozbyć referencji, aby poprawnie usunąć Aktywność
 		Log.d("MainScreen", ">>> onDestroy, ilość kamer: " + ServCounter.getCamCount());
-		timerThread.stopTimer();
-		gpsThread.stopGPS();
-		srtWriter.stopWriting();
+		gpsTimer.cancel();
 		super.onDestroy();
 	}
 
@@ -324,7 +286,7 @@ public class MainScreen extends AppCompatActivity {
 					emergencyButton.setImageResource(R.drawable.emergency3ungroup);
 					isEmergencyActive = false;
 				}
-			}, 5000); // What??? Po 5 sekundach wyłącz? Jaki to ma związek z czasem nagrywania? TEMPORARY
+			}, 5000); // TODO: make this use value of emergency recording from settings
 		}
 	}
 
