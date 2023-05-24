@@ -36,7 +36,13 @@ import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LifecycleOwner;
 import com.example.odyn.FileHandler;
 import com.example.odyn.R;
+import com.example.odyn.settings.SettingNames;
+import com.example.odyn.settings.SettingOptions;
+import com.example.odyn.settings.SettingsProvider;
 import com.google.common.util.concurrent.ListenableFuture;
+
+import org.json.JSONException;
+
 import java.io.File;
 import java.nio.ByteBuffer;
 import java.util.Timer;
@@ -50,7 +56,7 @@ import java.util.concurrent.ExecutionException;
 public class CamAccess {
     private ImageCapture imageCapture;
     private VideoCapture videoCapture;
-
+    private SettingsProvider settingsProvider;
     private GetCamInterface doItLaterIntf = null; // jeśli trzeba zaczekać na otrzymanie CamInfo()
     protected Activity main; // póki co spełnia dwie role: wątek (Context) i aktywność (wyświetlanie), później warto rozważyć rozdzielenie
     // korzysta z tego też klasa Cam (dziedziczy)
@@ -67,6 +73,7 @@ public class CamAccess {
     // konstruktor. PreviewView służy do wyświetlenia w nim obrazu z kamery
     public CamAccess(Activity main) {
         this.main = main;
+        settingsProvider = new SettingsProvider();
         PreviewView prView2 = main.findViewById(R.id.previewView);
         cameraProviderSetup(prView2);
         Log.v("CamAccess", ">>> CamAccess constructor");
@@ -76,6 +83,19 @@ public class CamAccess {
             doItLaterIntf.getCamInfoLater(getCamInfo());
         }
     }
+
+    private long getLimitLength() {
+        try {
+            int selectedPosition = settingsProvider.getSettingInt(SettingNames.spinners[3]);
+            long limit = SettingOptions.lengthValuesSeconds[selectedPosition];
+            Log.d("CamAccess", ">> Aktualna wartość limitu: " + limit);
+            return limit;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
     // te dwie poniższe funkcje służą do przygotowania kamery do przekazywania obrazu do <PreviewView> i robienia zdjęć
     /**
      * Jest to metoda służąca do przygotowania kamery do przekazywania obrazu.
@@ -117,22 +137,32 @@ public class CamAccess {
                 .build();
 
         /* TODO settings nagrywanie z i bez dzwieku */
-        //if(dzwiek) {
+        //Teoretycznie switch działa, ale nie działa wyłącznie audio w nagraniu, testowałem na sucho ustawienia
+        //które dają wyciszenie audio a i tak dalej u mnie było
+        try {
+            boolean switchValue = settingsProvider.getSettingBool(SettingNames.switches[6]);
+            Log.d("CamAccess", ">>> Wartość przełącznika: " + switchValue);
 
-    VideoCapture.Builder builder_vid = new VideoCapture.Builder();
-    videoCapture = builder_vid
-            .setVideoFrameRate(60)
-            .setAudioChannelCount(1)
-            .setAudioBitRate(64000)
-            .build();
-//}else {
-    VideoCapture.Builder builder_vid_noaudio = new VideoCapture.Builder();
-    videoCapture = builder_vid_noaudio
-            .setVideoFrameRate(60)
-            .setAudioChannelCount(0)
-            .setAudioBitRate(64000)
-            .build();
-//}
+
+            if (switchValue) {
+                VideoCapture.Builder builder_vid = new VideoCapture.Builder();
+                videoCapture = builder_vid
+                        .setVideoFrameRate(60)
+                        .setAudioChannelCount(1)
+                        .setAudioBitRate(64000)
+                        .build();
+            } else {
+                VideoCapture.Builder builder_vid_noaudio = new VideoCapture.Builder();
+                videoCapture = builder_vid_noaudio
+                        .setVideoFrameRate(60)
+                        .setAudioChannelCount(0)
+                        .setAudioBitRate(64000)
+                        .build();
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
         // użyj kamery do wyświetlania w mainActivity (preview) i do robienia zdjęć (imageCapture)
         Camera camera = cameraProvider.bindToLifecycle((LifecycleOwner) main, cameraSelector, preview, imageCapture, videoCapture);
     }
@@ -355,7 +385,8 @@ public class CamAccess {
                     /* TODO settings - dlugosc nagrania */
                     //System.out.println("Czas: " + count + " sekund");
                     //10+2 -> 2 to opoznienie aby nagrac film 10 sekundowy
-                    if (count >= 10+2) {
+                    long limit = getLimitLength();
+                    if (count >= limit) {
                         videoCapture.stopRecording();
                         count = 0;
                     }
