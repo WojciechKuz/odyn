@@ -1,6 +1,6 @@
 /*
     BSD 3-Clause License
-    Copyright (c) Wojciech Kuźbiński <wojkuzb@mat.umk.pl>, Jakub Orłowski <orljak@mat.umk.pl>, 2023
+    Copyright (c) Wojciech Kuźbiński <wojkuzb@mat.umk.pl>, Jakub Orłowski <orljak@mat.umk.pl>, Viacheslav Kushinir <kushnir@mat.umk.pl>, 2023
 
     See https://aleks-2.mat.umk.pl/pz2022/zesp10/#/project-info for see license text.
 */
@@ -36,6 +36,8 @@ import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LifecycleOwner;
 import com.example.odyn.FileHandler;
 import com.example.odyn.R;
+import com.example.odyn.gps.DataHolder;
+import com.example.odyn.gps.SRTWriter;
 import com.example.odyn.settings.SettingNames;
 import com.example.odyn.settings.SettingOptions;
 import com.example.odyn.settings.SettingsProvider;
@@ -101,7 +103,7 @@ public class CamAccess {
         try {
             int selectedPosition = settingsProvider.getSettingInt(SettingNames.spinners[3]);
             long limit = SettingOptions.lengthValuesSeconds[selectedPosition];
-            Log.d("CamAccess", ">> Aktualna wartość limitu: " + limit);
+            //Log.d("CamAccess", ">> Aktualna wartość limitu: " + limit);
             return limit;
         } catch (Exception e) {
             e.printStackTrace();
@@ -351,6 +353,8 @@ public class CamAccess {
 
     Timer timer = new Timer();
 
+    SRTWriter srtWriter;
+
     /**
      * Jest to metoda odpowiadająca za funkcję obsługi nagrywania video.
      * @param option Opcja
@@ -393,7 +397,10 @@ public class CamAccess {
                                 Log.e("CamAccess", ">>> Nie udało się zapisać nagrania");
                             }
                         });
+                        createSRT();
                     }
+                    DataHolder dataHolder = DataHolder.getInstance();
+                    dataHolder.setCounter(String.valueOf(count));
                     count++;
                     /* TODO settings - dlugosc nagrania */
                     //System.out.println("Czas: " + count + " sekund");
@@ -401,6 +408,7 @@ public class CamAccess {
                     long limit = getLimitLength();
                     if (count >= limit) {
                         videoCapture.stopRecording();
+                        srtWriter.stopWriting();
                         count = 0;
                     }
                 }
@@ -410,8 +418,15 @@ public class CamAccess {
         else
         {
              timer.cancel();
+             srtWriter.stopWriting();
              videoCapture.stopRecording();
         }
     } // end of takeVideo()
+
+    private void createSRT () {
+        File srtFile = new FileHandler(main).createDataFile("srt");
+        srtWriter = new SRTWriter(srtFile);
+        srtWriter.start();
+    }
 
 }
