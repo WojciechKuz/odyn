@@ -114,7 +114,7 @@ public class NotificationCreator {
 		Intent intent = IntentProvider.iconClicked(context, type);    // Tak, MainService wysyła do siebie te intenty futureTODO
 		if(intent == null)
 			Log.e("NotificationCreator", ">>> ERROR, intent nie istnieje, typ ikony: "+ type);
-		return PendingIntent.getService(context, code++, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+		return PendingIntent.getService(context, code++, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE); // Android 12 requires FLAG_MUTABLE or IMMUTABLE
 	}
 
 	/**

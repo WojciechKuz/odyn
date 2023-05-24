@@ -36,6 +36,8 @@ dependencies {
     implementation "androidx.camera:camera-view:1.2.2"
     implementation 'pub.devrel:easypermissions:3.0.0'
 
+    implementation 'androidx.work:work-runtime-ktx:2.8.1' // zapobiega crashom na androidzie 12
+
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.9.0' // było 1.8.0, jak zmieni się wygląd jakiegoś elementu na coś głupiego, to wystarczy przywrócić starą wersję
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
