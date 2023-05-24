@@ -39,6 +39,7 @@ import com.example.odyn.main_service.ServiceConnector;
 import com.example.odyn.main_service.types.IconType;
 import com.example.odyn.gps.SRTWriter;
 import com.example.odyn.gps.TimerThread;
+import com.example.odyn.main_service.types.ServCounter;
 import com.example.odyn.settings.SettingNames;
 import com.example.odyn.settings.SettingsProvider;
 import com.google.android.material.switchmaterial.SwitchMaterial;
@@ -258,6 +259,7 @@ public class MainScreen extends AppCompatActivity {
 	@Override
 	protected void onDestroy() {
 		ServiceConnector.removeActivity(); // trzeba się pozbyć referencji, aby poprawnie usunąć Aktywność
+		Log.d("MainScreen", ">>> onDestroy, ilość kamer: " + ServCounter.getCamCount());
 		timerThread.stopTimer();
 		gpsThread.stopGPS();
 		srtWriter.stopWriting();

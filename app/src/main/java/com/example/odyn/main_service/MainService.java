@@ -192,6 +192,7 @@ public class MainService extends Service {
 	public void onDestroy() {
 		Log.v("MainService", ">>> MainService destroyed");
 		ServCounter.serviceStopped();
+		Log.d("MainService", ">>> onDestroy, ilość kamer: " + ServCounter.getCamCount());
 		super.onDestroy();
 	}
 

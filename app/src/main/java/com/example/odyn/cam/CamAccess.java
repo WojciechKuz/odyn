@@ -36,6 +36,7 @@ import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LifecycleOwner;
 import com.example.odyn.FileHandler;
 import com.example.odyn.R;
+import com.example.odyn.main_service.types.ServCounter;
 import com.google.common.util.concurrent.ListenableFuture;
 import java.io.File;
 import java.nio.ByteBuffer;
@@ -71,6 +72,7 @@ public class CamAccess {
         cameraProviderSetup(prView2);
         Log.v("CamAccess", ">>> CamAccess constructor");
 
+        ServCounter.camStarted();
         //
         if(doItLaterIntf != null) {
             doItLaterIntf.getCamInfoLater(getCamInfo());
