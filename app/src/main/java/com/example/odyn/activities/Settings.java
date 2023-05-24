@@ -37,7 +37,7 @@ public class Settings extends AppCompatActivity {
     private SwitchMaterial switch4;
     private SwitchMaterial switch5;
     private SwitchMaterial switch6;
-    private int mode;
+    //private int mode;
     private Spinner spinner1;
     private Spinner spinner2;
     private Spinner spinner3;
@@ -142,7 +142,7 @@ public class Settings extends AppCompatActivity {
                 Log.w("Settings", ">>> nie udało się zapisać ustawienia");
             }
 
-            AppCompatDelegate.setDefaultNightMode(mode);
+            //AppCompatDelegate.setDefaultNightMode(mode);
             // saveSettingsToFile(); // zbędne, nie potrzeba co chwilę nadpisywać pliku, ustawienia w aplikacji są dostępne przez SettingsProvider.
             //  zapisanie do pliku po wyjściu z tej aktywności
         });
@@ -234,8 +234,8 @@ public class Settings extends AppCompatActivity {
                 spinners[i].setSelection(sprov.getSettingInt(SettingNames.spinners[i]));
 
 
-            mode = sprov.getSettingInt("mode");
-            AppCompatDelegate.setDefaultNightMode(mode);
+            //mode = sprov.getSettingInt("mode");
+            //AppCompatDelegate.setDefaultNightMode(mode);
 
         } catch (JSONException e) {
             Log.e("Settings", ">>> błąd podczas odczytu ustawień");

@@ -7,6 +7,8 @@
 
 package com.example.odyn.activities;
 
+import static java.lang.Thread.sleep;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -100,8 +102,15 @@ public class MainScreen extends AppCompatActivity {
 			menuItem.setTitle(spannableString);
 		}
 
+		/*
+		try {
+			sleep(20);
+		} catch (InterruptedException e) {
+			Log.v("MainScreen", ">>> Interrupted sleep");
+		}
 		// domyślnie włącza nagrywanie od razu po wejściu do aplikacji
 		onClickRecord(null);
+		*/
 	}
 
 	/**

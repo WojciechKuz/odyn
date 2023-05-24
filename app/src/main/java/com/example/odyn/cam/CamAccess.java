@@ -156,28 +156,28 @@ public class CamAccess {
         /* TODO settings nagrywanie z i bez dzwieku */
         //Teoretycznie switch działa, ale nie działa wyłącznie audio w nagraniu, testowałem na sucho ustawienia
         //które dają wyciszenie audio a i tak dalej u mnie było
+        boolean switchValue;
         try {
-            boolean switchValue = settingsProvider.getSettingBool(SettingNames.switches[6]);
+            switchValue = settingsProvider.getSettingBool(SettingNames.switches[6]);
             Log.d("CamAccess", ">>> Wartość przełącznika: " + switchValue);
-
-
-            if (switchValue) {
-                VideoCapture.Builder builder_vid = new VideoCapture.Builder();
-                videoCapture = builder_vid
-                        .setVideoFrameRate(60)
-                        .setAudioChannelCount(1)
-                        .setAudioBitRate(64000)
-                        .build();
-            } else {
-                VideoCapture.Builder builder_vid_noaudio = new VideoCapture.Builder();
-                videoCapture = builder_vid_noaudio
-                        .setVideoFrameRate(60)
-                        .setAudioChannelCount(0)
-                        .setAudioBitRate(64000)
-                        .build();
-            }
         } catch (JSONException e) {
-            e.printStackTrace();
+            Log.w("CamAccess", ">>> nie udało się odczytać wartości przełącznika 6\n" + e);
+            switchValue = SettingOptions.defaultSwitches[6];
+        }
+        if (switchValue) {
+            VideoCapture.Builder builder_vid = new VideoCapture.Builder();
+            videoCapture = builder_vid
+                    .setVideoFrameRate(60)
+                    .setAudioChannelCount(1)
+                    .setAudioBitRate(64000)
+                    .build();
+        } else {
+            VideoCapture.Builder builder_vid_noaudio = new VideoCapture.Builder();
+            videoCapture = builder_vid_noaudio
+                    .setVideoFrameRate(60)
+                    .setAudioChannelCount(0)
+                    .setAudioBitRate(64000)
+                    .build();
         }
 
         // użyj kamery do wyświetlania w mainActivity (preview) i do robienia zdjęć (imageCapture)
@@ -375,6 +375,8 @@ public class CamAccess {
                     {
                         File file = new FileHandler(main).createVideo("mp4");
                         VideoCapture.OutputFileOptions outputFileOptions = new VideoCapture.OutputFileOptions.Builder(file).build();
+                        if(videoCapture == null)
+                            Log.e("CamAccess", ">>> videoCapture jest null!");
                         videoCapture.startRecording(outputFileOptions, ContextCompat.getMainExecutor(main), new VideoCapture.OnVideoSavedCallback() {
 
                             /**
