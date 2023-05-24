@@ -408,11 +408,22 @@ public class MainScreen extends AppCompatActivity {
 	 */
 	@SuppressLint("RtlHardcoded")
 	private int darkSideOfMenu() {
-		if(true/* todo put setting here */) {
+		int leftOrRight = -1;
+		try {
+			leftOrRight = new SettingsProvider().getSettingInt(SettingNames.spinners[2]);
+		} catch (JSONException e) {
+			Log.e("MainScreen", ">>> Nie udało się odczytać ustawień\n" + e);
+			leftOrRight = 0;
+		}
+		if(leftOrRight == 0) {
 			return Gravity.LEFT;
 		}
-		else {
+		else if (leftOrRight == 1){
 			return Gravity.RIGHT;
+		}
+		else {
+			Log.wtf("MainScreen", ">>> niespotykana jak dotąd wartość leftOrRight: " + leftOrRight);
+			return Gravity.LEFT;
 		}
 	}
 }
