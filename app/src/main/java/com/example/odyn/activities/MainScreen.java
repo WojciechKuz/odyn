@@ -19,8 +19,11 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.SpannableString;
+import android.text.style.RelativeSizeSpan;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
@@ -41,6 +44,7 @@ import com.example.odyn.gps.SRTWriter;
 import com.example.odyn.gps.TimerThread;
 import com.example.odyn.settings.SettingNames;
 import com.example.odyn.settings.SettingsProvider;
+import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import org.json.JSONException;
@@ -99,8 +103,17 @@ public class MainScreen extends AppCompatActivity {
 
 		setupMainScreen();
 		setupGPS();
-		setupVisibility();
+
+		NavigationView navigationView = findViewById(R.id.nav_view);
+		Menu menu = navigationView.getMenu();
+		for (int i = 0; i < menu.size(); i++) {
+			MenuItem menuItem = menu.getItem(i);
+			SpannableString spannableString = new SpannableString(menuItem.getTitle());
+			spannableString.setSpan(new RelativeSizeSpan(1.7f), 0, spannableString.length(), 0);
+			menuItem.setTitle(spannableString);
+		}
 	}
+
 
 	/**
 	 * Jest to odpowiadająca za przełączanie widoczności lokalizacji i prędkości na ekranie.
