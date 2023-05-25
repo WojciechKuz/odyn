@@ -3,7 +3,6 @@ package com.example.odyn.plate_detection;
 import android.content.Context;
 import android.graphics.Bitmap;
 
-
 import com.example.odyn.ml.Detect;
 
 import org.tensorflow.lite.DataType;
