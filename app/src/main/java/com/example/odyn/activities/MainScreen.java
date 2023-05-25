@@ -76,7 +76,7 @@ public class MainScreen extends AppCompatActivity {
 	private Handler delayHandler = new Handler();
 	Timer gpsTimer = new Timer();
 	private boolean isEmergencyActive = false;
-	private boolean isVideoActive = false;
+	private boolean isVideoActive = true;
 
 	/**
 	 * Jest to metoda tworząca główny ekran aplikacji.
@@ -303,12 +303,12 @@ public class MainScreen extends AppCompatActivity {
 
 		// zmiana koloru ikony, aby zasygnalizować nagrywanie
 		ImageButton recordButton = findViewById(R.id.RecordButton);
-		if (!isVideoActive) {
-			recordButton.setImageResource(R.drawable.record_active);
-			isVideoActive = true;
-		} else {
+		if (isVideoActive) {
 			recordButton.setImageResource(R.drawable.record);
 			isVideoActive = false;
+		} else {
+			recordButton.setImageResource(R.drawable.record_active);
+			isVideoActive = true;
 		}
 	}
 

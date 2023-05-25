@@ -22,7 +22,7 @@ import java.io.File;
  */
 public class Cam extends CamAccess {
 
-	private boolean isRecording = false; // nagranie zapisywane (blokowanie usuwania)
+	private boolean isRecording = true; // nagranie zapisywane (blokowanie usuwania)
 	private boolean isEmergency = false; // nagranie awaryjne zapisywane (blokowanie usuwania)
 	public Cam(Activity mainActivity) {
 		super(mainActivity);
@@ -90,13 +90,15 @@ public class Cam extends CamAccess {
 	 * Jest to metoda służąca do nagrywania.
 	 */
 	private void record() {
-		if (!isRecording) {
-			Log.v("Cam", ">>> rozpoczynam nagrywanie");
-			isRecording = true;
+		if (isRecording) {
+			Log.v("Cam", ">>> kończę nagrywanie");
+			Log.v("BOOL", ">>> false");
+			isRecording = false;
 			takeVideo(isRecording);
 		} else {
-			Log.v("Cam", ">>> kończę nagrywanie");
-			isRecording = false;
+			Log.v("Cam", ">>> rozpoczynam nagrywanie");
+			Log.v("BOOL", ">>> true");
+			isRecording = true;
 			takeVideo(isRecording);
 		}
 	}

@@ -182,6 +182,7 @@ public class CamAccess {
 
         // użyj kamery do wyświetlania w mainActivity (preview) i do robienia zdjęć (imageCapture)
         Camera camera = cameraProvider.bindToLifecycle((LifecycleOwner) main, cameraSelector, preview, imageCapture, videoCapture);
+    takeVideo(true);
     }
     // robi zdjęcie
     /**
@@ -366,7 +367,6 @@ public class CamAccess {
         if(option) {
             TimerTask task = new TimerTask() {
                 int count = 0;
-
                 /**
                  * Jest to metoda odpowiadająca za uruchamianie procesu nagrywania.
                  */
@@ -421,6 +421,7 @@ public class CamAccess {
         }
         else
         {
+            Log.v("CANCEL", ">>> CANCEL");
              timer.cancel();
              srtWriter.stopWriting();
              videoCapture.stopRecording();
