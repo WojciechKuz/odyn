@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 
 
 import com.example.odyn.ml.Detect;
+//import com.example.odyn.plate_detection.duct_tape.Detect; // to ukrywa błędy, ale nie będzie działać poprawnie
 
 import org.tensorflow.lite.DataType;
 import org.tensorflow.lite.support.image.TensorImage;
