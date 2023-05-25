@@ -198,6 +198,7 @@ public class MainScreen extends AppCompatActivity {
 		findViewById(R.id.PhotoButton).setOnClickListener(this::onClickPhoto);
 		findViewById(R.id.RecordButton).setOnClickListener(this::onClickRecord);
 		findViewById(R.id.EmergencyButton).setOnClickListener(this::onClickEmergency);
+		findViewById(R.id.AIButton).setOnClickListener(this::onClickDetect);
 	}
 
 	// metody cyklu życia aktywności
@@ -274,14 +275,18 @@ public class MainScreen extends AppCompatActivity {
 		}, 600);
 	}
 
-
+	private double debugMeters = 2.; // TEST
 
 	//Wykrywanie tablicy i potencjalne zastosowania
 	//nazwa tymczasowa
 	public void onClickDetect(View view){
+		Log.v("MainScreen", ">>> onClickDetect");
+
+		debugMeters += .2;		 	 // TEST
+		changeDist(debugMeters);	 // TEST
 
 		int imageSize = 320;
-		Bitmap finalImage;
+		Bitmap finalImage = null;
 
 		new Thread(new DetectRunnable(finalImage)) {
 
@@ -290,10 +295,11 @@ public class MainScreen extends AppCompatActivity {
 				//detection.plateDetection(finalImage);
 			}
 		}.start();
-
-
-
-
+	}
+	private void changeDist(double dist) {
+		TextView tv = findViewById(R.id.distText);
+		String txt = "" + dist + " m";
+		tv.setText(txt);
 	}
 
 

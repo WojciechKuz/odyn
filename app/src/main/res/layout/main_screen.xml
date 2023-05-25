@@ -67,6 +67,19 @@
                 android:scaleType="fitCenter"
                 app:srcCompat="@drawable/photo" />
 
+            <Button
+                android:id="@+id/AIButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="13sp"
+                android:text="@string/AIButtonText" />
+
+            <TextView
+                android:id="@+id/distText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="dist M" />
+
         </LinearLayout>
 
         <LinearLayout
