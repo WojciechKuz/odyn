@@ -29,6 +29,7 @@ import androidx.camera.core.ImageCapture;
 import androidx.camera.core.ImageCaptureException;
 import androidx.camera.core.ImageProxy;
 import androidx.camera.core.Preview;
+import androidx.camera.core.UseCaseGroup;
 import androidx.camera.core.VideoCapture;
 import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.camera.view.PreviewView;
@@ -180,10 +181,26 @@ public class CamAccess {
                     .build();
         }
 
+        UseCaseGroup cameraUseCases = createUseCases(preview, imageCapture, videoCapture);
+
         // użyj kamery do wyświetlania w mainActivity (preview) i do robienia zdjęć (imageCapture)
-        Camera camera = cameraProvider.bindToLifecycle((LifecycleOwner) main, cameraSelector, preview, imageCapture, videoCapture);
-    takeVideo(true);
+        Camera camera = cameraProvider.bindToLifecycle((LifecycleOwner) main, cameraSelector, cameraUseCases);
+        takeVideo(true);
     }
+
+    /**
+     * tworzy grupę przypadków użycia
+     */
+    private UseCaseGroup createUseCases(Preview preview, ImageCapture imageCapture, VideoCapture videoCapture) {
+        UseCaseGroup.Builder ucgBuilder = new UseCaseGroup.Builder();
+
+        ucgBuilder.addUseCase(imageCapture);
+        //ucgBuilder.addUseCase(videoCapture); // FIXME temporary disabled
+        ucgBuilder.addUseCase(preview);
+
+        return ucgBuilder.build();
+    }
+
     // robi zdjęcie
     /**
      * Jest to metoda odpowiadająca za funkcję obsługi robienia zdjęcia.
@@ -364,13 +381,16 @@ public class CamAccess {
      */
     @SuppressLint({"RestrictedApi", "MissingPermission"})
     public void takeVideo(boolean option) {
+        if(true) {
+            Log.i("CamAccess", ">>> NO RECORDING. This version of app has disabled recording videos!\n" + "It's for older devices with only 2 maximum camerax use cases");
+            return; // FIXME temporary disabled
+        }
         if(!option) {
          //   timer.cancel();
             srtWriter.stopWriting();
             videoCapture.stopRecording();
         }
-        else if(option)
-        {
+        else if(option) {
             TimerTask task = new TimerTask() {
                 int count = 0;
                 /**
@@ -425,13 +445,11 @@ public class CamAccess {
             };
            try {
                timer.schedule(task, 0, 1000);
-           } catch(Exception e)
-           {
+           } catch(Exception e){
                Log.v("CANCEL", ">>> Timer anulowany");
            }
-           }
         }
-     // end of takeVideo()
+    } // end of takeVideo()
 
     private void createSRT () {
         File srtFile = new FileHandler(main).createDataFile("srt");
