@@ -364,7 +364,13 @@ public class CamAccess {
      */
     @SuppressLint({"RestrictedApi", "MissingPermission"})
     public void takeVideo(boolean option) {
-        if(option) {
+        if(!option) {
+         //   timer.cancel();
+            srtWriter.stopWriting();
+            videoCapture.stopRecording();
+        }
+        else if(option)
+        {
             TimerTask task = new TimerTask() {
                 int count = 0;
                 /**
@@ -417,16 +423,15 @@ public class CamAccess {
                     }
                 }
             };
-            timer.schedule(task, 0, 1000);
+           try {
+               timer.schedule(task, 0, 1000);
+           } catch(Exception e)
+           {
+               Log.v("CANCEL", ">>> Timer anulowany");
+           }
+           }
         }
-        else
-        {
-            Log.v("CANCEL", ">>> CANCEL");
-             timer.cancel();
-             srtWriter.stopWriting();
-             videoCapture.stopRecording();
-        }
-    } // end of takeVideo()
+     // end of takeVideo()
 
     private void createSRT () {
         File srtFile = new FileHandler(main).createDataFile("srt");
