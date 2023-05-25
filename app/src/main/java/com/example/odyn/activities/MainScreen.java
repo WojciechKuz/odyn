@@ -1,10 +1,10 @@
 package com.example.odyn.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.drawerlayout.widget.DrawerLayout;
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,16 +15,20 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
+
 import com.example.odyn.FileHandler;
 import com.example.odyn.R;
 import com.example.odyn.cam.Cam;
 import com.example.odyn.gps.GPSThread;
 import com.example.odyn.gps.GPSValues;
-import com.example.odyn.gps.TextFieldChanger;
-import com.example.odyn.main_service.ServiceConnector;
-import com.example.odyn.main_service.types.IconType;
 import com.example.odyn.gps.SRTWriter;
 import com.example.odyn.gps.TimerThread;
+import com.example.odyn.main_service.ServiceConnector;
+import com.example.odyn.main_service.types.IconType;
+import com.example.odyn.plate_detection.DetectRunnable;
+import com.example.odyn.plate_detection.Detection;
 
 import java.io.File;
 import java.util.HashMap;
@@ -64,6 +68,8 @@ public class MainScreen extends AppCompatActivity {
 	private boolean isEmergencyActive = false;
 	private boolean isVideoActive = false;
 
+	private Cam cam;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -77,7 +83,9 @@ public class MainScreen extends AppCompatActivity {
 
 	private void setupMainScreen() {
 		ServiceConnector.setActivity(this); // static, usunięcie w onDestroy()
-		ServiceConnector.sendCam(new Cam(this)); // zwraca do MainService, jak się da to tworzenie z powrotem przenieść do MainService
+
+		cam = new Cam(this);
+		ServiceConnector.sendCam(cam); // zwraca do MainService, jak się da to tworzenie z powrotem przenieść do MainService
 
 		// obsługa przycisków, metody do obsługi (np. this::onClickPhoto) znajdują się poniżej
 		View mainScreenLayout = findViewById(R.id.layout_incepcja);
@@ -198,7 +206,68 @@ public class MainScreen extends AppCompatActivity {
 				isEmergencyActive = false;
 			}
 		}, 600);
+
+		//
+		//otrzymywanie bitmapy z aparatu
+		//
+		//ponizej tymczasowe rozwiazanie
+		int imageSize = 320;
+		Bitmap image = BitmapFactory.decodeFile("/storage/emulated/0/Pictures/plate.jpg");
+		int dimension = Math.min(image.getHeight(), image.getWidth());
+		image = ThumbnailUtils.extractThumbnail(image,dimension,dimension);
+		image = Bitmap.createScaledBitmap(image, imageSize,imageSize, true);
+		Bitmap finalImage = image;
+
+		//
+		//TO DO zamienic powyzszy kod pobierajacy obraz z pamieci na bitmape z aparatu
+		//
+
+		new Thread(new DetectRunnable(finalImage)) {
+
+			public void run() {
+				Detection detection = new Detection();
+				detection.plateDetection(finalImage, getApplicationContext());
+			}
+		}.start();
+
+
 	}
+
+
+	//Wykrywanie tablicy i potencjalne zastosowania
+	//nazwa tymczasowa
+	public void onClickDetect(View view){
+
+		//
+		//otrzymywanie bitmapy z aparatu
+		//
+		//ponizej tymczasowe rozwiazanie
+		int imageSize = 320;
+		Bitmap image = BitmapFactory.decodeFile("/storage/emulated/0/Pictures/plate.jpg");
+		int dimension = Math.min(image.getHeight(), image.getWidth());
+		image = ThumbnailUtils.extractThumbnail(image,dimension,dimension);
+		image = Bitmap.createScaledBitmap(image, imageSize,imageSize, true);
+		Bitmap finalImage = image;
+
+		//
+		//TO DO zamienic powyzszy kod pobierajacy obraz z pamieci na bitmape z aparatu
+		//
+
+		new Thread(new DetectRunnable(finalImage)) {
+
+			public void run() {
+				Detection detection = new Detection();
+				//detection.plateDetection(finalImage);
+			}
+		}.start();
+
+
+
+
+	}
+
+
+
 
 	// Nagrywanie awaryjne
 	public void onClickEmergency(View view) {
