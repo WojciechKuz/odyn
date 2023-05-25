@@ -439,4 +439,11 @@ public class CamAccess {
         srtWriter.start();
     }
 
+    /**
+     * Przestań pisać do pliku srt, wywoływane w MainService.onDestroy()
+     */
+    public void stopSRT() {
+        srtWriter.stopWriting();
+    }
+
 }

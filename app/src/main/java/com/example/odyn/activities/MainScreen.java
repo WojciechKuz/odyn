@@ -31,8 +31,10 @@ import com.example.odyn.R;
 import com.example.odyn.cam.Cam;
 import com.example.odyn.cam.CamInfo;
 import com.example.odyn.gps.DataHolder;
+import com.example.odyn.main_service.MainService;
 import com.example.odyn.main_service.ServiceConnector;
 import com.example.odyn.main_service.types.IconType;
+import com.example.odyn.main_service.types.IntentProvider;
 import com.example.odyn.main_service.types.ServCounter;
 import com.example.odyn.settings.SettingNames;
 import com.example.odyn.settings.SettingOptions;
@@ -362,6 +364,18 @@ public class MainScreen extends AppCompatActivity {
 		Intent intent = new Intent(Intent.ACTION_MAIN);
 		intent.addCategory(Intent.CATEGORY_HOME);
 		startActivity(intent);
+	}
+
+	/**
+	 * Wyłącz całą aplikację, zamknij powiadomienie.
+	 * Najpierw wyłącza service, zakańczając pisanie do pliku wideo i srt.
+	 * Potem zamyka samą aplikację. Aby całkowicie zamknąć aplikację należy usunąć ją z listy aktywnych aplikacji
+	 * na androidzie (kwadrat na pasku na dole, albo przeciągnąć w prawo).
+	 * @param item Pozycja w menu
+	 */
+	public synchronized void onClickTurnOff(MenuItem item) {
+		stopService(new Intent(this, MainService.class));
+		finishAffinity();
 	}
 
 

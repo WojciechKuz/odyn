@@ -23,4 +23,8 @@
         android:title="@string/record_in_background"
         android:onClick="onClickBackground">
     </item>
+    <item android:id="@+id/turn_off"
+        android:title="@string/menu_close_app"
+        android:onClick="onClickTurnOff">
+    </item>
 </menu>

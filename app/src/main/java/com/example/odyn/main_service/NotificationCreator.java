@@ -71,13 +71,13 @@ public class NotificationCreator {
 		builder.addAction(emerg);
 		builder.addAction(recrd);
 		builder.addAction(photo);
-		builder.addAction(back); // FIXME wydaje się, że nadpisuje inne ikony
+		//builder.addAction(back);
 
 		// zamknie się powiadomienie, to apka też się zamknie
-		builder.setDeleteIntent(pendingIntentProvider(IconType.close));
+		//builder.setDeleteIntent(pendingIntentProvider(IconType.close)); // i tak nie da się usunąć, bo podpięte do foreground service
 
 		// naciśniesz > otworzy się apka. czy przyciski wliczone jako content?
-		//builder.setContentIntent(pendingIntentProvider(IconType.back_to_app));
+		builder.setContentIntent(pendingIntentProvider(IconType.back_to_app));
 		/*  ✔ utworzone
 		 *  ✔ ikonka (domyślna)
 		 *  ✔ tekst

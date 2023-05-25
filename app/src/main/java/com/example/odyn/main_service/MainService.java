@@ -7,6 +7,7 @@
 
 package com.example.odyn.main_service;
 
+import android.app.Activity;
 import android.app.Notification;
 import android.app.Service;
 import android.content.Intent;
@@ -140,7 +141,7 @@ public class MainService extends Service {
 			case close:
 				// zamknij apkę
 				Log.d("MainService", ">>> zamykam aplikację");
-				startService(IntentProvider.iconClicked(this, IconType.close));
+				//startActivity(IntentProvider.iconClicked(this, IconType.close));
 				break;
 			case menu:
 				// nottodo: MainScreen będzie otwierać menu
@@ -202,6 +203,7 @@ public class MainService extends Service {
 		ServCounter.serviceStopped();
 		gpsThread.stopGPS();
 		timeHandlerThread.stopTimer();
+		cam.stopSRT();
 		Log.d("MainService", ">>> onDestroy, ilość kamer: " + ServCounter.getCamCount());
 		super.onDestroy();
 	}

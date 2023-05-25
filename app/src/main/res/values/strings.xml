@@ -40,4 +40,5 @@
     <string name="spinner5desc">Rozmiar katalogu nagrań awaryjnych</string>
 
     <string name="spinner7desc">Język, Language</string>
+    <string name="menu_close_app">zamknij aplikację</string>
 </resources>
