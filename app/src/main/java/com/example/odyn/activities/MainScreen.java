@@ -14,6 +14,9 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -29,11 +32,14 @@ import android.widget.TextView;
 
 import com.example.odyn.R;
 import com.example.odyn.cam.Cam;
+import com.example.odyn.cam.CamAccess;
 import com.example.odyn.cam.CamInfo;
 import com.example.odyn.gps.DataHolder;
 import com.example.odyn.main_service.ServiceConnector;
 import com.example.odyn.main_service.types.IconType;
 import com.example.odyn.main_service.types.ServCounter;
+import com.example.odyn.plate_detection.DetectRunnable;
+import com.example.odyn.plate_detection.Detection;
 import com.example.odyn.settings.SettingNames;
 import com.example.odyn.settings.SettingOptions;
 import com.example.odyn.settings.SettingsProvider;
@@ -267,6 +273,29 @@ public class MainScreen extends AppCompatActivity {
 			}
 		}, 600);
 	}
+
+
+
+	//Wykrywanie tablicy i potencjalne zastosowania
+	//nazwa tymczasowa
+	public void onClickDetect(View view){
+
+		int imageSize = 320;
+		Bitmap finalImage;
+
+		new Thread(new DetectRunnable(finalImage)) {
+
+			public void run() {
+				Detection detection = new Detection();
+				//detection.plateDetection(finalImage);
+			}
+		}.start();
+
+
+
+
+	}
+
 
 	// Nagrywanie awaryjne
 	/**
