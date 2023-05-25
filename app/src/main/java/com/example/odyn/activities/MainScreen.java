@@ -390,4 +390,16 @@ public class MainScreen extends AppCompatActivity {
 			return Gravity.LEFT;
 		}
 	}
+
+	/**
+	 * nadpisanie tej metody zapobiega cofaniu do StartActivity po naciśnięciu systemowego przycisku wstecz
+	 */
+	@Override
+	public void onBackPressed() {
+		DrawerLayout draw = findViewById(R.id.drawer_layout);
+		if(draw.isOpen())
+			onClickCloseMenu(null);
+		setResult(RESULT_CANCELED);
+		//super.onBackPressed();
+	}
 }
