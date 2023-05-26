@@ -6,7 +6,7 @@ Projekt zespołu X na Programowanie Zespołowe w roku akademickim 2022/2023.
 - [@Mateusz Szymczak](https://www.github.com/mszymczak710)
 - [@Damian Gałkowski](https://github.com/DamianGal)
 - [@Krzysztof Krzewiński](https://github.com/archonejka)
-- [@Viacheslav Kushinir](https://github.com/MusicManiac)
+- [@Viacheslav Kushnir](https://github.com/MusicManiac)
 - [@Jakub Orłowski](https://github.com/XewoniX)
 
 
