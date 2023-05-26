@@ -77,7 +77,7 @@
                     android:layout_height="match_parent"
                     android:layout_alignParentLeft="true"
                     android:layout_toLeftOf="@id/spinner1"
-                    android:text="@string/locationRecordingSwitchDesc"
+                    android:text="@string/whereToSaveSwitchDesc"
                     android:textColor="@color/black"
                     android:textSize="@dimen/spinner_description_text_size"
                     tools:ignore="RtlHardcoded" />
