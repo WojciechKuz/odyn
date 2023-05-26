@@ -57,12 +57,12 @@ public class SRTWriter extends Thread {
 					}
 					//Log.d("SRTWriter", "Counter value: " + dataHolder.getCounter());
 					srtLine += secondsToTimestamp(counterText - 1) + " --> " + secondsToTimestamp(counterText);
-					srtLine += "\n" + timerText + " | ";
+					srtLine += "\n" + timerText;
 					if (writeSpeed) {
-						srtLine += "\n" + dataHolder.getSpeed() + " | ";
+						srtLine += " | " + dataHolder.getSpeed();
 					}
 					if (writeLocation) {
-						srtLine += latitudeText + ", ";
+						srtLine += " | " + latitudeText + ", ";
 						srtLine += longitudeText;
 					}
 					srtLine += "\n\n";

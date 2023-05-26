@@ -119,32 +119,36 @@ public class MainScreen extends AppCompatActivity {
 	 * Jest to odpowiadająca za przełączanie widoczności lokalizacji i prędkości na ekranie.
 	 */
 	private void setupVisibility() {
-		Boolean showLocation, showSpeed;
 		TextView latitudeText = findViewById(R.id.latitudeText);
 		TextView longitudeText = findViewById(R.id.longitudeText);
 		TextView speedText = findViewById(R.id.speedText);
-		try {
-			SettingsProvider settingsProvider = new SettingsProvider();
-			showLocation = settingsProvider.getSettingBool(SettingNames.switches[2]);
-			showSpeed = settingsProvider.getSettingBool(SettingNames.switches[4]);
-			Log.e("MainScreen", ">>>" + showLocation + " " + showSpeed + "\n");
-		} catch (JSONException e) {
-			Log.e("MainScreen", ">>> nie załadowano ustawień, użyję wartości domyślnych\n" + e);
-			showLocation = SettingOptions.defaultSwitches[2];
-			showSpeed = SettingOptions.defaultSwitches[4];
-		}
-		if (showLocation) {
-			latitudeText.setVisibility(View.VISIBLE);
-			longitudeText.setVisibility(View.VISIBLE);
-		} else {
-			latitudeText.setVisibility(View.INVISIBLE);
-			longitudeText.setVisibility(View.INVISIBLE);
-		}
-		if (showSpeed) {
-			speedText.setVisibility(View.VISIBLE);
-		} else {
-			speedText.setVisibility(View.INVISIBLE);
-		}
+		runOnUiThread(new Runnable() {
+			Boolean showLocation, showSpeed;
+			@Override
+			public void run() {
+				try {
+					SettingsProvider settingsProvider = new SettingsProvider();
+					showLocation = settingsProvider.getSettingBool(SettingNames.switches[2]);
+					showSpeed = settingsProvider.getSettingBool(SettingNames.switches[4]);
+				} catch (JSONException e) {
+					Log.e("MainScreen", ">>> nie załadowano ustawień, użyję wartości domyślnych\n" + e);
+					showLocation = SettingOptions.defaultSwitches[2];
+					showSpeed = SettingOptions.defaultSwitches[4];
+				}
+				if (showLocation) {
+					latitudeText.setVisibility(View.VISIBLE);
+					longitudeText.setVisibility(View.VISIBLE);
+				} else {
+					latitudeText.setVisibility(View.INVISIBLE);
+					longitudeText.setVisibility(View.INVISIBLE);
+				}
+				if (showSpeed) {
+					speedText.setVisibility(View.VISIBLE);
+				} else {
+					speedText.setVisibility(View.INVISIBLE);
+				}
+			}
+		});
 	}
 
 	/**

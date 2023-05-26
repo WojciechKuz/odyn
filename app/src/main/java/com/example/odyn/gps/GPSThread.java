@@ -169,12 +169,12 @@ public class GPSThread extends Thread implements SensorEventListener {
 	private void getSettingsValues() {
 		try {
 			settingsProvider = new SettingsProvider();
-			int selectedAccelerometerPosition = settingsProvider.getSettingInt(SettingNames.spinners[5]);
+			int selectedAccelerometerPosition = settingsProvider.getSettingInt(SettingNames.spinners[6]);
 			accelerometerSen = SettingOptions.accelerometerSens[selectedAccelerometerPosition];
-			int selectedMinSpeedPosition = settingsProvider.getSettingInt(SettingNames.spinners[5]);
+			int selectedMinSpeedPosition = settingsProvider.getSettingInt(SettingNames.spinners[7]);
 			minimumSpeed = SettingOptions.minimumSpeed[selectedMinSpeedPosition];
-			Log.d("GPSThread", ">>> Current acceleration sens: " + accelerometerSen);
-			Log.d("GPSThread", ">>> Current minimumSpeed: " + minimumSpeed);
+			//Log.d("GPSThread", ">>> Current acceleration sens: " + accelerometerSen);
+			//Log.d("GPSThread", ">>> Current minimumSpeed: " + minimumSpeed);
 		} catch (JSONException e) {
 			Log.e("GPSThread", ">>> ERROR, "+ e);
 			accelerometerSen = 1;
