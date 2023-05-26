@@ -14,15 +14,16 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 /**
+ * Wątek do aktualizacji aktualnego czasu w InfoDisplayThread i SRTWriter
  * Thread for updating current time in InfoDisplayThread and SRTWriter
  */
 public class TimeHandlerThread extends Thread {
 	Timer timer = new Timer();
 
 	/**
+	 * Metoda aktualizująca aktualny czas co sekundę
 	 * Method that updates current time every second
 	 */
-
 	@Override
 	public void run() {
 		TimerTask task = new TimerTask() {
@@ -39,6 +40,7 @@ public class TimeHandlerThread extends Thread {
 	}
 
 	/**
+	 * Metoda zatrzymania wątku
 	 * Method to stop the thread
 	 */
 	public void stopTimer() {

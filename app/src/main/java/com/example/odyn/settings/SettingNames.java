@@ -1,6 +1,6 @@
 /*
     BSD 3-Clause License
-    Copyright (c) Wojciech Kuźbiński <wojkuzb@mat.umk.pl>, Damian Gałkowski <galdam@mat.umk.pl>, 2023
+    Copyright (c) Wojciech Kuźbiński <wojkuzb@mat.umk.pl>, Damian Gałkowski <galdam@mat.umk.pl>, Viacheslav Kushinir <kushnir@mat.umk.pl>, 2023
 
     See https://aleks-2.mat.umk.pl/pz2022/zesp10/#/project-info for see license text.
 */
@@ -15,7 +15,7 @@ public class SettingNames {
 			"no 0", "AI", "dispLoc", "saveLoc", "dispSpeed", "saveSpeed", "recAudio"
 	};
 	public static final String[] spinners = {
-			"no 0", "storage_option", "Left_Right", "Length_record", "Size_video", "Size_emergency"
+			"no 0", "storage_option", "Left_Right", "Length_record", "Size_video", "Size_emergency", "Accelerometer_sensitivity", "Min_speed"
 	};
 }
 	/*

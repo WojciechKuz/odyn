@@ -17,6 +17,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 /**
+ * Wątek odpowiedzialny za zapisywanie informacji GPS do pliku .srt
  * Thread responsible for writing GPS info into .srt file
  */
 public class SRTWriter extends Thread {
@@ -82,6 +83,7 @@ public class SRTWriter extends Thread {
     }
 
 	/**
+	 * Metoda zakończenia zapisu do pliku .srt
 	 * Method to finish writing into .srt file
 	 */
     public void stopWriting() {
@@ -90,6 +92,7 @@ public class SRTWriter extends Thread {
     }
 
 	/**
+	 * Metoda konwersji aktualnej długości nagrania z sekund na hh:mm:ss:ms
 	 * Method to convert current length of recording from seconds to hh:mm:ss:ms
 	 */
 	@SuppressLint("DefaultLocale")

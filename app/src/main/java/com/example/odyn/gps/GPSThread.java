@@ -23,8 +23,14 @@ import android.util.Log;
 
 import com.example.odyn.main_service.ServiceConnector;
 import com.example.odyn.main_service.types.IconType;
+import com.example.odyn.settings.SettingNames;
+import com.example.odyn.settings.SettingOptions;
+import com.example.odyn.settings.SettingsProvider;
+
+import org.json.JSONException;
 
 /**
+ * Wątek GPS, zbiera informacje o lokalizacji, prędkości, przyspieszeniu. Dodatkowo implementuje uproszczoną metodę wykrywania kolizji.
  * GPS thread, gathers information about location, speed, acceleration. Additionally implements simplified method to detect collisions.
  */
 public class GPSThread extends Thread implements SensorEventListener {
@@ -34,11 +40,15 @@ public class GPSThread extends Thread implements SensorEventListener {
 	private Sensor accelerometer;
 	private Context context;
 	private Handler handler;
+	private SettingsProvider settingsProvider;
 
 	private float acceleration;
 	private float currentAcceleration;
 	private float lastAcceleration;
 	private double speed;
+	private double accelerometerSen;
+	private int minimumSpeed;
+	private long lastSettingsUpdateTime = 0;
 
 	public GPSThread(Context context) {
 		this.context = context;
@@ -46,13 +56,16 @@ public class GPSThread extends Thread implements SensorEventListener {
 	}
 
 	/**
+	 * Jest to metoda uruchamiająca wątek do obsługi GPS.
 	 * Method starting the thread
 	 */
 	@Override
 	public void run() {
 		locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+		settingsProvider = new SettingsProvider();
 		locationListener = new LocationListener() {
 			/**
+			 * Metoda, która aktualizuje wartości w DataHolder po zmianie lokalizacji.
 			 * Method that updates values in DataHolder when locations is changed.
 			 */
 			@Override
@@ -66,6 +79,7 @@ public class GPSThread extends Thread implements SensorEventListener {
 			}
 
 			/**
+			 * Jest to metoda odpowiadająca za zmianę statusu wątku nawigacji.
 			 * Method responsible for handling status change
 			 * @param provider
 			 * @param status
@@ -76,6 +90,7 @@ public class GPSThread extends Thread implements SensorEventListener {
 			}
 
 			/**
+			 * Jest to metoda odpowiadająca za działania po uruchomieniu pracy dostawcy.
 			 * Method responsible for handling event of provider being enabled
 			 * @param provider
 			 */
@@ -84,6 +99,7 @@ public class GPSThread extends Thread implements SensorEventListener {
 			}
 
 			/**
+			 * Jest to metoda odpowiadająca za działania po zakończeniu pracy dostawcy.
 			 * Method responsible for handling event of provider being disabled
 			 * @param provider
 			 */
@@ -111,6 +127,7 @@ public class GPSThread extends Thread implements SensorEventListener {
 	}
 
 	/**
+	 * Jest to metoda odpowiadająca za zakończenie pracy wątku GPS.
 	 * Method responsible for stopping the thread
 	 */
 	public void stopGPS() {
@@ -120,6 +137,7 @@ public class GPSThread extends Thread implements SensorEventListener {
 	}
 
 	/**
+	 * Jest to metoda odpowiadająca za zmianę sensora.
 	 * Method to detect phone shake using acceleration sensor
 	 */
 	@Override
@@ -131,14 +149,41 @@ public class GPSThread extends Thread implements SensorEventListener {
 		lastAcceleration = currentAcceleration;
 		currentAcceleration = (float) Math.sqrt(x * x + y * y + z * z);
 
+		// make sure settings are not needlessly fetched 50 times/sec
+		long currentTime = System.currentTimeMillis();
+		if (currentTime - lastSettingsUpdateTime >= 2000) { // updates values every 2s
+			getSettingsValues();
+			lastSettingsUpdateTime = currentTime;
+		}
+
 		float delta = currentAcceleration - lastAcceleration;
 		acceleration = acceleration * 0.9f + delta;
-		if (acceleration > 1 && speed >= 20) { // TODO: Speed setting
+		if (acceleration > accelerometerSen && speed >= minimumSpeed) {
 			startEmergency();
 		}
 	}
 
 	/**
+	 * Jest to metoda służąca do otrzymywania ustawień
+	 * Method returning settings value
+	 */
+	private void getSettingsValues() {
+		try {
+			int selectedAccelerometerPosition = settingsProvider.getSettingInt(SettingNames.spinners[5]);
+			accelerometerSen = SettingOptions.accelerometerSens[selectedAccelerometerPosition];
+			int selectedMinSpeedPosition = settingsProvider.getSettingInt(SettingNames.spinners[5]);
+			minimumSpeed = SettingOptions.minimumSpeed[selectedMinSpeedPosition];
+			Log.d("GPSThread", ">>> Current acceleration sens: " + accelerometerSen);
+			Log.d("GPSThread", ">>> Current minimumSpeed: " + minimumSpeed);
+		} catch (JSONException e) {
+			Log.e("GPSThread", ">>> ERROR, "+ e);
+			accelerometerSen = 1;
+			minimumSpeed = 20;
+		}
+	}
+
+	/**
+	 * Jest to metoda odpowiadająca za zmianę dokładności.
 	 * Method responsible for handling accuracy change
 	 */
 	@Override
@@ -146,6 +191,7 @@ public class GPSThread extends Thread implements SensorEventListener {
 	}
 
 	/**
+	 * Jest to metoda odpowiadająca za rozpoczęcie nagrywania awaryjnego.
 	 * Method to start emergency recording
 	 */
 	private void startEmergency() {

@@ -1,6 +1,6 @@
 /*
     BSD 3-Clause License
-    Copyright (c) Wojciech Kuźbiński <wojkuzb@mat.umk.pl>, Damian Gałkowski <galdam@mat.umk.pl>, 2023
+    Copyright (c) Wojciech Kuźbiński <wojkuzb@mat.umk.pl>, Damian Gałkowski <galdam@mat.umk.pl>, Viacheslav Kushinir <kushnir@mat.umk.pl>, 2023
 
     See https://aleks-2.mat.umk.pl/pz2022/zesp10/#/project-info for see license text.
 */
@@ -43,6 +43,7 @@ public class Settings extends AppCompatActivity {
     private Spinner spinner3;
     private Spinner spinner4;
     private Spinner spinner5;
+    private Spinner spinner6;
 
     // elementy umieściłem w tablicy, dla ułatwienia użytkowania
     private SwitchMaterial[] mSwitch;
@@ -84,8 +85,9 @@ public class Settings extends AppCompatActivity {
         spinner3 = findViewById(R.id.spinner3);
         spinner4 = findViewById(R.id.spinner4);
         spinner5 = findViewById(R.id.spinner5);
+        spinner6 = findViewById(R.id.spinner6);
         mSwitch = new SwitchMaterial[] {null, switch1, switch2, switch3, switch4, switch5, switch6};
-        spinners = new Spinner[] {null, spinner1, spinner2, spinner3, spinner4, spinner5};
+        spinners = new Spinner[] {null, spinner1, spinner2, spinner3, spinner4, spinner5, spinner6};
     }
 
     /**
@@ -125,6 +127,8 @@ public class Settings extends AppCompatActivity {
         ArrayAdapter<String> adapter5 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, SettingOptions.SizeEmergency);
         spinner5.setAdapter(adapter5);
 
+        ArrayAdapter<String> adapter6 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, SettingOptions.AccelerometerSensitivity);
+        spinner6.setAdapter(adapter6);
     }
 
     /**

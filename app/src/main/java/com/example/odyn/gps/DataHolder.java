@@ -8,6 +8,7 @@
 package com.example.odyn.gps;
 
 /**
+ * Klasa odpowiedzialna za przechowywanie danych związanych z GPS, aby można było uzyskać do nich dostęp z innych klas
  * Class responsible for holding GPS-related data so it can be accessed by multiple other classes
  */
 public class DataHolder {
@@ -25,6 +26,7 @@ public class DataHolder {
 	private DataHolder() {	}
 
 	/**
+	 * Metoda odpowiedzialna za zwrócenie instancji DataHolder, jeśli istnieje. Jeśli nie, tworzy jedną.
 	 * Method responsible for returning instance of DataHolder, if it exists. If it doesn't, creates one.
 	 * @return instance
 	 */
@@ -36,6 +38,7 @@ public class DataHolder {
 	}
 
 	/**
+	 * Metoda zwracająca zapisaną długość geograficzną
 	 * Method returning stored longitude
 	 * @return longitude
 	 */
@@ -44,6 +47,7 @@ public class DataHolder {
 	}
 
 	/**
+	 * Metoda używana do aktualizacji wartości długości geograficznej
 	 * Method used to update longitude value
 	 */
 	public void setLongitude(String longitude) {
@@ -51,6 +55,7 @@ public class DataHolder {
 	}
 
 	/**
+	 * Metoda zwracająca zapisaną szerokość geograficzną
 	 * Method returning stored latitude
 	 * @return latitude
 	 */
@@ -59,6 +64,7 @@ public class DataHolder {
 	}
 
 	/**
+	 * Metoda używana do aktualizacji wartości szerokości geograficznej
 	 * Method used to update latitude value
 	 */
 	public void setLatitude(String latitude) {
@@ -66,6 +72,7 @@ public class DataHolder {
 	}
 
 	/**
+	 * Metoda zwracająca zapisaną prędkość
 	 * Method returning stored speed
 	 * @return speed
 	 */
@@ -74,6 +81,7 @@ public class DataHolder {
 	}
 
 	/**
+	 * Metoda używana do aktualizacji wartości prędkości
 	 * Method used to update speed value
 	 */
 	public void setSpeed(String speed) {
@@ -81,6 +89,7 @@ public class DataHolder {
 	}
 
 	/**
+	 * Metoda zwracająca zapisany licznik
 	 * Method returning stored counter
 	 * @return counter
 	 */
@@ -89,6 +98,7 @@ public class DataHolder {
 	}
 
 	/**
+	 * Metoda używana do aktualizacji wartości licznika
 	 * Method used to update counter value
 	 */
 	public void setCounter(String counter) {
@@ -96,6 +106,7 @@ public class DataHolder {
 	}
 
 	/**
+	 * Metoda zwracająca zapisany timer
 	 * Method returning stored timer
 	 * @return counter
 	 */
@@ -104,6 +115,7 @@ public class DataHolder {
 	}
 
 	/**
+	 * Metoda używana do aktualizacji wartości timera
 	 * Method used to update timer value
 	 */
 	public void setTimer(String timer) {
