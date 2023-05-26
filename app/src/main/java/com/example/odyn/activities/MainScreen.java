@@ -127,6 +127,7 @@ public class MainScreen extends AppCompatActivity {
 			SettingsProvider settingsProvider = new SettingsProvider();
 			showLocation = settingsProvider.getSettingBool(SettingNames.switches[2]);
 			showSpeed = settingsProvider.getSettingBool(SettingNames.switches[4]);
+			Log.e("MainScreen", ">>>" + showLocation + " " + showSpeed + "\n");
 		} catch (JSONException e) {
 			Log.e("MainScreen", ">>> nie załadowano ustawień, użyję wartości domyślnych\n" + e);
 			showLocation = SettingOptions.defaultSwitches[2];

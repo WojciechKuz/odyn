@@ -44,6 +44,7 @@ public class Settings extends AppCompatActivity {
     private Spinner spinner4;
     private Spinner spinner5;
     private Spinner spinner6;
+    private Spinner spinner7;
 
     // elementy umieściłem w tablicy, dla ułatwienia użytkowania
     private SwitchMaterial[] mSwitch;
@@ -86,8 +87,9 @@ public class Settings extends AppCompatActivity {
         spinner4 = findViewById(R.id.spinner4);
         spinner5 = findViewById(R.id.spinner5);
         spinner6 = findViewById(R.id.spinner6);
+        spinner7 = findViewById(R.id.spinner7);
         mSwitch = new SwitchMaterial[] {null, switch1, switch2, switch3, switch4, switch5, switch6};
-        spinners = new Spinner[] {null, spinner1, spinner2, spinner3, spinner4, spinner5, spinner6};
+        spinners = new Spinner[] {null, spinner1, spinner2, spinner3, spinner4, spinner5, spinner6, spinner7};
     }
 
     /**
@@ -129,6 +131,9 @@ public class Settings extends AppCompatActivity {
 
         ArrayAdapter<String> adapter6 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, SettingOptions.AccelerometerSensitivity);
         spinner6.setAdapter(adapter6);
+
+        ArrayAdapter<String> adapter7 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, SettingOptions.MinimumSpeed);
+        spinner7.setAdapter(adapter7);
     }
 
     /**

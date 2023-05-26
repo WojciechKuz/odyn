@@ -62,7 +62,6 @@ public class GPSThread extends Thread implements SensorEventListener {
 	@Override
 	public void run() {
 		locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-		settingsProvider = new SettingsProvider();
 		locationListener = new LocationListener() {
 			/**
 			 * Metoda, która aktualizuje wartości w DataHolder po zmianie lokalizacji.
@@ -169,6 +168,7 @@ public class GPSThread extends Thread implements SensorEventListener {
 	 */
 	private void getSettingsValues() {
 		try {
+			settingsProvider = new SettingsProvider();
 			int selectedAccelerometerPosition = settingsProvider.getSettingInt(SettingNames.spinners[5]);
 			accelerometerSen = SettingOptions.accelerometerSens[selectedAccelerometerPosition];
 			int selectedMinSpeedPosition = settingsProvider.getSettingInt(SettingNames.spinners[5]);

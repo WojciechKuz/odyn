@@ -240,7 +240,7 @@
                     android:layout_height="match_parent"
                     android:layout_alignParentLeft="true"
                     android:layout_toLeftOf="@id/spinner7"
-                    android:text="@string/accelerationSpinnerDesc"
+                    android:text="@string/minSpeedSpinnerDesc"
                     android:textColor="@color/black"
                     android:textSize="@dimen/spinner_description_text_size"
                     tools:ignore="RtlHardcoded" />
@@ -251,7 +251,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:background="@android:drawable/btn_dropdown"
-                    android:contentDescription="@string/accelerationSpinnerDesc"
+                    android:contentDescription="@string/minSpeedSpinnerDesc"
                     android:spinnerMode="dropdown" />
 
             </RelativeLayout>

@@ -38,6 +38,7 @@
     <string name="maxRecordingFolderSizeSpinnerDesc">Rozmiar katalogu nagrań</string>
     <string name="emergencyCatalogueSizeSpinnerDesc">Rozmiar katalogu nagrań awaryjnych</string>
     <string name="accelerationSpinnerDesc">Czułość na wstrząsy kolizyjne</string>
+    <string name="minSpeedSpinnerDesc">Minimalna prędkość do wykrycia kolizji</string>
 
     <string name="spinner7desc">Język, Language</string>
     <string name="menu_close_app">zamknij aplikację</string>
