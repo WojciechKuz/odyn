@@ -58,7 +58,7 @@
                 android:layout_weight="1"
                 android:layout_margin="1dp"
                 android:background="#00FFFFFF"
-                android:contentDescription="@string/take_video"
+                android:contentDescription="@string/take_video_button_desc"
                 android:scaleType="centerInside"
                 app:srcCompat="@drawable/record_active" />
 
