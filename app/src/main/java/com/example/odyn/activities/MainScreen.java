@@ -147,6 +147,7 @@ public class MainScreen extends AppCompatActivity {
 				} else {
 					speedText.setVisibility(View.INVISIBLE);
 				}
+				//Log.d("MainScreen", ">>> showLocation: " + showLocation + ", showSpeed: " + showSpeed);
 			}
 		});
 	}
@@ -164,6 +165,10 @@ public class MainScreen extends AppCompatActivity {
 				runOnUiThread(new Runnable() {
 					public void run() {
 						DataHolder dataHolder = DataHolder.getInstance();
+						Log.e("MainScreen", ">>> DataHolder: latitudeText " + dataHolder.getLatitude());
+						Log.e("MainScreen", ">>> DataHolder: longitudeText " + dataHolder.getLongitude());
+						Log.e("MainScreen", ">>> DataHolder: speedText " + dataHolder.getSpeed());
+						Log.e("MainScreen", ">>> DataHolder: timeText " + dataHolder.getTimer());
 						latitudeText.setText(dataHolder.getLatitude());
 						longitudeText.setText(dataHolder.getLongitude());
 						speedText.setText(dataHolder.getSpeed());

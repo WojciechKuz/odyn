@@ -188,6 +188,7 @@ public class MainService extends Service {
 		super.onCreate();
 		gpsThread = new GPSThread(getApplicationContext());
 		gpsThread.start();
+		//Log.d("MainService/GPSThread", "Started GPSThread");
 		timeHandlerThread = new TimeHandlerThread();
 		timeHandlerThread.start();
 		ServCounter.serviceStarted();

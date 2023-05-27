@@ -1,6 +1,6 @@
 /*
     BSD 3-Clause License
-    Copyright (c) Wojciech Kuźbiński <wojkuzb@mat.umk.pl>, Mateusz Szymczak <mszymczak710@mat.umk.pl>, 2023
+    Copyright (c) Wojciech Kuźbiński <wojkuzb@mat.umk.pl>, Mateusz Szymczak <mszymczak710@mat.umk.pl>, Viacheslav Kushinir <kushnir@mat.umk.pl>, 2023
 
     See https://aleks-2.mat.umk.pl/pz2022/zesp10/#/project-info for see license text.
 */
@@ -48,7 +48,7 @@ public class StartActivity extends AppCompatActivity {
 			Manifest.permission.RECORD_AUDIO,
 			Manifest.permission.WRITE_EXTERNAL_STORAGE,
 			Manifest.permission.ACCESS_FINE_LOCATION,
-			Manifest.permission.ACCESS_COARSE_LOCATION
+			Manifest.permission.ACCESS_COARSE_LOCATION,
 	};
 
 	/**
@@ -78,22 +78,28 @@ public class StartActivity extends AppCompatActivity {
 	public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
 		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 		StringBuilder upr = new StringBuilder("upr: ");
-		if(requestCode == permCode) {
+		if (requestCode == permCode) {
 			boolean permissionSum = true;
-			for(int granty : grantResults) {
-				permissionSum = permissionSum && (granty == PackageManager.PERMISSION_GRANTED);
-				upr.append(granty == PackageManager.PERMISSION_GRANTED).append(", ");
+			for (int i = 0; i < grantResults.length; i++) {
+				int grantResult = grantResults[i];
+				// Check if the permission is WRITE_EXTERNAL_STORAGE and the SDK is 30 or higher and skip it if it's API30+
+				if (Manifest.permission.WRITE_EXTERNAL_STORAGE.equals(permissions[i])
+						&& android.os.Build.VERSION.SDK_INT >= 30) {
+					permissionSum = permissionSum && true;
+					upr.append(grantResult == PackageManager.PERMISSION_GRANTED).append(", ");
+				} else {
+					permissionSum = permissionSum && (grantResult == PackageManager.PERMISSION_GRANTED);
+					upr.append(grantResult == PackageManager.PERMISSION_GRANTED).append(", ");
+				}
 			}
-			if(permissionSum) {
+			if (permissionSum) {
 				Log.d("StartActivity", ">>> Mam uprawnienia, uruchamiam MainService");
 				startMainService();
-			}
-			else {
+			} else {
 				upr.append('.');
 				Log.w("StartActivity", ">>> Nie wyrażono zgody na wszystkie potrzebne uprawnienia" + upr);
 			}
 		}
-
 	}
 
 

@@ -8,7 +8,9 @@
 package com.example.odyn.gps;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -21,11 +23,16 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
+import androidx.core.app.ActivityCompat;
+
+import android.Manifest;
 import com.example.odyn.main_service.ServiceConnector;
 import com.example.odyn.main_service.types.IconType;
 import com.example.odyn.settings.SettingNames;
 import com.example.odyn.settings.SettingOptions;
 import com.example.odyn.settings.SettingsProvider;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 
 import org.json.JSONException;
 
@@ -74,7 +81,7 @@ public class GPSThread extends Thread implements SensorEventListener {
 				dataHolder.setLongitude("Long: " + location.getLongitude());
 				speed = location.getSpeed() * 3.6;
 				dataHolder.setSpeed("Speed: " + String.format("%.1f", speed));
-				//Log.d("GPSThread", "Latitude: " + dataHolder.getLatitude() + ", Longitude: " + dataHolder.getLongitude() + ", Speed: " + dataHolder.getSpeed() + "km/h");
+				//Log.d("GPSThread", dataHolder.getLatitude() + ", " + dataHolder.getLongitude() + ", " + dataHolder.getSpeed());
 			}
 
 			/**
@@ -107,6 +114,8 @@ public class GPSThread extends Thread implements SensorEventListener {
 			}
 		};
 
+		Log.d("GPSThread", "Latitude");
+
 		sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
 		accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 		acceleration = 0.0f;
@@ -117,8 +126,14 @@ public class GPSThread extends Thread implements SensorEventListener {
 			@SuppressLint("MissingPermission") // already requested on app startup
 			@Override
 			public void run() {
-				locationManager.requestLocationUpdates(LocationManager.FUSED_PROVIDER, 1000, 0, locationListener);
-				sensorManager.registerListener(GPSThread.this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+				int resultCode = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(context);
+				if (resultCode == ConnectionResult.SUCCESS) {
+					//Log.d("GPSThread", "handler runnable");
+					locationManager.requestLocationUpdates(LocationManager.FUSED_PROVIDER, 1000, 0, locationListener);
+					sensorManager.registerListener(GPSThread.this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+				} else {
+					Log.e("GPSThread", "Google Play services are not available or need an update");
+				}
 			}
 		});
 		locationManager.removeUpdates(locationListener);
