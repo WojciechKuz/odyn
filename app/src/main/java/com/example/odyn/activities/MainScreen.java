@@ -347,6 +347,7 @@ public class MainScreen extends AppCompatActivity {
 	 * @param item Pozycja w menu
 	 */
 	public void onClickRecordingsList(MenuItem item) {
+		// TODO zmienić, dostosować do katalogów: zdjęcia, wideo, awaryjne, dane_GPS
 		Intent intent = new Intent(Intent.ACTION_VIEW);
 		intent.setDataAndType(Uri.parse("content://media/internal/images/media"), "image/*");
 		startActivity(intent);
