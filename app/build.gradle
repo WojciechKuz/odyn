@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.odyn'
+    namespace 'pl.umk.mat.odyn'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.example.odyn"
+        applicationId "pl.umk.mat.odyn"
         minSdk 23
         targetSdk 33
         versionCode 1
