@@ -89,7 +89,7 @@ public class MainScreen extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_drawer);
 
-		Log.d("MainScreen", ">>> onCreate DrawerActivity");
+		Log.v("MainScreen", ">>> onCreate DrawerActivity");
 
 		setupMainScreen();
 		setupVisibility();
@@ -165,10 +165,12 @@ public class MainScreen extends AppCompatActivity {
 				runOnUiThread(new Runnable() {
 					public void run() {
 						DataHolder dataHolder = DataHolder.getInstance();
-						Log.e("MainScreen", ">>> DataHolder: latitudeText " + dataHolder.getLatitude());
-						Log.e("MainScreen", ">>> DataHolder: longitudeText " + dataHolder.getLongitude());
-						Log.e("MainScreen", ">>> DataHolder: speedText " + dataHolder.getSpeed());
-						Log.e("MainScreen", ">>> DataHolder: timeText " + dataHolder.getTimer());
+						if (false) {
+							Log.d("MainScreen", ">>> DataHolder: latitudeText " + dataHolder.getLatitude());
+							Log.d("MainScreen", ">>> DataHolder: longitudeText " + dataHolder.getLongitude());
+							Log.d("MainScreen", ">>> DataHolder: speedText " + dataHolder.getSpeed());
+							Log.d("MainScreen", ">>> DataHolder: timeText " + dataHolder.getTimer());
+						}
 						latitudeText.setText(dataHolder.getLatitude());
 						longitudeText.setText(dataHolder.getLongitude());
 						speedText.setText(dataHolder.getSpeed());
@@ -192,10 +194,10 @@ public class MainScreen extends AppCompatActivity {
 		CamInfo camInfo = null;
 		if(cam.canIgetCamInfo()) {
 			camInfo = cam.getCamInfo();	// TODO use bitmap and info to analyze image
-			Log.d("MainScreen", ">>> Otrzymano CamInfo");
+			Log.v("MainScreen", ">>> Otrzymano CamInfo");
 		}
 		else {
-			Log.d("MainScreen", ">>> Nie można tu jeszcze otrzymać CamInfo");
+			Log.v("MainScreen", ">>> Nie można tu jeszcze otrzymać CamInfo");
 		}
 
 		// obsługa przycisków, metody do obsługi (np. this::onClickPhoto) znajdują się poniżej
@@ -252,7 +254,7 @@ public class MainScreen extends AppCompatActivity {
 	 * @param view Widok
 	 */
 	public void onClickMenu(View view) {
-		Log.d("MainScreen", ">>> otwórz menu");
+		Log.v("MainScreen", ">>> otwórz menu");
 		DrawerLayout drawer = findViewById(R.id.drawer_layout);
 
 		int grawitacja = darkSideOfMenu();
@@ -265,7 +267,7 @@ public class MainScreen extends AppCompatActivity {
 	 * @param view Widok
 	 */
 	public void onClickPhoto(View view) {
-		Log.d("MainScreen", ">>> zrób zdjęcie");
+		Log.v("MainScreen", ">>> zrób zdjęcie");
 		ServiceConnector.onClickIcon(IconType.photo);
 
 		// na 0,6s zmień ikonkę, aby było widać, że kliknięto
@@ -286,7 +288,7 @@ public class MainScreen extends AppCompatActivity {
 	 * @param view Widok
 	 */
 	public void onClickEmergency(View view) {
-		Log.d("MainScreen", ">>> nagrywanie awaryjne");
+		Log.v("MainScreen", ">>> nagrywanie awaryjne");
 		ServiceConnector.onClickIcon(IconType.emergency);
 
 		// FIXME this is Temporary code, because there's no emergency recording feature yet
@@ -310,7 +312,7 @@ public class MainScreen extends AppCompatActivity {
 	 * @param view Widok
 	 */
 	public void onClickRecord(View view) {
-		Log.d("MainScreen", ">>> nagraj");
+		Log.v("MainScreen", ">>> nagraj");
 		ServiceConnector.onClickIcon(IconType.recording);
 
 		// zmiana koloru ikony, aby zasygnalizować nagrywanie
@@ -334,7 +336,7 @@ public class MainScreen extends AppCompatActivity {
 	 * @param item Pozycja w menu
 	 */
 	public void onClickCloseMenu(MenuItem item) {
-		Log.d("MainScreen", ">>> zamknij menu");
+		Log.v("MainScreen", ">>> zamknij menu");
 		DrawerLayout drawer = findViewById(R.id.drawer_layout);
 
 		int grawitacja = darkSideOfMenu();
