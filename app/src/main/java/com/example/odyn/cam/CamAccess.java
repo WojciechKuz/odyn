@@ -403,7 +403,7 @@ public class CamAccess {
                              */
                             @Override
                             public void onError(int videoCaptureError, @NonNull String message, @Nullable Throwable cause) {
-                                System.out.println("----------GownoVID----------");
+                                System.out.println("----------ErrorVID----------");
                                 Log.e("CamAccess", ">>> Nie udało się zapisać nagrania");
                             }
                         });
