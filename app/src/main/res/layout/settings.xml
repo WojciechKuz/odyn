@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
     BSD 3-Clause License
-    Copyright (c) Wojciech Kuźbiński <wojkuzb@mat.umk.pl>, Damian Gałkowski <galdam@mat.umk.pl>, 2023
+    Copyright (c) Wojciech Kuźbiński <wojkuzb@mat.umk.pl>, Damian Gałkowski <galdam@mat.umk.pl>, Viacheslav Kushinir <kushnir@mat.umk.pl>, 2023
 
     See https://aleks-2.mat.umk.pl/pz2022/zesp10/#/project-info for see license text.
 -->
@@ -23,42 +23,43 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="@dimen/switch_text_size"
-            android:text="@string/switch1desc" />
+            android:text="@string/aiSwitchDesc"
+            android:visibility="gone" /> <!-- no AI :( -->
 
         <com.google.android.material.switchmaterial.SwitchMaterial
             android:id="@+id/switch2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="@dimen/switch_text_size"
-            android:text="@string/switch2desc" />
+            android:text="@string/locationDisplaySwitchDesc" />
 
         <com.google.android.material.switchmaterial.SwitchMaterial
             android:id="@+id/switch3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="@dimen/switch_text_size"
-            android:text="@string/switch3desc" />
+            android:text="@string/locationRecordingSwitchDesc" />
 
         <com.google.android.material.switchmaterial.SwitchMaterial
             android:id="@+id/switch4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="@dimen/switch_text_size"
-            android:text="@string/switch4desc" />
+            android:text="@string/speedDisplaySwitchDesc" />
 
         <com.google.android.material.switchmaterial.SwitchMaterial
             android:id="@+id/switch5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="@dimen/switch_text_size"
-            android:text="@string/switch5desc" />
+            android:text="@string/speedRecordingSwitchDesc" />
 
         <com.google.android.material.switchmaterial.SwitchMaterial
             android:id="@+id/switch6"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="@dimen/switch_text_size"
-            android:text="@string/switch6desc" />
+            android:text="@string/soundRecordingSwitchDesc" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -77,7 +78,7 @@
                     android:layout_height="match_parent"
                     android:layout_alignParentLeft="true"
                     android:layout_toLeftOf="@id/spinner1"
-                    android:text="@string/spinner1desc"
+                    android:text="@string/whereToSaveSwitchDesc"
                     android:textColor="@color/black"
                     android:textSize="@dimen/spinner_description_text_size"
                     tools:ignore="RtlHardcoded" />
@@ -88,7 +89,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:background="@android:drawable/btn_dropdown"
-                    android:contentDescription="@string/spinner1desc"
+                    android:contentDescription="@string/locationRecordingSwitchDesc"
                     android:spinnerMode="dropdown" />
 
             </RelativeLayout>
@@ -105,7 +106,7 @@
                     android:layout_height="match_parent"
                     android:layout_alignParentLeft="true"
                     android:layout_toLeftOf="@id/spinner2"
-                    android:text="@string/spinner2desc"
+                    android:text="@string/menuPositionSpinnerDesc"
                     android:textColor="@color/black"
                     android:textSize="@dimen/spinner_description_text_size"
                     tools:ignore="RtlHardcoded"/>
@@ -116,7 +117,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:background="@android:drawable/btn_dropdown"
-                    android:contentDescription="@string/spinner2desc"
+                    android:contentDescription="@string/menuPositionSpinnerDesc"
                     android:spinnerMode="dropdown" />
 
             </RelativeLayout>
@@ -132,7 +133,7 @@
                     android:layout_height="match_parent"
                     android:layout_alignParentLeft="true"
                     android:layout_toLeftOf="@id/spinner3"
-                    android:text="@string/spinner3desc"
+                    android:text="@string/recordingLengthSpinnerDesc"
                     android:textColor="@color/black"
                     android:textSize="@dimen/spinner_description_text_size"
                     tools:ignore="RtlHardcoded"/>
@@ -143,7 +144,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:background="@android:drawable/btn_dropdown"
-                    android:contentDescription="@string/spinner3desc"
+                    android:contentDescription="@string/recordingLengthSpinnerDesc"
                     android:spinnerMode="dropdown" />
 
             </RelativeLayout>
@@ -159,7 +160,7 @@
                     android:layout_height="match_parent"
                     android:layout_alignParentLeft="true"
                     android:layout_toLeftOf="@id/spinner4"
-                    android:text="@string/spinner4desc"
+                    android:text="@string/maxRecordingFolderSizeSpinnerDesc"
                     android:textColor="@color/black"
                     android:textSize="@dimen/spinner_description_text_size"
                     tools:ignore="RtlHardcoded" />
@@ -170,7 +171,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:background="@android:drawable/btn_dropdown"
-                    android:contentDescription="@string/spinner4desc"
+                    android:contentDescription="@string/maxRecordingFolderSizeSpinnerDesc"
                     android:spinnerMode="dropdown" />
 
             </RelativeLayout>
@@ -186,7 +187,7 @@
                     android:layout_height="match_parent"
                     android:layout_alignParentLeft="true"
                     android:layout_toLeftOf="@id/spinner5"
-                    android:text="@string/spinner4desc"
+                    android:text="@string/emergencyCatalogueSizeSpinnerDesc"
                     android:textColor="@color/black"
                     android:textSize="@dimen/spinner_description_text_size"
                     tools:ignore="RtlHardcoded" />
@@ -197,7 +198,61 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:background="@android:drawable/btn_dropdown"
-                    android:contentDescription="@string/spinner5desc"
+                    android:contentDescription="@string/emergencyCatalogueSizeSpinnerDesc"
+                    android:spinnerMode="dropdown" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/row6"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/textView6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentLeft="true"
+                    android:layout_toLeftOf="@id/spinner6"
+                    android:text="@string/accelerationSpinnerDesc"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/spinner_description_text_size"
+                    tools:ignore="RtlHardcoded" />
+
+                <Spinner
+                    android:id="@+id/spinner6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:background="@android:drawable/btn_dropdown"
+                    android:contentDescription="@string/accelerationSpinnerDesc"
+                    android:spinnerMode="dropdown" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/row7"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/textView7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentLeft="true"
+                    android:layout_toLeftOf="@id/spinner7"
+                    android:text="@string/minSpeedSpinnerDesc"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/spinner_description_text_size"
+                    tools:ignore="RtlHardcoded" />
+
+                <Spinner
+                    android:id="@+id/spinner7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:background="@android:drawable/btn_dropdown"
+                    android:contentDescription="@string/minSpeedSpinnerDesc"
                     android:spinnerMode="dropdown" />
 
             </RelativeLayout>
