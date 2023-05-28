@@ -24,10 +24,10 @@
         android:theme="@style/Theme.odyn"
         tools:targetApi="29">
         <activity
-            android:name=".activities.MainScreen"
+            android:name="pl.umk.mat.odyn.activities.MainScreen"
             android:exported="false" />
         <activity
-            android:name=".activities.StartActivity"
+            android:name="pl.umk.mat.odyn.activities.StartActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -37,15 +37,15 @@
         </activity>
 
         <service
-            android:name=".main_service.MainService"
+            android:name="pl.umk.mat.odyn.main_service.MainService"
             android:exported="false"
             android:foregroundServiceType="camera|microphone|location"/>
 
         <activity
-            android:name=".activities.RecordingList"
+            android:name="pl.umk.mat.odyn.activities.RecordingList"
             android:exported="false" />
         <activity
-            android:name=".activities.Settings"
+            android:name="pl.umk.mat.odyn.activities.Settings"
             android:exported="false" />
     </application>
 
