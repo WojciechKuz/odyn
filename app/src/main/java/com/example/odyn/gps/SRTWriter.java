@@ -66,7 +66,7 @@ public class SRTWriter extends Thread {
 						srtLine += longitudeText;
 					}
 					srtLine += "\n\n";
-					Log.d("GPS", srtLine);
+					//Log.d("GPS", srtLine); // turned off to prevent spamming Logs
 					writer.write(srtLine);
 					writer.flush();
 					//Log.d("GPSThread","Wrote srt line");
