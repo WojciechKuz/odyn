@@ -70,7 +70,7 @@ public class NotificationCreator {
 		// ikonki akcji
 		builder.addAction(emerg);
 		builder.addAction(recrd);
-		builder.addAction(photo);
+		//builder.addAction(photo);
 		//builder.addAction(back);
 
 		// zamknie się powiadomienie, to apka też się zamknie
