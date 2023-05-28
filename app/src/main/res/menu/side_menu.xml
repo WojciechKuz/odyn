@@ -13,13 +13,14 @@
         android:onClick="onClickCloseMenu">
     </item>
     <item android:id="@+id/to_list"
-        android:title="@string/menu_open_recording_list">
+        android:title="@string/menu_open_recording_list"
+        android:onClick="onClickRecordingsList" >
         <!--
         zdjęcia
         wideo
         awaryjne
         dane GPS
-        -->
+
         <menu>
             <item android:id="@+id/picture_list"
                 android:title="@string/menu_gallery_pict"
@@ -38,6 +39,7 @@
                 android:onClick="onClickRecordingsList">
             </item>
         </menu>
+        -->
     </item>
     <item android:id="@+id/to_settings"
         android:title="@string/menu_open_settings"
