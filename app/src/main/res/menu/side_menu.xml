@@ -21,19 +21,19 @@
         dane GPS
         -->
         <menu>
-            <item android:id="picture_list"
+            <item android:id="@+id/picture_list"
                 android:title="@string/menu_gallery_pict"
                 android:onClick="onClickRecordingsList">
             </item>
-            <item android:id="video_list"
+            <item android:id="@+id/video_list"
                 android:title="@string/menu_gallery_video"
                 android:onClick="onClickRecordingsList">
             </item>
-            <item android:id="emergency_list"
+            <item android:id="@+id/emergency_list"
                 android:title="@string/menu_gallery_emergency"
                 android:onClick="onClickRecordingsList">
             </item>
-            <item android:id="data_list"
+            <item android:id="@+id/data_list"
                 android:title="@string/menu_explore_srt"
                 android:onClick="onClickRecordingsList">
             </item>

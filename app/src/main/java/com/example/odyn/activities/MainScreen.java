@@ -206,6 +206,17 @@ public class MainScreen extends AppCompatActivity {
 		findViewById(R.id.PhotoButton).setOnClickListener(this::onClickPhoto);
 		findViewById(R.id.RecordButton).setOnClickListener(this::onClickRecord);
 		findViewById(R.id.EmergencyButton).setOnClickListener(this::onClickEmergency);
+
+		DrawerLayout drawer = findViewById(R.id.drawer_layout);
+		NavigationView navigationView = findViewById(R.id.nav_view);
+		try {
+			int side = new SettingsProvider().getSettingInt(SettingNames.spinners[2]);
+			if(side == 1) {
+				getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+			}
+		} catch (JSONException e) {
+			Log.e("MainScreen", ">>> Nie udało się odczytać ustawień");
+		}
 	}
 
 	// metody cyklu życia aktywności
@@ -399,6 +410,8 @@ public class MainScreen extends AppCompatActivity {
 	 */
 	@SuppressLint("RtlHardcoded")
 	private int darkSideOfMenu() {
+		if(true)
+			return Gravity.START;
 		int leftOrRight = -1;
 		try {
 			leftOrRight = new SettingsProvider().getSettingInt(SettingNames.spinners[2]);
