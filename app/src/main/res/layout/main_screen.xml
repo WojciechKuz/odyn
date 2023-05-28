@@ -70,6 +70,7 @@
                 android:layout_margin="1dp"
                 android:background="#00FFFFFF"
                 android:contentDescription="@string/photo_button_desc"
+                android:visibility="gone"
                 android:scaleType="fitCenter"
                 app:srcCompat="@drawable/photo" />
 
