@@ -194,8 +194,8 @@ public class CamAccess {
     private UseCaseGroup createUseCases(Preview preview, ImageCapture imageCapture, VideoCapture videoCapture) {
         UseCaseGroup.Builder ucgBuilder = new UseCaseGroup.Builder();
 
-        ucgBuilder.addUseCase(imageCapture);
-        //ucgBuilder.addUseCase(videoCapture); // FIXME temporary disabled
+        //ucgBuilder.addUseCase(imageCapture);  // FIXME temporary disabled
+        ucgBuilder.addUseCase(videoCapture);
         ucgBuilder.addUseCase(preview);
 
         return ucgBuilder.build();
@@ -207,6 +207,11 @@ public class CamAccess {
      * @param file Plik
      */
     public void takePicture(File file) {
+
+        if(true) {
+            Log.i("CamAccess", ">>> NO PHOTO. This version of app has disabled taking photo!\n" + "It's for older devices with only 2 maximum camerax use cases");
+            return; // FIXME temporary disabled
+        }
         // Set up the output file and capture the image
         ImageCapture.OutputFileOptions outputFileOptions = new ImageCapture.OutputFileOptions.Builder(file).build();
         imageCapture.takePicture(outputFileOptions, ContextCompat.getMainExecutor(main), new ImageCapture.OnImageSavedCallback() {
@@ -381,10 +386,6 @@ public class CamAccess {
      */
     @SuppressLint({"RestrictedApi", "MissingPermission"})
     public void takeVideo(boolean option) {
-        if(true) {
-            Log.i("CamAccess", ">>> NO RECORDING. This version of app has disabled recording videos!\n" + "It's for older devices with only 2 maximum camerax use cases");
-            return; // FIXME temporary disabled
-        }
         if(!option) {
          //   timer.cancel();
             srtWriter.stopWriting();
