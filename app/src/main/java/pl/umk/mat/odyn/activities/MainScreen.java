@@ -77,6 +77,7 @@ public class MainScreen extends AppCompatActivity {
 
 	private Handler delayHandler = new Handler();
 	Timer gpsTimer = new Timer();
+	Timer AITimer = new Timer();
 	private boolean isEmergencyActive = false;
 	private boolean isVideoActive = true;
 
@@ -94,6 +95,7 @@ public class MainScreen extends AppCompatActivity {
 		setupMainScreen();
 		setupVisibility();
 		gpsInfoUpdate();
+		AIInfoUpdate();
 
 		NavigationView navigationView = findViewById(R.id.nav_view);
 		Menu menu = navigationView.getMenu();
@@ -122,12 +124,14 @@ public class MainScreen extends AppCompatActivity {
 		TextView latitudeText = findViewById(R.id.latitudeText);
 		TextView longitudeText = findViewById(R.id.longitudeText);
 		TextView speedText = findViewById(R.id.speedText);
+		TextView distance = findViewById(R.id.distance);
 		runOnUiThread(new Runnable() {
-			Boolean showLocation, showSpeed;
+			Boolean showLocation, showSpeed, showDistance ;
 			@Override
 			public void run() {
 				try {
 					SettingsProvider settingsProvider = new SettingsProvider();
+					showDistance = settingsProvider.getSettingBool(SettingNames.switches[1]);
 					showLocation = settingsProvider.getSettingBool(SettingNames.switches[2]);
 					showSpeed = settingsProvider.getSettingBool(SettingNames.switches[4]);
 				} catch (JSONException e) {
@@ -147,11 +151,33 @@ public class MainScreen extends AppCompatActivity {
 				} else {
 					speedText.setVisibility(View.INVISIBLE);
 				}
+				if (showDistance) {
+					distance.setVisibility(View.VISIBLE);
+				} else {
+					distance.setVisibility(View.INVISIBLE);
+				}
 				//Log.d("MainScreen", ">>> showLocation: " + showLocation + ", showSpeed: " + showSpeed);
 			}
 		});
 	}
+	private void AIInfoUpdate() {
+		final TextView distance = findViewById(R.id.distance);
+		TimerTask task = new TimerTask() {
+			public void run() {
+				runOnUiThread(new Runnable() {
+					public void run() {
+						if (false) {
+							//Log.d("MainScreen", ">>> DataHolder: distance " + class);
 
+						}
+						distance.setText("Dziala elo");
+						setupVisibility();
+					}
+				});
+			}
+		};
+		AITimer.schedule(task, 0, 1000);
+	}
 	/**
 	 * Jest to metoda odpowiedzialna za aktualizację wartości GPS na ekranie
 	 */
