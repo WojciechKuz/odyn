@@ -238,7 +238,7 @@ public class CamAccess {
         /**
          * Jest to metoda odpowiedzialna za dostarczanie obrazu do analizy AI.
          */
-        private void takePictureBMP(){
+        private Bitmap takePictureBMP(){
             imageCapture.takePicture(ContextCompat.getMainExecutor(main), new ImageCapture.OnImageCapturedCallback() {
                 /**
                  * Jest to metoda odpowiedzialna za obsługę otrzymania bitmapy.
@@ -263,6 +263,7 @@ public class CamAccess {
                     super.onError(exception);
                 }
             });
+            return BMP;
         }
 
         /**

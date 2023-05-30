@@ -7,8 +7,6 @@
 
 package pl.umk.mat.odyn.activities;
 
-import static java.lang.Thread.sleep;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -77,6 +75,7 @@ public class MainScreen extends AppCompatActivity {
 
 	private Handler delayHandler = new Handler();
 	Timer gpsTimer = new Timer();
+	Timer AITimer = new Timer();
 	private boolean isEmergencyActive = false;
 	private boolean isVideoActive = true;
 
@@ -94,6 +93,8 @@ public class MainScreen extends AppCompatActivity {
 		setupMainScreen();
 		setupVisibility();
 		gpsInfoUpdate();
+		AIInfoUpdate();
+
 
 		NavigationView navigationView = findViewById(R.id.nav_view);
 		Menu menu = navigationView.getMenu();
@@ -103,7 +104,6 @@ public class MainScreen extends AppCompatActivity {
 			spannableString.setSpan(new RelativeSizeSpan(1.7f), 0, spannableString.length(), 0);
 			menuItem.setTitle(spannableString);
 		}
-
 		/*
 		try {
 			sleep(20);
@@ -114,7 +114,6 @@ public class MainScreen extends AppCompatActivity {
 		onClickRecord(null);
 		*/
 	}
-
 	/**
 	 * Jest to odpowiadająca za przełączanie widoczności lokalizacji i prędkości na ekranie.
 	 */
@@ -122,14 +121,16 @@ public class MainScreen extends AppCompatActivity {
 		TextView latitudeText = findViewById(R.id.latitudeText);
 		TextView longitudeText = findViewById(R.id.longitudeText);
 		TextView speedText = findViewById(R.id.speedText);
+		TextView distance = findViewById(R.id.distance);
 		runOnUiThread(new Runnable() {
-			Boolean showLocation, showSpeed;
+			Boolean showLocation, showSpeed,distance;
 			@Override
 			public void run() {
 				try {
 					SettingsProvider settingsProvider = new SettingsProvider();
 					showLocation = settingsProvider.getSettingBool(SettingNames.switches[2]);
 					showSpeed = settingsProvider.getSettingBool(SettingNames.switches[4]);
+					distance = settingsProvider.getSettingBool(SettingNames.switches[1]);
 				} catch (JSONException e) {
 					Log.e("MainScreen", ">>> nie załadowano ustawień, użyję wartości domyślnych\n" + e);
 					showLocation = SettingOptions.defaultSwitches[2];
@@ -147,11 +148,35 @@ public class MainScreen extends AppCompatActivity {
 				} else {
 					speedText.setVisibility(View.INVISIBLE);
 				}
+				if (distance) {
+					speedText.setVisibility(View.VISIBLE);
+				} else {
+					speedText.setVisibility(View.INVISIBLE);
+				}
 				//Log.d("MainScreen", ">>> showLocation: " + showLocation + ", showSpeed: " + showSpeed);
 			}
 		});
 	}
+	private void AIInfoUpdate() {
+		final TextView distance = findViewById(R.id.distance);
+		TimerTask task = new TimerTask() {
+			public void run() {
+				runOnUiThread(new Runnable() {
+					public void run() {
 
+						if (false) {
+							//Log.d("MainScreen", ">>> Distance: " + class);
+
+						}
+						CamInfo caminfo = cam.getCamInfo();
+						distance.setText("Miejsce na odleglosc");
+						setupVisibility();
+					}
+				});
+			}
+		};
+		AITimer.schedule(task, 0, 1000);
+	}
 	/**
 	 * Jest to metoda odpowiedzialna za aktualizację wartości GPS na ekranie
 	 */
@@ -186,11 +211,14 @@ public class MainScreen extends AppCompatActivity {
 	/**
 	 * Jest to metoda odpowiadająca za ustawienie prawidłowego działania ekranu głównego.
 	 */
+	private Cam cam;
 	private void setupMainScreen() {
 		ServiceConnector.setActivity(this); // static, usunięcie w onDestroy()
 		Cam cam = new Cam(this);
 		ServiceConnector.sendCam(cam); // zwraca do MainService, jak się da to tworzenie z powrotem przenieść do MainService
+		this.cam = cam;
 
+		// to nie potrzebne
 		CamInfo camInfo = null;
 		if(cam.canIgetCamInfo()) {
 			camInfo = cam.getCamInfo();	// TODO use bitmap and info to analyze image

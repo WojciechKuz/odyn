@@ -6,7 +6,6 @@
 */
 
 package pl.umk.mat.odyn.cam;
-
 import android.graphics.Bitmap;
 
 /**
@@ -43,7 +42,6 @@ public class CamInfo {
 	public float getWidth() {
 		return width;
 	}
-
 	/**
 	 * Jest to metoda odpowiedzialna za otrzymywanie informacji o wysokości.
 	 */
