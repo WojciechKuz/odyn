@@ -36,7 +36,6 @@ public class FileHandler {
     private String emergSubdir = "emergency_recordings";
     private String dataSubdir = "data";
     private Context context;
-
     private SettingsProvider settingsProvider;
     private boolean isEmergency = false;
 
@@ -200,9 +199,6 @@ public class FileHandler {
             }
         }
     }
-
-
-
     /**
      * Jest to metoda służąca do otrzymywania rozmiaru katalogu.
      * @param directoryPath Ścieżka do katalogu
@@ -225,11 +221,8 @@ public class FileHandler {
                 }
             }
         }
-
         return size;
     }
-
-
     /**
      * Jest to metoda służąca do otrzymywania rozmiaru katalogu z plikami obrazów.
      */
