@@ -239,7 +239,7 @@ public class CamAccess {
         /**
          * Jest to metoda wywoływana w celu otrzymania informacji do analizy AI.
          */
-        private synchronized Bitmap takePictureBMP(){
+        private synchronized void takePictureBMP(){
             Log.d("CamAccess", ">>> takePictureBMP()");
             imageCapture.takePicture(ContextCompat.getMainExecutor(main), new ImageCapture.OnImageCapturedCallback() {
                 /**
@@ -273,7 +273,6 @@ public class CamAccess {
                     super.onError(exception);
                 }
             });
-            return BMP;
         }
 
         /**

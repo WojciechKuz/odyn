@@ -52,14 +52,14 @@ public class Detection {
                 image = ThumbnailUtils.extractThumbnail(image,dimension,dimension);
                 image = Bitmap.createScaledBitmap(image, imageSize,imageSize, true);
                 Matrix matrix = new Matrix();
-                matrix.postRotate(270);
+                matrix.postRotate(90);
                 image = Bitmap.createBitmap(image, 0, 0, image.getWidth(),image.getHeight() , matrix, true);
+            }else {
+                int dimension = Math.min(image.getHeight(), image.getWidth());
+                image = ThumbnailUtils.extractThumbnail(image, dimension, dimension);
+                image = Bitmap.createScaledBitmap(image, imageSize, imageSize, true);
+
             }
-            int dimension = Math.min(image.getHeight(), image.getWidth());
-            image = ThumbnailUtils.extractThumbnail(image,dimension,dimension);
-            image = Bitmap.createScaledBitmap(image, imageSize,imageSize, true);
-
-
             int[] intValues = new int[image.getWidth() * image.getHeight()];
             image.getPixels(intValues, 0, image.getWidth(), 0, 0, image.getWidth(), image.getHeight());
             int pixel = 0;
@@ -73,6 +73,7 @@ public class Detection {
                 }
             }
             inputFeature0.loadBuffer(byteBuffer);
+
 
             // Runs model inference and gets result.
             Detect.Outputs outputs = model.process(inputFeature0);
@@ -91,10 +92,10 @@ public class Detection {
                     maxPos = i;
                 }
             }
-            //System.out.println(caminfo.getHeight() + "wysokosc");
+            System.out.println(caminfo.getFOV() + "FOV");
             //System.out.println(caminfo.getWidth() + "szerokosc");
             System.out.println(maxConfidence);
-            if(maxConfidence > 0.5) {
+            if(maxConfidence > 0.3) {
                 // Retrieve the bounding box coordinates for the detected object with the best confidence
                 int offset = maxPos * 4;
                 float xmin = boundingBoxes[offset];
