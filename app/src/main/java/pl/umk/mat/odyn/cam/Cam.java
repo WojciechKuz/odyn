@@ -108,13 +108,12 @@ public class Cam extends CamAccess {
 	 * Jest to metoda służąca do nagrywania awaryjnego.
 	 */
 	private void emergency() {
-		//File file = new FileHandler(main).createEmergencyVideo("mp4");
 		if (!isEmergency) {
 			isEmergency = true;
-			takeVideo(isEmergency);
+			setEmergencyMode(true);
 		} else {
-			isEmergency = false;
-			takeVideo(isEmergency);
+			isEmergency = true;
+			setEmergencyMode(true);
 		}
 	}
 

@@ -185,17 +185,30 @@ public class FileHandler {
             File emergDir = new File(getDirPath(emergSubdir));
             createDirIfNotExists(emergDir.getAbsolutePath()); // Upewnij się, że katalog "emergency_recordings" istnieje
 
+            File latestFile = null;
+            long latestTimestamp = 0;
+
+            // Znajdź najnowszy plik
             for (File file : videoFiles) {
                 if (file.isFile()) {
-                    String fileName = file.getName();
-                    String destinationPath = getDirPath(emergSubdir) + File.separator + fileName;
-
-                    File destinationFile = new File(destinationPath);
-                    if (file.renameTo(destinationFile)) {
-                        Log.d("FileHandler", ">>> Przeniesiono plik do awaryjnych: " + fileName);
-                    } else {
-                        Log.e("FileHandler", ">>> Nie udało się przenieść pliku do awaryjnych: " + fileName);
+                    long timestamp = file.lastModified();
+                    if (timestamp > latestTimestamp) {
+                        latestFile = file;
+                        latestTimestamp = timestamp;
                     }
+                }
+            }
+
+            // Przenieś najnowszy plik do katalogu awaryjnego
+            if (latestFile != null) {
+                String fileName = latestFile.getName();
+                String destinationPath = getDirPath(emergSubdir) + File.separator + fileName;
+
+                File destinationFile = new File(destinationPath);
+                if (latestFile.renameTo(destinationFile)) {
+                    Log.d("FileHandler", ">>> Przeniesiono plik do awaryjnych: " + fileName);
+                } else {
+                    Log.e("FileHandler", ">>> Nie udało się przenieść pliku do awaryjnych: " + fileName);
                 }
             }
         }

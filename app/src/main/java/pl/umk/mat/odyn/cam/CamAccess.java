@@ -62,7 +62,7 @@ public class CamAccess {
     private SettingsProvider settingsProvider;
     private GetCamInterface doItLaterIntf = null; // jeśli trzeba zaczekać na otrzymanie CamInfo()
     protected Activity main; // póki co spełnia dwie role: wątek (Context) i aktywność (wyświetlanie), później warto rozważyć rozdzielenie
-    private boolean isEmergency = false;
+    private boolean isEmergency = true;
     // korzysta z tego też klasa Cam (dziedziczy)
     /* Activity używane do:
         dostarczenia FileHandler'owi kontekstu x2
@@ -88,18 +88,31 @@ public class CamAccess {
             doItLaterIntf.getCamInfoLater(getCamInfo());
         }
         setEmergencyFlag(true);
+
+        handleEmergencyRecording();
     }
     private void setEmergencyFlag(boolean isEmergency) {
         this.isEmergency = isEmergency;
     }
+
     private void handleEmergencyRecording() {
+        Log.d("CamAccess", "handleEmergencyRecording()");
+        Log.d("CamAccess", "isEmergency: " + isEmergency);
+
         if (isEmergency) {
             FileHandler fileHandler = new FileHandler(main);
             fileHandler.moveEmergencyRecordings();
-            setEmergencyFlag(false);
         }
     }
 
+    public void setEmergencyMode(boolean emergencyMode) {
+        setEmergencyFlag(emergencyMode);
+        handleEmergencyRecording();
+
+        if (!emergencyMode) {
+            isEmergency = true;
+        }
+    }
 
     private long getLimitLength() {
         try {
