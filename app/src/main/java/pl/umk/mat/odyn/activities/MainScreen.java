@@ -122,7 +122,7 @@ public class MainScreen extends AppCompatActivity {
 		TextView latitudeText = findViewById(R.id.latitudeText);
 		TextView longitudeText = findViewById(R.id.longitudeText);
 		TextView speedText = findViewById(R.id.speedText);
-		TextView distance = findViewById(R.id.distance);
+		TextView distanceTxt = findViewById(R.id.distance);
 		runOnUiThread(new Runnable() {
 			Boolean showLocation, showSpeed,distance;
 			@Override
@@ -150,9 +150,9 @@ public class MainScreen extends AppCompatActivity {
 					speedText.setVisibility(View.INVISIBLE);
 				}
 				if (distance) {
-					distance.setVisibility(View.VISIBLE);
+					distanceTxt.setVisibility(View.VISIBLE);
 				} else {
-					distance.setVisibility(View.INVISIBLE);
+					distanceTxt.setVisibility(View.INVISIBLE);
 				}
 				//Log.d("MainScreen", ">>> showLocation: " + showLocation + ", showSpeed: " + showSpeed);
 			}
