@@ -92,10 +92,10 @@ public class Detection {
                     maxPos = i;
                 }
             }
-            System.out.println(caminfo.getFOV() + "FOV");
+
             //System.out.println(caminfo.getWidth() + "szerokosc");
             System.out.println(maxConfidence);
-            if(maxConfidence > 0.3) {
+            if(maxConfidence > 0.1) {
                 // Retrieve the bounding box coordinates for the detected object with the best confidence
                 int offset = maxPos * 4;
                 float xmin = boundingBoxes[offset];
@@ -122,7 +122,8 @@ public class Detection {
                 DistanceCalculator distanceCalculator = new DistanceCalculator(520, 114);
                 float distance = distanceCalculator.calculateDistance(boxWidth, boxHeight, caminfo.getWidth(), caminfo.getHeight(), caminfo.getFOV());
                 model.close();
-                return distance/1000;
+                System.out.println(distance);
+                return distance/2500;
             }else{
                 return 0;
             }

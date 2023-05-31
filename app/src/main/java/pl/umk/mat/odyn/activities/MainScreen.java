@@ -159,7 +159,6 @@ public class MainScreen extends AppCompatActivity {
 			}
 		});
 	}
-
 	/**
 	 * Wątek wyświetlający informację o odległości od pojazdu z przodu
 	 */
@@ -185,7 +184,7 @@ public class MainScreen extends AppCompatActivity {
 				});
 			}
 		};
-		AITimer.schedule(task, 0, 1000);
+		AITimer.schedule(task, 0, 3000);
 	}
 
 	/**
@@ -199,8 +198,9 @@ public class MainScreen extends AppCompatActivity {
 		setupVisibility();
 		Detection detection = new Detection();
 		float distanceFromTheNearestCar = detection.plateDetection(caminfo, getApplicationContext());
-		if(distanceFromTheNearestCar!= 0 ){
-			distance.setText(String.valueOf((int)distanceFromTheNearestCar));
+		if(distanceFromTheNearestCar<=10){
+			distance.setText(String.valueOf(distanceFromTheNearestCar));
+			System.out.println(distanceFromTheNearestCar + "odleglosc");
 		} else {
 			distance.setText("");
 		}
