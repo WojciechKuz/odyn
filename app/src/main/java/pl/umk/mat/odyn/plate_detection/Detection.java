@@ -81,23 +81,26 @@ public class Detection {
                     maxPos = i;
                 }
             }
+            if(maxConfidence > 0.7) {
+                // Retrieve the bounding box coordinates for the detected object with the best confidence
+                int offset = maxPos * 4;
+                float xmin = boundingBoxes[offset];
+                float ymin = boundingBoxes[offset + 1];
+                float xmax = boundingBoxes[offset + 2];
+                float ymax = boundingBoxes[offset + 3];
 
-            // Retrieve the bounding box coordinates for the detected object with the best confidence
-            int offset = maxPos * 4;
-            float xmin = boundingBoxes[offset];
-            float ymin = boundingBoxes[offset + 1];
-            float xmax = boundingBoxes[offset + 2];
-            float ymax = boundingBoxes[offset + 3];
 
+                BoundingBox bestBoundingBox = new BoundingBox(xmin, ymin, xmax, ymax);
 
-            BoundingBox bestBoundingBox = new BoundingBox(xmin, ymin, xmax, ymax);
-
-            float boxWidth = (xmax - xmin) * 320;
-            float boxHeight = (ymax - ymin) * 320;
-            DistanceCalculator distanceCalculator = new DistanceCalculator(520, 114);
-            float distance = distanceCalculator.calculateDistance(boxWidth,boxHeight, caminfo.getWidth(), caminfo.getHeight(), caminfo.getFOV());
-            model.close();
-            return distance;
+                float boxWidth = (xmax - xmin) * 320;
+                float boxHeight = (ymax - ymin) * 320;
+                DistanceCalculator distanceCalculator = new DistanceCalculator(520, 114);
+                float distance = distanceCalculator.calculateDistance(boxWidth, boxHeight, caminfo.getWidth(), caminfo.getHeight(), caminfo.getFOV());
+                model.close();
+                return distance;
+            }else{
+                return 0;
+            }
 
             // Releases model resources if no longer used.
 
