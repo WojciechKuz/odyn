@@ -166,22 +166,14 @@ public class MainScreen extends AppCompatActivity {
 		cam.setCamInfoListener(this::receivedCamInfo);
 
 		TimerTask task = new TimerTask() {
+			@Override
 			public void run() {
-				runOnUiThread(new Runnable() {
-					public void run() {
-
-						// Cam kamera mogła nie zostać zainicjalizowana. Pomiń, jeśli Cam nie jest zainicjalizowana:
-						if(!cam.canIgetCamInfo()) {
-							Log.v("MainScreen", ">>> Nie mogę jeszcze pobrać informacji o kamerze");
-							return;
-						}
-
-						if (false) {
-							//Log.d("MainScreen", ">>> Distance: " + class);
-						}
-						cam.getCamInfo();
-					}
-				});
+				// Cam kamera mogła nie zostać zainicjalizowana. Pomiń, jeśli Cam nie jest zainicjalizowana:
+				if(!cam.canIgetCamInfo()) {
+					Log.v("MainScreen", ">>> Nie mogę jeszcze pobrać informacji o kamerze");
+					return;
+				}
+				cam.getCamInfo();
 			}
 		};
 		AITimer.schedule(task, 0, 3000);
