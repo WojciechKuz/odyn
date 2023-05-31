@@ -16,10 +16,19 @@ import java.nio.ByteOrder;
 import pl.umk.mat.odyn.cam.CamInfo;
 import pl.umk.mat.odyn.ml.Detect;
 
+/**
+ * Klasa odpowiadająca za analizę obrazu i wyznaczanie odległości
+ */
 public class Detection {
 
     int imageSize = 320;
 
+    /**
+     * Ta metoda na podstawie informacji z kamery oblicza odległość od pojazdu z przodu
+     * @param caminfo informacje z kamery
+     * @param context kontekst aplikacji
+     * @return odległość od pojazdu z przodu
+     */
     public float plateDetection(CamInfo caminfo, Context context) {
         try {
             Bitmap image = caminfo.getBMP();

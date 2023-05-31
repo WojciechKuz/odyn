@@ -238,7 +238,7 @@ public class CamAccess {
         }
 
         /**
-         * Jest to metoda odpowiedzialna za dostarczanie obrazu do analizy AI.
+         * Jest to metoda wywoływana w celu otrzymania informacji do analizy AI.
          */
         private synchronized Bitmap takePictureBMP(){
             Log.d("CamAccess", ">>> takePictureBMP()");
@@ -315,7 +315,7 @@ public class CamAccess {
         }
 
         /**
-         * Jest to metoda służąca do otrzymywania informacji takich jak:
+         * Jest to metoda służąca do zwracania informacji takich jak:
          * obiekt przechowujący bitmapę, FOV,szerokość i wysokość obrazu.
          */
         private void returnCamInfo() {
@@ -327,6 +327,10 @@ public class CamAccess {
             }
             doItLaterIntf.getCamInfo(new CamInfo(FOV, width, height, BMP));
         }
+
+        /**
+         * Wywoływana w celu przekazania żądania otrzymania obrazu i informacji o kamerze
+         */
         private void getCamInfo() {
             takePictureBMP();
         }
@@ -339,8 +343,8 @@ public class CamAccess {
      * Przed wywołaniem getCamInfo() należy sprawdzić za pomocą canIgetCamInfo(), czy można to wywołać,
      * ponieważ składowa imageCapture, z której te metody korzystają, może jeszcze nie być zainicjalizowana.
      *
-     * Problem z wywołaniem tej metody może nastąpić na początku programu, zaraz po konstruktorze Cam albo CamAccess.
-     * Jeśli nie da się uruchomić, to można poczekać chwilę, albo skorzystać z setImgCaptureCreatedListener().
+     * Po otrzymaniu informacji (dzieje się to asynchronicznie) wywołuje returnCamInfo(), które zaś
+     * wywołuje ustawiony wcześniej za pomocą setCamInfoListener(CamInfo) interfejs.
      *
      * // Sprawdzenie:
      * if(cam.canIgetCamInfo()) {
@@ -362,8 +366,7 @@ public class CamAccess {
         return imageCapture != null;
     }
     /**
-     * Jeśli nie można jeszcze wykonać getCamInfo() można tu podać dowolną metodę zwraca (void, przyjmuje CamInfo),
-     * która ma się wykonać, po tym jak będzie już możliwe wykonanie getCamInfo().
+     * Aby otrzymać po wywołaniu getCamInfo() wyników (CamInfo) należy ustawić interfejs, do którego będą przesyłane wyniki.
      * @param interf Interfejs
      */
     public void setCamInfoListener(CamInfoInterface interf) {

@@ -158,6 +158,10 @@ public class MainScreen extends AppCompatActivity {
 			}
 		});
 	}
+
+	/**
+	 * Wątek wyświetlający informację o odległości od pojazdu z przodu
+	 */
 	private void AIInfoUpdate() {
 		cam.setCamInfoListener(this::receivedCamInfo);
 
