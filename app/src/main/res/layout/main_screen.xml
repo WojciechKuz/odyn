@@ -129,7 +129,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="0"
-                    />
+                    android:textColor="#DD1919" />
 
                 <TextView
                     android:id="@+id/srtText"

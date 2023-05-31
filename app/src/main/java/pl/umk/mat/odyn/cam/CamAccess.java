@@ -83,7 +83,6 @@ public class CamAccess {
         PreviewView prView2 = main.findViewById(R.id.previewView);
         cameraProviderSetup(prView2);
         Log.v("CamAccess", ">>> CamAccess constructor");
-
         ServCounter.camStarted();
         //
         //if(doItLaterIntf != null) {
@@ -121,7 +120,7 @@ public class CamAccess {
      * @param prView Widok podglądu
      */
     @SuppressLint("RestrictedApi")
-    private void cameraProviderSetup(PreviewView prView) {
+    public void cameraProviderSetup(PreviewView prView) {
         ListenableFuture<ProcessCameraProvider> cameraProviderFuture = ProcessCameraProvider.getInstance(main);
         cameraProviderFuture.addListener(() -> {
             try {
@@ -139,7 +138,7 @@ public class CamAccess {
      * @param prView Widok podglądu
      */
     @SuppressLint("RestrictedApi")
-    private void bindPreview(ProcessCameraProvider cameraProvider, PreviewView prView) {
+   private void bindPreview(ProcessCameraProvider cameraProvider, PreviewView prView) {
 
         CameraSelector cameraSelector = new CameraSelector.Builder()
                 .requireLensFacing(CameraSelector.LENS_FACING_BACK)
@@ -263,9 +262,9 @@ public class CamAccess {
                     // Zapisz obraz w pamięci podręcznej
                 }
 
-                /**
-                 * Jest to metoda odpowiedzialna za obsługę błędu przy tworzeniu bitmapy.
-                 * @param exception Wyjątek
+                 /**
+                     * Jest to metoda odpowiedzialna za obsługę błędu przy tworzeniu bitmapy.
+                     * @param exception Wyjątek
                  */
                 @Override
                 public void onError(@NonNull ImageCaptureException exception) {

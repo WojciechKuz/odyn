@@ -53,7 +53,7 @@ public class Detection {
                 image = Bitmap.createScaledBitmap(image, imageSize,imageSize, true);
                 Matrix matrix = new Matrix();
                 matrix.postRotate(270);
-                image = Bitmap.createBitmap(image, 0, 0, image.getWidth(), image.getHeight(), matrix, true);
+                image = Bitmap.createBitmap(image, 0, 0, image.getWidth(),image.getHeight() , matrix, true);
             }
             int dimension = Math.min(image.getHeight(), image.getWidth());
             image = ThumbnailUtils.extractThumbnail(image,dimension,dimension);
@@ -91,6 +91,8 @@ public class Detection {
                     maxPos = i;
                 }
             }
+            //System.out.println(caminfo.getHeight() + "wysokosc");
+            //System.out.println(caminfo.getWidth() + "szerokosc");
             System.out.println(maxConfidence);
             if(maxConfidence > 0.5) {
                 // Retrieve the bounding box coordinates for the detected object with the best confidence

@@ -9,7 +9,6 @@ package pl.umk.mat.odyn.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
@@ -24,7 +23,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
-
 import pl.umk.mat.odyn.R;
 import pl.umk.mat.odyn.cam.Cam;
 import pl.umk.mat.odyn.cam.CamInfo;
@@ -80,14 +78,16 @@ public class MainScreen extends AppCompatActivity {
 	private boolean isEmergencyActive = false;
 	private boolean isVideoActive = true;
 
+
 	/**
 	 * Jest to metoda tworząca główny ekran aplikacji.
 	 * @param savedInstanceState Wiązka argumentów
 	 */
-	@Override
+
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_drawer);
+
 
 		Log.v("MainScreen", ">>> onCreate DrawerActivity");
 
@@ -150,9 +150,9 @@ public class MainScreen extends AppCompatActivity {
 					speedText.setVisibility(View.INVISIBLE);
 				}
 				if (distance) {
-					speedText.setVisibility(View.VISIBLE);
+					distance.setVisibility(View.VISIBLE);
 				} else {
-					speedText.setVisibility(View.INVISIBLE);
+					distance.setVisibility(View.INVISIBLE);
 				}
 				//Log.d("MainScreen", ">>> showLocation: " + showLocation + ", showSpeed: " + showSpeed);
 			}
@@ -199,7 +199,7 @@ public class MainScreen extends AppCompatActivity {
 		Detection detection = new Detection();
 		float distanceFromTheNearestCar = detection.plateDetection(caminfo, getApplicationContext());
 		if(distanceFromTheNearestCar!= 0 ){
-			distance.setText(String.valueOf(distanceFromTheNearestCar));
+			distance.setText(String.valueOf((int)distanceFromTheNearestCar));
 		} else {
 			distance.setText("");
 		}
@@ -311,6 +311,7 @@ public class MainScreen extends AppCompatActivity {
 		ServiceConnector.removeActivity(); // trzeba się pozbyć referencji, aby poprawnie usunąć Aktywność
 		Log.d("MainScreen", ">>> onDestroy, ilość kamer: " + ServCounter.getCamCount());
 		gpsTimer.cancel();
+		AITimer.cancel();
 		super.onDestroy();
 	}
 
