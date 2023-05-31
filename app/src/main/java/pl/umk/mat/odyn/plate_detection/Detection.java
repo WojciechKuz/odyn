@@ -104,9 +104,20 @@ public class Detection {
 
 
                 BoundingBox bestBoundingBox = new BoundingBox(xmin, ymin, xmax, ymax);
+                //float boxWidth = (xmax - xmin) * 320;
+                //float boxHeight = (ymax - ymin) * 320;
+                float cameraWidth = caminfo.getWidth();
+                float cameraHeight = caminfo.getHeight();
+                float camSize;
+                if(cameraHeight > cameraWidth) {
+                    camSize = cameraWidth;
+                }
+                else {
+                    camSize = cameraHeight;
+                }
+                float boxWidth = (xmax - xmin) * camSize;
+                float boxHeight = (ymax - ymin) * camSize;
 
-                float boxWidth = (xmax - xmin) * 320;
-                float boxHeight = (ymax - ymin) * 320;
                 DistanceCalculator distanceCalculator = new DistanceCalculator(520, 114);
                 float distance = distanceCalculator.calculateDistance(boxWidth, boxHeight, caminfo.getWidth(), caminfo.getHeight(), caminfo.getFOV());
                 model.close();
