@@ -4,6 +4,7 @@ import static java.lang.Float.NaN;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.media.ThumbnailUtils;
 import android.util.Log;
 
@@ -45,6 +46,15 @@ public class Detection {
             byteBuffer.order(ByteOrder.nativeOrder());
 
             //adjusting input image
+            if(image.getHeight()>image.getWidth())
+            {
+                int dimension = Math.min(image.getHeight(), image.getWidth());
+                image = ThumbnailUtils.extractThumbnail(image,dimension,dimension);
+                image = Bitmap.createScaledBitmap(image, imageSize,imageSize, true);
+                Matrix matrix = new Matrix();
+                matrix.postRotate(270);
+                image = Bitmap.createBitmap(image, 0, 0, image.getWidth(), image.getHeight(), matrix, true);
+            }
             int dimension = Math.min(image.getHeight(), image.getWidth());
             image = ThumbnailUtils.extractThumbnail(image,dimension,dimension);
             image = Bitmap.createScaledBitmap(image, imageSize,imageSize, true);
@@ -81,7 +91,8 @@ public class Detection {
                     maxPos = i;
                 }
             }
-            if(maxConfidence > 0.7) {
+            System.out.println(maxConfidence);
+            if(maxConfidence > 0.5) {
                 // Retrieve the bounding box coordinates for the detected object with the best confidence
                 int offset = maxPos * 4;
                 float xmin = boundingBoxes[offset];
@@ -97,7 +108,7 @@ public class Detection {
                 DistanceCalculator distanceCalculator = new DistanceCalculator(520, 114);
                 float distance = distanceCalculator.calculateDistance(boxWidth, boxHeight, caminfo.getWidth(), caminfo.getHeight(), caminfo.getFOV());
                 model.close();
-                return distance;
+                return distance/1000;
             }else{
                 return 0;
             }
@@ -114,9 +125,4 @@ public class Detection {
         return 0;
 
     }
-
-
-
-
-
 }
