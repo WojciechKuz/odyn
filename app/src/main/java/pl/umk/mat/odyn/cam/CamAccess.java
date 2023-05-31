@@ -263,6 +263,15 @@ public class CamAccess {
                     super.onError(exception);
                 }
             });
+            if (BMP.getWidth() > 0 && BMP.getHeight() > 0) {
+                // Zmienna bitmapa nie jest pusta
+                Log.d("BITMAPA", ">>> BITMAPA ZOSTALA STWORZONA");
+                // Wykonaj odpowiednie działania
+            } else {
+                // Zmienna bitmapa jest pusta
+                Log.d("BITMAPA", ">>> BITMAPA JEST PUSTA");
+                // Wykonaj odpowiednie działania dla przypadku pustej bitmapy
+            }
             return BMP;
         }
 
