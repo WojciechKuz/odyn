@@ -4,6 +4,7 @@ import static java.lang.Float.NaN;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.media.ThumbnailUtils;
 import android.util.Log;
 
 import org.tensorflow.lite.DataType;
@@ -42,6 +43,12 @@ public class Detection {
             TensorBuffer inputFeature0 = TensorBuffer.createFixedSize(new int[]{1, 320, 320, 3}, DataType.FLOAT32);
             ByteBuffer byteBuffer = ByteBuffer.allocateDirect(4 * imageSize * imageSize * 3);
             byteBuffer.order(ByteOrder.nativeOrder());
+
+            //adjusting input image
+            int dimension = Math.min(image.getHeight(), image.getWidth());
+            image = ThumbnailUtils.extractThumbnail(image,dimension,dimension);
+            image = Bitmap.createScaledBitmap(image, imageSize,imageSize, true);
+
 
             int[] intValues = new int[image.getWidth() * image.getHeight()];
             image.getPixels(intValues, 0, image.getWidth(), 0, 0, image.getWidth(), image.getHeight());
