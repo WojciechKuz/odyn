@@ -182,7 +182,7 @@ public class CamAccess {
         }
 
         // użyj kamery do wyświetlania w mainActivity (preview) i do robienia zdjęć (imageCapture)
-        Camera camera = cameraProvider.bindToLifecycle((LifecycleOwner) main, cameraSelector, preview, imageCapture, videoCapture);
+        Camera camera = cameraProvider.bindToLifecycle((LifecycleOwner) main, cameraSelector, preview, imageCapture); // FIXME videoCapture
     takeVideo(true);
     }
     // robi zdjęcie

@@ -179,6 +179,10 @@ public class MainScreen extends AppCompatActivity {
 						if (false) {
 							//Log.d("MainScreen", ">>> Distance: " + class);
 						}
+						startTimes[startIter] = System.currentTimeMillis();
+						startIter++;
+						if(startIter == 64)
+							startTimes = new long[64];
 						cam.getCamInfo();
 					}
 				});
@@ -186,6 +190,9 @@ public class MainScreen extends AppCompatActivity {
 		};
 		AITimer.schedule(task, 0, 3000);
 	}
+	private long[] startTimes = new long[64];
+	private int startIter = 0;
+	private int stopIter = 0;
 
 	/**
 	 * Automatycznie wywoływane po otrzymaniu CamInfo
@@ -204,6 +211,13 @@ public class MainScreen extends AppCompatActivity {
 		} else {
 			distance.setText("");
 		}
+
+		long execTime = System.currentTimeMillis() - startTimes[stopIter];
+		String s = ">>> ExecTime of [" + stopIter + "]: " + execTime + " milis";
+		Log.d("MainScreen", s);
+		stopIter++;
+		if(stopIter >= 64)
+			stopIter = 0;
 	}
 
 	/**
