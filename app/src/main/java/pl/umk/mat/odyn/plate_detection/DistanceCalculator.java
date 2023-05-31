@@ -11,13 +11,21 @@ public class DistanceCalculator {
 
     public float calculateDistance(float boxWidth, float boxHeight, float cameraWidth, float cameraHeight, float fov) {
         // Calculate the horizontal and vertical angles
-        float horizontalAngle = (float) Math.toRadians(fov) * (boxWidth / cameraWidth);
-        float verticalAngle = (float) Math.toRadians(fov) * (boxHeight / cameraHeight);
+        float camSize;
+        if(cameraHeight > cameraWidth) {
+            camSize = cameraWidth;
+        }
+        else {
+            camSize = cameraHeight;
+        }
+        //float horizontalAngle = (float) Math.toRadians(fov) * (boxWidth / camSize);
+        //float verticalAngle = (float) Math.toRadians(fov) * (boxHeight / camSize);
 
         // Calculate the distance to the object using trigonometry
-        float distanceHorizontal = (realWidth / 2) / (float) Math.tan(horizontalAngle / 2);
-        float distanceVertical = (realHeight / 2) / (float) Math.tan(verticalAngle / 2);
-        float distance = (distanceHorizontal + distanceVertical) / 2;
+        //float distanceHorizontal = (realWidth / 2) / (float) Math.tan(horizontalAngle / 2);
+        //float distanceVertical = (realHeight / 2) / (float) Math.tan(verticalAngle / 2);
+        //float distance = (distanceHorizontal + distanceVertical) / 2;
+        float distance = (camSize / 2) / (float) Math.tan(fov / 2);
 
         return distance;
     }

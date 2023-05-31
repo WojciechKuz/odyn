@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:textSize="@dimen/switch_text_size"
             android:text="@string/aiSwitchDesc"
-            /> <!-- no AI :( -->
+            />
 
         <com.google.android.material.switchmaterial.SwitchMaterial
             android:id="@+id/switch2"

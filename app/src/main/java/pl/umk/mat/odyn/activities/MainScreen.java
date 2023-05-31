@@ -150,6 +150,7 @@ public class MainScreen extends AppCompatActivity {
 					speedText.setVisibility(View.INVISIBLE);
 				}
 				if (distance) {
+
 					distanceText.setVisibility(View.VISIBLE);
 				} else {
 					distanceText.setVisibility(View.INVISIBLE);
