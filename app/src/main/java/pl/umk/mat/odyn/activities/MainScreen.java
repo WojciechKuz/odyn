@@ -164,26 +164,21 @@ public class MainScreen extends AppCompatActivity {
 	 */
 	private void AIInfoUpdate() {
 		cam.setCamInfoListener(this::receivedCamInfo);
-		TimerTask task = new TimerTask() {
-			public void run() {
-				runOnUiThread(new Runnable() {
-					public void run() {
-						// Cam kamera mogła nie zostać zainicjalizowana. Pomiń, jeśli Cam nie jest zainicjalizowana:
-						if(!cam.canIgetCamInfo()) {
-							Log.v("MainScreen", ">>> Nie mogę jeszcze pobrać informacji o kamerze");
-							return;
-						}
 
-						if (false) {
-							//Log.d("MainScreen", ">>> Distance: " + class);
-						}
-						cam.getCamInfo();
-					}
-				});
+		TimerTask task = new TimerTask() {
+			@Override
+			public void run() {
+				// Cam kamera mogła nie zostać zainicjalizowana. Pomiń, jeśli Cam nie jest zainicjalizowana:
+				if(!cam.canIgetCamInfo()) {
+					Log.v("MainScreen", ">>> Nie mogę jeszcze pobrać informacji o kamerze");
+					return;
+				}
+				cam.getCamInfo();
 			}
 		};
 		AITimer.schedule(task, 0, 3000);
 	}
+
 	/**
 	 * Automatycznie wywoływane po otrzymaniu CamInfo
 	 */
@@ -202,6 +197,7 @@ public class MainScreen extends AppCompatActivity {
 			distance.setText("");
 		}
 	}
+
 	/**
 	 * Jest to metoda odpowiedzialna za aktualizację wartości GPS na ekranie
 	 */
