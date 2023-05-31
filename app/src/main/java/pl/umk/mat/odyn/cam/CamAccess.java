@@ -254,6 +254,7 @@ public class CamAccess {
                     super.onCaptureSuccess(image);
                     Log.d("CamAccess", ">>> otrzymano ImageProxy");
                     BMP = imageProxyToBitmap(image);
+                    image.close();
                     Log.d("CamAccess", ">>> otrzymano bitmapę");
                     if(BMP == null) {
                         Log.e("CamAccess/Cam", ">>> Uwaga, bitmapa jest nullem w takePictureBMP(), onSuccess()");
