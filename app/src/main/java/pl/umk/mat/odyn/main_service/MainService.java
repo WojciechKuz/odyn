@@ -84,7 +84,7 @@ public class MainService extends Service {
 	/**
 	 Jest to metoda służąca do ustawiania parametrów MainService.
 	 */
-	private void mainServiceStart() { // ma się wykonywać pokolei
+	private synchronized void mainServiceStart() { // ma się wykonywać pokolei
 		Log.v("MainService", ">>> setting up MainService");
 
 		new SettingsProvider().loadSettings(this); // wczyta ustawienia

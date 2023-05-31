@@ -159,33 +159,48 @@ public class MainScreen extends AppCompatActivity {
 		});
 	}
 	private void AIInfoUpdate() {
-		final TextView distance = findViewById(R.id.distance);
+		cam.setCamInfoListener(this::receivedCamInfo);
+
 		TimerTask task = new TimerTask() {
 			public void run() {
 				runOnUiThread(new Runnable() {
 					public void run() {
 
+						// Cam kamera mogła nie zostać zainicjalizowana. Pomiń, jeśli Cam nie jest zainicjalizowana:
+						if(!cam.canIgetCamInfo()) {
+							Log.v("MainScreen", ">>> Nie mogę jeszcze pobrać informacji o kamerze");
+							return;
+						}
+
 						if (false) {
 							//Log.d("MainScreen", ">>> Distance: " + class);
-
 						}
-						CamInfo caminfo = cam.getCamInfo();
-
-						setupVisibility();
-						Detection detection = new Detection();
-						float distanceFromTheNearestCar = detection.plateDetection(caminfo, getApplicationContext());
-						if(distanceFromTheNearestCar!= 0 ){
-							distance.setText(String.valueOf(distanceFromTheNearestCar));
-						} else {
-							distance.setText("");
-						}
-
+						cam.getCamInfo();
 					}
 				});
 			}
 		};
 		AITimer.schedule(task, 0, 1000);
 	}
+
+	/**
+	 * Automatycznie wywoływane po otrzymaniu CamInfo
+	 */
+	private void receivedCamInfo(CamInfo caminfo) {
+		if(caminfo.getBMP() == null) {
+			Log.e("MainScreen", ">>> Uwaga, bitmapa jest nullem");
+		}
+		TextView distance = findViewById(R.id.distance);
+		setupVisibility();
+		Detection detection = new Detection();
+		float distanceFromTheNearestCar = detection.plateDetection(caminfo, getApplicationContext());
+		if(distanceFromTheNearestCar!= 0 ){
+			distance.setText(String.valueOf(distanceFromTheNearestCar));
+		} else {
+			distance.setText("");
+		}
+	}
+
 	/**
 	 * Jest to metoda odpowiedzialna za aktualizację wartości GPS na ekranie
 	 */
@@ -228,6 +243,7 @@ public class MainScreen extends AppCompatActivity {
 		this.cam = cam;
 
 		// to nie potrzebne
+		/*
 		CamInfo camInfo = null;
 		if(cam.canIgetCamInfo()) {
 			camInfo = cam.getCamInfo();	// TODO use bitmap and info to analyze image
@@ -236,6 +252,8 @@ public class MainScreen extends AppCompatActivity {
 		else {
 			Log.v("MainScreen", ">>> Nie można tu jeszcze otrzymać CamInfo");
 		}
+		*/
+		// TODO here here set CamInfo Reciever
 
 		// obsługa przycisków, metody do obsługi (np. this::onClickPhoto) znajdują się poniżej
 		View mainScreenLayout = findViewById(R.id.layout_incepcja);

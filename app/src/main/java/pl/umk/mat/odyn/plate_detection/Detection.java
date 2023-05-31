@@ -1,7 +1,10 @@
 package pl.umk.mat.odyn.plate_detection;
 
+import static java.lang.Float.NaN;
+
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.util.Log;
 
 import org.tensorflow.lite.DataType;
 import org.tensorflow.lite.support.tensorbuffer.TensorBuffer;
@@ -19,7 +22,11 @@ public class Detection {
 
     public float plateDetection(CamInfo caminfo, Context context) {
         try {
-           Bitmap image = caminfo.getBMP();
+            Bitmap image = caminfo.getBMP();
+            if(image == null) {
+                Log.e("Detection", ">>> Uwaga, bitmapa jest nullem");
+                //return NaN;
+            }
             Detect model = Detect.newInstance(context);
 
             // Creates inputs for reference.
@@ -80,7 +87,10 @@ public class Detection {
             // Releases model resources if no longer used.
 
         } catch (IOException e) {
+            Log.e("Detection", ">>> Error w Detection\n" + e); // pisze do logów
             // TODO Handle the exception
+        } catch (NullPointerException e) {
+            Log.e("Detection", ">>> Error w Detection, coś może być nullem!\n" + e);
         }
 
         return 0;

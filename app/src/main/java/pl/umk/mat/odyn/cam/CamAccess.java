@@ -9,6 +9,7 @@ package pl.umk.mat.odyn.cam;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Service;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -60,8 +61,9 @@ public class CamAccess {
     private ImageCapture imageCapture;
     private VideoCapture videoCapture;
     private SettingsProvider settingsProvider;
-    private GetCamInterface doItLaterIntf = null; // jeśli trzeba zaczekać na otrzymanie CamInfo()
+    private CamInfoInterface doItLaterIntf = null; // jeśli trzeba zaczekać na otrzymanie CamInfo()
     protected Activity main; // póki co spełnia dwie role: wątek (Context) i aktywność (wyświetlanie), później warto rozważyć rozdzielenie
+    protected Service service;
     private boolean isEmergency = false;
     // korzysta z tego też klasa Cam (dziedziczy)
     /* Activity używane do:
@@ -84,10 +86,10 @@ public class CamAccess {
 
         ServCounter.camStarted();
         //
-        if(doItLaterIntf != null) {
-            doItLaterIntf.getCamInfoLater(getCamInfo());
-        }
-        setEmergencyFlag(true);
+        //if(doItLaterIntf != null) {
+        //    doItLaterIntf.getCamInfoLater(getCamInfo());
+        //}
+        setEmergencyFlag(true); // FIXME WSZYSTKIE NAGRANIA SĄ AWARYJNE ???
     }
     private void setEmergencyFlag(boolean isEmergency) {
         this.isEmergency = isEmergency;
@@ -238,7 +240,8 @@ public class CamAccess {
         /**
          * Jest to metoda odpowiedzialna za dostarczanie obrazu do analizy AI.
          */
-        private Bitmap takePictureBMP(){
+        private synchronized Bitmap takePictureBMP(){
+            Log.d("CamAccess", ">>> takePictureBMP()");
             imageCapture.takePicture(ContextCompat.getMainExecutor(main), new ImageCapture.OnImageCapturedCallback() {
                 /**
                  * Jest to metoda odpowiedzialna za obsługę otrzymania bitmapy.
@@ -249,17 +252,13 @@ public class CamAccess {
                     // Tutaj otrzymujesz obraz z kamery, możesz go przetwarzać lub zapisać w pamięci
                     // Uwaga: Ta metoda jest wywoływana na innym wątku, więc musisz obsłużyć go odpowiednio
                     super.onCaptureSuccess(image);
-                    Log.d("BITMAPA", ">>> image stworzony");
+                    Log.d("CamAccess", ">>> otrzymano ImageProxy");
                     BMP = imageProxyToBitmap(image);
-                    if (BMP.getWidth() > 0 && BMP.getHeight() > 0) {
-                        // Zmienna bitmapa nie jest pusta
-                        Log.d("BITMAPA", ">>> BITMAPA ZOSTALA STWORZONA");
-                        // Wykonaj odpowiednie działania
-                    } else {
-                        // Zmienna bitmapa jest pusta
-                        Log.d("BITMAPA", ">>> BITMAPA JEST PUSTA");
-                        // Wykonaj odpowiednie działania dla przypadku pustej bitmapy
+                    Log.d("CamAccess", ">>> otrzymano bitmapę");
+                    if(BMP == null) {
+                        Log.e("CamAccess/Cam", ">>> Uwaga, bitmapa jest nullem w takePictureBMP(), onSuccess()");
                     }
+                    returnCamInfo(); // zwraca Bitmapę i camInfo do ustalonego reciever'a
                     // Zapisz obraz w pamięci podręcznej
                 }
 
@@ -270,10 +269,10 @@ public class CamAccess {
                 @Override
                 public void onError(@NonNull ImageCaptureException exception) {
                     // Obsłuż błędy związane z wykonywaniem zdjęcia
+                    Log.e("CamAccess", ">>> Nie otrzymano bitmapy, oto exception:\n" + exception);
                     super.onError(exception);
                 }
             });
-
             return BMP;
         }
 
@@ -319,14 +318,20 @@ public class CamAccess {
          * Jest to metoda służąca do otrzymywania informacji takich jak:
          * obiekt przechowujący bitmapę, FOV,szerokość i wysokość obrazu.
          */
-        public CamInfo getCamInfo() {
-            if(FOV == 0 || width == 0 || height == 0) {
+        private void returnCamInfo() {
+            if(FOV == 0. || width == 0. || height == 0.) {
                 getInfo();
             }
-            takePictureBMP();
-            return new CamInfo(FOV, width, height, BMP);
+            if(BMP == null) {
+                Log.e("CamAccess/Cam", ">>> Uwaga, bitmapa jest nullem w getCamInfo()");
+            }
+            doItLaterIntf.getCamInfo(new CamInfo(FOV, width, height, BMP));
         }
-    }
+        private void getCamInfo() {
+            takePictureBMP();
+        }
+    } // KONIEC CamInfoProvider
+
 
     /**
      * Jest to metoda służąca do otrzymywania informacji takich jak:
@@ -343,12 +348,11 @@ public class CamAccess {
      * }
      *
      */
-    public CamInfo getCamInfo() {
+    public void getCamInfo() {
         // może się zdarzyć, że imageCapture (getCamInfo() z tego korzysta) nie jest jeszcze zainicjalizowane.
         if(imageCapture != null) {
-            return new CamInfoProvider().getCamInfo();
+            new CamInfoProvider().getCamInfo();
         }
-        return null;
     }
 
     /**
@@ -362,7 +366,7 @@ public class CamAccess {
      * która ma się wykonać, po tym jak będzie już możliwe wykonanie getCamInfo().
      * @param interf Interfejs
      */
-    public void setImgCaptureCreatedListener(GetCamInterface interf) {
+    public void setCamInfoListener(CamInfoInterface interf) {
         doItLaterIntf = interf;
     }
 

@@ -10,6 +10,6 @@ package pl.umk.mat.odyn.cam;
 /**
  * Jest to interfejs odpowiedzialny za otrzymywanie informacji z kamery.
  */
-public interface GetCamInterface {
-	void getCamInfoLater(CamInfo camInfo);
+public interface CamInfoInterface {
+	void getCamInfo(CamInfo camInfo);
 }
