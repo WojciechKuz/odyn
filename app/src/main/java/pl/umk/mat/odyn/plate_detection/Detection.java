@@ -55,7 +55,6 @@ public class Detection {
                     byteBuffer.putFloat((val & 0xFF) * (1.f / 255));
                 }
             }
-            image.recycle();    //powinno rozwiazac problem z zamykaniem image po zbadaniu zdjecia
             inputFeature0.loadBuffer(byteBuffer);
 
             // Runs model inference and gets result.
