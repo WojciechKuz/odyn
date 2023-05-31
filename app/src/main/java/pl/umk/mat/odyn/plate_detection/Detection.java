@@ -19,7 +19,7 @@ public class Detection {
 
     public float plateDetection(CamInfo caminfo, Context context) {
         try {
-            Bitmap image = caminfo.getBMP();
+           Bitmap image = caminfo.getBMP();
             Detect model = Detect.newInstance(context);
 
             // Creates inputs for reference.
@@ -39,7 +39,7 @@ public class Detection {
                     byteBuffer.putFloat((val & 0xFF) * (1.f / 255));
                 }
             }
-
+            image.recycle();    //powinno rozwiazac problem z zamykaniem image po zbadaniu zdjecia
             inputFeature0.loadBuffer(byteBuffer);
 
             // Runs model inference and gets result.
