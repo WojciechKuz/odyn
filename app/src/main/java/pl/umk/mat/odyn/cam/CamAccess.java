@@ -249,7 +249,17 @@ public class CamAccess {
                     // Tutaj otrzymujesz obraz z kamery, możesz go przetwarzać lub zapisać w pamięci
                     // Uwaga: Ta metoda jest wywoływana na innym wątku, więc musisz obsłużyć go odpowiednio
                     super.onCaptureSuccess(image);
+                    Log.d("BITMAPA", ">>> image stworzony");
                     BMP = imageProxyToBitmap(image);
+                    if (BMP.getWidth() > 0 && BMP.getHeight() > 0) {
+                        // Zmienna bitmapa nie jest pusta
+                        Log.d("BITMAPA", ">>> BITMAPA ZOSTALA STWORZONA");
+                        // Wykonaj odpowiednie działania
+                    } else {
+                        // Zmienna bitmapa jest pusta
+                        Log.d("BITMAPA", ">>> BITMAPA JEST PUSTA");
+                        // Wykonaj odpowiednie działania dla przypadku pustej bitmapy
+                    }
                     // Zapisz obraz w pamięci podręcznej
                 }
 
@@ -263,15 +273,7 @@ public class CamAccess {
                     super.onError(exception);
                 }
             });
-            if (BMP.getWidth() > 0 && BMP.getHeight() > 0) {
-                // Zmienna bitmapa nie jest pusta
-                Log.d("BITMAPA", ">>> BITMAPA ZOSTALA STWORZONA");
-                // Wykonaj odpowiednie działania
-            } else {
-                // Zmienna bitmapa jest pusta
-                Log.d("BITMAPA", ">>> BITMAPA JEST PUSTA");
-                // Wykonaj odpowiednie działania dla przypadku pustej bitmapy
-            }
+
             return BMP;
         }
 
