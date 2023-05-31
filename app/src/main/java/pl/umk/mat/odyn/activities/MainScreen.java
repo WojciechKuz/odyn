@@ -33,6 +33,7 @@ import pl.umk.mat.odyn.main_service.MainService;
 import pl.umk.mat.odyn.main_service.ServiceConnector;
 import pl.umk.mat.odyn.main_service.types.IconType;
 import pl.umk.mat.odyn.main_service.types.ServCounter;
+import pl.umk.mat.odyn.plate_detection.Detection;
 import pl.umk.mat.odyn.settings.SettingNames;
 import pl.umk.mat.odyn.settings.SettingOptions;
 import pl.umk.mat.odyn.settings.SettingsProvider;
@@ -169,8 +170,16 @@ public class MainScreen extends AppCompatActivity {
 
 						}
 						CamInfo caminfo = cam.getCamInfo();
-						distance.setText("Miejsce na odleglosc");
+
 						setupVisibility();
+						Detection detection = new Detection();
+						float distanceFromTheNearestCar = detection.plateDetection(caminfo, getApplicationContext());
+						if(distanceFromTheNearestCar!= 0 ){
+							distance.setText(String.valueOf(distanceFromTheNearestCar));
+						} else {
+							distance.setText("");
+						}
+
 					}
 				});
 			}
