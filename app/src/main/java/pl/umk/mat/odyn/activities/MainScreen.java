@@ -164,28 +164,21 @@ public class MainScreen extends AppCompatActivity {
 	 */
 	private void AIInfoUpdate() {
 		cam.setCamInfoListener(this::receivedCamInfo);
-
+		Log.d("MainScreen", ">>> AI setup");
 		TimerTask task = new TimerTask() {
+			@Override
 			public void run() {
-				runOnUiThread(new Runnable() {
-					public void run() {
+				// Cam kamera mogła nie zostać zainicjalizowana. Pomiń, jeśli Cam nie jest zainicjalizowana:
+				if(!cam.canIgetCamInfo()) {
+					Log.v("MainScreen", ">>> Nie mogę jeszcze pobrać informacji o kamerze");
+					return;
+				}
 
-						// Cam kamera mogła nie zostać zainicjalizowana. Pomiń, jeśli Cam nie jest zainicjalizowana:
-						if(!cam.canIgetCamInfo()) {
-							Log.v("MainScreen", ">>> Nie mogę jeszcze pobrać informacji o kamerze");
-							return;
-						}
-
-						if (false) {
-							//Log.d("MainScreen", ">>> Distance: " + class);
-						}
-						startTimes[startIter] = System.currentTimeMillis();
-						startIter++;
-						if(startIter == 64)
-							startTimes = new long[64];
-						cam.getCamInfo();
-					}
-				});
+				startTimes[startIter] = System.currentTimeMillis();
+				startIter++;
+				if(startIter == 64)
+					startTimes = new long[64];
+				cam.getCamInfo();
 			}
 		};
 		AITimer.schedule(task, 0, 3000);
@@ -272,7 +265,6 @@ public class MainScreen extends AppCompatActivity {
 			Log.v("MainScreen", ">>> Nie można tu jeszcze otrzymać CamInfo");
 		}
 		*/
-		// TODO here here set CamInfo Reciever
 
 		// obsługa przycisków, metody do obsługi (np. this::onClickPhoto) znajdują się poniżej
 		View mainScreenLayout = findViewById(R.id.layout_incepcja);

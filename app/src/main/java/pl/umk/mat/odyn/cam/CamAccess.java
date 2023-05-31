@@ -295,9 +295,9 @@ public class CamAccess {
                 String cameraId = cameraManager.getCameraIdList()[1]; // wybierz pierwszą kamerę
                 CameraCharacteristics characteristics = cameraManager.getCameraCharacteristics(cameraId);
                 // uzyskanie wartości FOV
-                float[] focalLengths = characteristics.get(CameraCharacteristics.LENS_INFO_AVAILABLE_FOCAL_LENGTHS);
-                float[] apertures = characteristics.get(CameraCharacteristics.LENS_INFO_AVAILABLE_APERTURES);
-                FOV = calculateFOV(focalLengths[0], apertures[0]);
+                //float[] focalLengths = characteristics.get(CameraCharacteristics.LENS_INFO_AVAILABLE_FOCAL_LENGTHS);
+                //float[] apertures = characteristics.get(CameraCharacteristics.LENS_INFO_AVAILABLE_APERTURES);
+                FOV = 40.f;//calculateFOV(focalLengths[0], apertures[0]); // FIXME na moim telefonie nie mogę otrzymać tych informacji, ale na oko wyliczyłem w stopniach
 
                 // uzyskanie wartości rozdzielczości
                 StreamConfigurationMap map = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
