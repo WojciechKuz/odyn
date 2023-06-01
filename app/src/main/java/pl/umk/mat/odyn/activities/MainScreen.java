@@ -191,7 +191,7 @@ public class MainScreen extends AppCompatActivity {
 		Detection detection = new Detection();
 		float distanceFromTheNearestCar = detection.plateDetection(caminfo, getApplicationContext());
 		if(distanceFromTheNearestCar<=10){
-			String sztring = String.valueOf(distanceFromTheNearestCar) + " m";
+			String sztring = String.format("%.2f m", distanceFromTheNearestCar);
 			distance.setText(sztring);
 			Log.d("MainScreen",">>> odleglosc [m]: " + distanceFromTheNearestCar);
 		} else {
